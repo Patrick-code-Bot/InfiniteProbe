@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# infiniteprobe.com
 
-## Getting Started
+Production site for **InfiniteProbe** — the self-powered wireless meat
+thermometer. Built with Next.js (App Router, TypeScript), statically generated
+marketing pages, and Shopify Storefront API commerce. Converted pixel-for-pixel
+from the Claude Design handoff in `../ClaudeDesignPrototypesHandoff/`.
 
-First, run the development server:
+**Before launch:** work through [`LAUNCH_CHECKLIST.md`](./LAUNCH_CHECKLIST.md) —
+it lists every `[bracketed]` placeholder. Unresolved placeholders render in the
+design system's dashed-orange "unconfirmed" style, so they're visible, not hidden.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # fill in Shopify credentials
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Path | Purpose |
+|---|---|
+| `app/` | Six routes: `/` `/how-it-works` `/shop` `/specs` `/app` `/support` — all statically generated |
+| `app/api/newsletter/` | Newsletter signup endpoint (provider stub — see checklist §8) |
+| `app/sitemap.ts`, `app/robots.ts`, `app/opengraph-image.tsx` | SEO: sitemap.xml, robots.txt, OG image |
+| `components/` | Shared header (sticky nav, cart-aware on /shop), footer, cart drawer, spec tables, FAQ accordions |
+| `data/specs.json` | **Single source of truth for all spec values** — Specs page and Home teaser both read it. Edit a number here (even in GitHub's web editor) and redeploy |
+| `data/products.ts` | Maps the 4 shop cards to Shopify product handles |
+| `data/images.ts` | Photo slot registry — drop a file in `public/images/`, set its path here |
+| `lib/shopify.ts` | Storefront API client: products, cart create/add/update/remove, checkout URL |
+| `lib/site.ts` | Site URL, support email, external links |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Content updates (no code knowledge needed)
 
-## Learn More
+- **Change a spec value** → edit `data/specs.json`, set `"tbc": false` when confirmed
+- **Swap a photo** → replace the file in `public/images/` (same name), push
+- **Change product name/price/photo** → Shopify admin; live immediately, no deploy
+- **Videos** → host on YouTube/Vimeo or Vercel Blob/Cloudflare Stream; embed by URL (never commit video files)
 
-To learn more about Next.js, take a look at the following resources:
+## Commerce flow
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Products render from Shopify at runtime (public Storefront token, client-side).
+Cart is a persistent Shopify cart (localStorage cart ID); CHECKOUT redirects to
+Shopify's hosted checkout (`cart.checkoutUrl`). Until Shopify env vars and
+product handles are set, the shop renders the design's placeholder bundles and
+the cart drawer explains what's missing.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy (Vercel)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Import the repo in Vercel with **Root Directory = `site`**, add the env vars
+from `.env.example`, and attach the `infiniteprobe.com` domain. Details in
+LAUNCH_CHECKLIST.md §10.

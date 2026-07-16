@@ -1,42 +1,204 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* InfiniteProbe design system — see ClaudeDesignPrototypesHandoff/InfiniteProbe Design System.dc.html
+   Ivory #F2EFE6 · Beige #EAE6DA · Cream #FBF9F3 · Ink #141414 · Burnt Orange #C9661A · Charcoal #161513
+   Orange is accent only, never a large fill. Dark bands: hero · app showcase · category statement. */
 
 * {
   box-sizing: border-box;
-  padding: 0;
+}
+
+body {
   margin: 0;
+  background: #F2EFE6;
+  color: #141414;
+  font-family: var(--font-inter), sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
-  color: inherit;
+  color: #141414;
   text-decoration: none;
 }
+a:hover {
+  color: #C9661A;
+}
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
+button {
+  font-family: var(--font-inter), sans-serif;
+}
+
+.mono {
+  font-family: var(--font-plex-mono), monospace;
+}
+
+/* Pill buttons */
+.btn-ink {
+  background: #141414;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-ink:hover {
+  background: #C9661A;
+  color: #FFFFFF;
+}
+
+.btn-cream {
+  background: #F2EFE6;
+  color: #141414;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-cream:hover {
+  background: #C9661A;
+  color: #FFFFFF;
+}
+
+.btn-outline-dark {
+  background: transparent;
+  color: #141414;
+  border: 1.5px solid #141414;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline-dark:hover {
+  background: #141414;
+  color: #F2EFE6;
+}
+
+.btn-outline-light {
+  background: transparent;
+  color: #F2EFE6;
+  border: 1.5px solid rgba(242, 239, 230, 0.5);
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline-light:hover {
+  border-color: #F2EFE6;
+  background: rgba(242, 239, 230, 0.08);
+}
+
+/* App store badges */
+.badge-dark {
+  border: 1.5px solid #141414;
+  border-radius: 12px;
+  font-family: var(--font-plex-mono), monospace;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  color: #141414;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+}
+.badge-dark:hover {
+  background: #141414;
+  color: #F2EFE6;
+}
+
+.badge-light {
+  border: 1.5px solid rgba(242, 239, 230, 0.4);
+  border-radius: 12px;
+  font-family: var(--font-plex-mono), monospace;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  color: rgba(242, 239, 230, 0.85);
+  transition: border-color 0.2s;
+  display: inline-block;
+}
+.badge-light:hover {
+  border-color: #F2EFE6;
+  color: rgba(242, 239, 230, 0.85);
+}
+
+/* Accordion / list-row hover */
+.row-hover {
+  transition: background 0.15s;
+}
+.row-hover:hover {
+  background: rgba(20, 20, 20, 0.02);
+}
+
+/* Download / doc cards */
+.card-hover-orange {
+  transition: border-color 0.2s;
+}
+.card-hover-orange:hover {
+  border-color: #C9661A !important;
+}
+
+/* Icon buttons (cart ✕, qty ±) */
+.icon-hover {
+  transition: color 0.15s;
+}
+.icon-hover:hover {
+  color: #C9661A !important;
+}
+
+/* Newsletter input */
+.input-pill {
+  border: 1.5px solid rgba(20, 20, 20, 0.25);
+  background: #FBF9F3;
+  border-radius: 999px;
+  font-family: var(--font-plex-mono), monospace;
+  color: #141414;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-pill:focus {
+  border-color: #C9661A;
+}
+
+/* Desktop nav links — hidden under 900px (Shop nav uses 1000px), as designed */
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 28px;
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+@media (min-width: 900px) {
+  .nav-links {
+    display: flex;
   }
+}
+.nav-links-shop {
+  display: none;
+  align-items: center;
+  gap: 28px;
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+@media (min-width: 1000px) {
+  .nav-links-shop {
+    display: flex;
+  }
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes chainGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 102, 26, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(201, 102, 26, 0.25); }
+}
+
+@keyframes electronFlow {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
 }

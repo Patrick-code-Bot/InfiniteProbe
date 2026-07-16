@@ -1,0 +1,116 @@
+{
+  "_comment": "Single source of truth for every spec value. The Specs page and the homepage teaser both read from this file — update a number here and it changes everywhere. Values wrapped in [brackets] are unconfirmed placeholders and render in the dashed-orange 'awaiting engineering' style; remove the brackets once engineering confirms and the value renders as verified.",
+  "model": "IP-X1",
+  "glance": [
+    { "value": "[X.X] mm", "label": "PROBE DIAMETER", "tbc": true },
+    { "value": "[XX]–[XXX] °C", "label": "AMBIENT RATING", "tbc": true },
+    { "value": "BLE 5.0", "label": "UP TO [XX] M RANGE", "tbc": false },
+    { "value": "[IPXX]", "label": "WATER RESISTANCE", "tbc": true },
+    { "value": "0 batteries", "label": "SELF-POWERED, FOREVER", "tbc": false }
+  ],
+  "homeTeaser": [
+    { "value": "[X.X] mm", "label": "PROBE DIAMETER · TBC", "tbc": true },
+    { "value": "[XX]–[XXX] °C", "label": "OPERATING RANGE · TBC", "tbc": true },
+    { "value": "BLE 5.0", "label": "UP TO [XX] M RANGE", "tbc": false },
+    { "value": "[IPXX]", "label": "WATER RESISTANCE · TBC", "tbc": true }
+  ],
+  "tables": [
+    {
+      "key": "s1",
+      "section": "§ 01",
+      "title": "TEMPERATURE & ACCURACY",
+      "defaultOpen": true,
+      "rows": [
+        { "label": "Internal (meat) sensor range", "value": "[XX °C – XXX °C / XX °F – XXX °F]", "tbc": true },
+        { "label": "Maximum ambient exposure", "value": "[XXX °C / XXX °F]", "tbc": true },
+        { "label": "Accuracy", "value": "[± X.X °C across XX–XX °C]", "tbc": true },
+        { "label": "Sensor type / count", "value": "[single-point core sensor — confirm]", "tbc": true },
+        { "label": "Resolution", "value": "[X.X °]", "tbc": true },
+        { "label": "Sampling rate", "value": "[every X s]", "tbc": true }
+      ]
+    },
+    {
+      "key": "s2",
+      "section": "§ 02",
+      "title": "POWER",
+      "defaultOpen": true,
+      "rows": [
+        { "label": "Power source", "value": "Thermoelectric generation from cooking heat", "tbc": false },
+        { "label": "Battery", "value": "None — no charging, ever", "tbc": false },
+        { "label": "Minimum activation temperature", "value": "[XX °C ambient — confirm cold-start]", "tbc": true },
+        { "label": "Behavior below activation temp", "value": "[sleeps / stored-energy buffer — confirm]", "tbc": true },
+        { "label": "Energy storage", "value": "[capacitor buffer for temperature dips — confirm]", "tbc": true }
+      ]
+    },
+    {
+      "key": "s3",
+      "section": "§ 03",
+      "title": "WIRELESS",
+      "defaultOpen": false,
+      "rows": [
+        { "label": "Protocol", "value": "Bluetooth Low Energy 5.0", "tbc": false },
+        { "label": "Line-of-sight range", "value": "[up to XX m]", "tbc": true },
+        { "label": "Typical range (grill lid closed)", "value": "[XX m]", "tbc": true },
+        { "label": "Simultaneous probes per phone", "value": "[X probes]", "tbc": true },
+        { "label": "Offline behavior", "value": "Offline alert in app; auto-reconnect", "tbc": false }
+      ]
+    },
+    {
+      "key": "s4",
+      "section": "§ 04",
+      "title": "PHYSICAL",
+      "defaultOpen": false,
+      "rows": [
+        { "label": "Probe length", "value": "[XXX mm]", "tbc": true },
+        { "label": "Needle diameter", "value": "[X.X mm]", "tbc": true },
+        { "label": "Handle (cap) diameter", "value": "[XX mm]", "tbc": true },
+        { "label": "Weight", "value": "[XX g]", "tbc": true },
+        { "label": "Body material", "value": "Food-grade stainless steel 304", "tbc": false },
+        { "label": "Minimum insertion depth", "value": "[XX mm — marked by insertion line]", "tbc": true },
+        { "label": "Water resistance", "value": "[IPXX] · dishwasher [safe / hand-wash — confirm]", "tbc": true }
+      ]
+    },
+    {
+      "key": "s5",
+      "section": "§ 05",
+      "title": "APP & COMPATIBILITY",
+      "defaultOpen": false,
+      "rows": [
+        { "label": "Platforms", "value": "iOS [XX+] · Android [X+]", "tbc": true },
+        { "label": "Cooking library", "value": "26+ preset cuts, editable targets, custom cuts", "tbc": false },
+        { "label": "Units", "value": "°C / °F", "tbc": false },
+        { "label": "Languages", "value": "[list — app shows \"Follow system\"]", "tbc": true },
+        { "label": "Alerts", "value": "Target reached, offline alert; per-probe sounds & vibration", "tbc": false },
+        { "label": "Data", "value": "Live chart, cook history, record mode", "tbc": false },
+        { "label": "Privacy", "value": "Bluetooth-local; nothing leaves your device", "tbc": false }
+      ]
+    },
+    {
+      "key": "s6",
+      "section": "§ 06",
+      "title": "IN THE BOX",
+      "defaultOpen": false,
+      "rows": [
+        { "label": "Contents", "value": "[X ×] InfiniteProbe One · Quick-start guide · [storage case / stand?]", "tbc": true }
+      ]
+    },
+    {
+      "key": "s7",
+      "section": "§ 07",
+      "title": "CERTIFICATIONS & WARRANTY",
+      "defaultOpen": false,
+      "rows": [
+        { "label": "Certifications", "value": "[CE / FCC / RoHS / food-contact — from compliance docs]", "tbc": true },
+        { "label": "Warranty", "value": "[X-year limited warranty]", "tbc": true },
+        { "label": "Returns", "value": "[XX-day money-back guarantee]", "tbc": true }
+      ]
+    }
+  ],
+  "warranty": {
+    "years": "[X]",
+    "returnDays": "[XX]"
+  },
+  "range": {
+    "lineOfSight": "up to [XX] m"
+  }
+}
