@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoMark, Wordmark } from "@/components/Logo";
@@ -23,6 +24,27 @@ export default function Header() {
   const { cart, openCart } = useCart();
   const onShop = pathname === "/shop";
   const count = cart?.totalQuantity ?? 0;
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close on route change — the panel would otherwise stay open over the new page.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  // Escape to close, and lock body scroll while the panel covers the page.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
 
   return (
     <div
@@ -63,8 +85,39 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        {onShop ? (
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <button
+            onClick={() => setMenuOpen((open) => !open)}
+            className={onShop ? "nav-toggle-shop" : "nav-toggle"}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            >
+              {menuOpen ? (
+                <>
+                  <path d="M6 6l12 12" />
+                  <path d="M18 6L6 18" />
+                </>
+              ) : (
+                <>
+                  <path d="M3.5 7h17" />
+                  <path d="M3.5 12h17" />
+                  <path d="M3.5 17h17" />
+                </>
+              )}
+            </svg>
+          </button>
+          {onShop ? (
+            <>
             <button
               onClick={openCart}
               aria-label="Open cart"
@@ -124,22 +177,88 @@ export default function Header() {
             >
               CART
             </button>
-          </div>
-        ) : (
-          <Link href="/shop">
-            <button
-              className="btn-ink"
+            </>
+          ) : (
+            <Link href="/shop">
+              <button
+                className="btn-ink"
+                style={{
+                  padding: "11px 22px",
+                  fontSize: 12,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                SHOP NOW
+              </button>
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {menuOpen && (
+        <>
+          {/* Overlay and panel both live inside the header's stacking context
+              (sticky + z-index:50), so they are layered against each other, not
+              against the page. */}
+          <div
+            onClick={() => setMenuOpen(false)}
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              height: "100vh",
+              zIndex: 1,
+              background: "rgba(20,19,17,0.45)",
+            }}
+          />
+          <div
+            id="mobile-menu"
+            style={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              zIndex: 2,
+              background: "#F2EFE6",
+              borderBottom: "2px solid #141414",
+              boxShadow: "0 16px 40px rgba(20,19,17,0.18)",
+              maxHeight: "calc(100vh - 68px)",
+              overflowY: "auto",
+            }}
+          >
+            <nav
               style={{
-                padding: "11px 22px",
-                fontSize: 12,
-                whiteSpace: "nowrap",
+                maxWidth: 1280,
+                margin: "0 auto",
+                padding: "8px 24px 28px",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              SHOP NOW
-            </button>
-          </Link>
-        )}
-      </div>
+              {NAV.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="mobile-nav-link"
+                  style={isActive(pathname, item.href) ? { color: "#C9661A" } : undefined}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link href="/shop" style={{ marginTop: 24 }}>
+                <button
+                  className="btn-ink"
+                  style={{ width: "100%", padding: "16px 24px", fontSize: 13 }}
+                >
+                  SHOP NOW →
+                </button>
+              </Link>
+            </nav>
+          </div>
+        </>
+      )}
     </div>
   );
 }

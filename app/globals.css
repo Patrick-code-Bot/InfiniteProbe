@@ -1,4 +1,4 @@
-/* InfiniteProbe design system — see ClaudeDesignPrototypesHandoff/InfiniteProbe Design System.dc.html
+/* InfiniteProbe design system — see ClaudeDesignProtoTypes/ProtoTypeHandoff_1st_20260723/InfiniteProbe Design System.dc.html
    Ivory #F2EFE6 · Beige #EAE6DA · Cream #FBF9F3 · Ink #141414 · Burnt Orange #C9661A · Charcoal #161513
    Orange is accent only, never a large fill. Dark bands: hero · app showcase · category statement. */
 
@@ -186,6 +186,52 @@ button {
   .nav-links-shop {
     display: flex;
   }
+}
+
+/* Mobile menu toggle — the mirror image of .nav-links: shown only where the
+   desktop link row is hidden, so the nav is never unreachable. */
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  color: #141414;
+}
+@media (min-width: 900px) {
+  .nav-toggle {
+    display: none;
+  }
+}
+.nav-toggle-shop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  color: #141414;
+}
+@media (min-width: 1000px) {
+  .nav-toggle-shop {
+    display: none;
+  }
+}
+
+/* Mobile menu panel links */
+.mobile-nav-link {
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 15px;
+  letter-spacing: 0.16em;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(20, 20, 20, 0.1);
+  display: block;
+  transition: color 0.15s;
 }
 
 @keyframes livePulse {

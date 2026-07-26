@@ -3,7 +3,7 @@
 Production site for **InfiniteProbe** — the self-powered wireless meat
 thermometer. Built with Next.js (App Router, TypeScript), statically generated
 marketing pages, and Shopify Storefront API commerce. Converted pixel-for-pixel
-from the Claude Design handoff in `../ClaudeDesignPrototypesHandoff/`.
+from the Claude Design handoffs in `../ClaudeDesignProtoTypes/`.
 
 **Before launch:** work through [`LAUNCH_CHECKLIST.md`](./LAUNCH_CHECKLIST.md) —
 it lists every `[bracketed]` placeholder. Unresolved placeholders render in the
