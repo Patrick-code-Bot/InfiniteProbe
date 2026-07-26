@@ -96,6 +96,17 @@ dashed placeholder boxes) — drop files into `/public/images` and set the path:
 - [ ] In Shopify: Settings → Checkout — confirm checkout branding matches (logo, colors) since checkout happens on Shopify's domain
 - [ ] Test a full end-to-end order with Shopify's Bogus Gateway before enabling real payments
 
+## 11 · New pages (2026-07-27 design handoff)
+
+- [ ] **Ambient sensing spec values** — `data/specs.json` § s1: `Sensor type / count` (`[internal + ambient — confirm]`), `Ambient sensor range` (`[XX °C – XXX °C — confirm]`). Confirm with engineering whether dual internal+ambient sensing is final before launch (the "Sensing" row is asserted as non-TBC copy already).
+- [ ] **App screenshots** — the 2nd design handoff implies updated app screenshots showing the new ambient-tracking UI (referenced under different filenames in the prototype export), but no actual image files were included. Current `/public/images/UI01–05.png` and `data/images.ts` are unchanged. Get final ambient-UI screenshots from design before launch.
+- [ ] **`/why-different`** — new standalone page (`app/why-different/page.tsx`). Content is finished/non-placeholder in the design handoff; no new brackets introduced.
+- [ ] **`/privacy-policy`** (`app/privacy-policy/page.tsx`) — placeholders: `[MONTH DD, YYYY — SET AT PUBLICATION]` (last updated), `[privacy@infiniteprobe.com]` (confirm address), `[REGISTERED ADDRESS — AWAITING LEGAL]`, `[JURISDICTION — TBC]`, `[REGIONS — TBC]`, `[X]` business-day request-acknowledgment window.
+- [ ] **`/shipping-policy`** (`app/shipping-policy/page.tsx`) — placeholders: last-updated date, `[X–X] days` processing time (×2), peak-season `[X]` day delay, `[HH:MM TIMEZONE — TBC]` cutoff, `[$XX — TBC]` expedited/priority rates, AK/HI/territory `[X–X]` day delay, `[X–XX] business days` international transit, `[CONFIRM WITH CARRIER]` PO Box/APO guidance, `[X–XX]` military address delay, tracking-silence/damage/missing-package day thresholds in the FAQ, `[orders@infiniteprobe.com]`.
+- [ ] **`/terms-of-service`** (`app/terms-of-service/page.tsx`) — placeholders: effective date, `[PENDING]` Shipping Policy cross-reference (now resolvable — link once confirmed), `[USD $100 — TBC]` liability cap, `[JURISDICTION — TBC]` (×2), `[XX]` days informal-resolution period, `[ARBITRATION PROVIDER — TBC]`, `[SEAT — TBC]`, `[legal@infiniteprobe.com]`, `[REGISTERED ADDRESS — AWAITING LEGAL]`. **Do not launch without legal sign-off** — jurisdiction, arbitration provider/seat, and liability cap materially affect enforceability.
+- [ ] **`/warranty`** (`app/warranty/page.tsx`) — placeholders: `[X]`-year warranty length (×2, glance tile + § 02 body), `[XX]`-day return window (×2), `[XX]` days replacement-warranty extension, `[X]` business days refund processing, `[JURISDICTION — TBC]`, an entire unwritten sub-section (`[Regional warranty durations, distributor contacts, and any extended holiday return window — awaiting confirmation from legal and operations.]`), `[support@infiniteprobe.com]`. Also confirm `data/specs.json` → `warranty.years` / `warranty.returnDays` match once resolved (Home guarantee banner reads the same values).
+- [ ] **Footer/nav policy links** — `lib/site.ts` → `LINKS.shippingPolicy` / `warrantyPolicy` / `privacyPolicy` / `termsOfService` now point at the new internal routes instead of external `[bracketed]` URLs; no further action needed there once the pages' own content is finalized.
+
 ## Notes for ongoing content updates
 
 - **Specs** → edit `data/specs.json` (one-line edit, works in GitHub web editor)

@@ -49,7 +49,7 @@ const CHAIN_STEPS = [
   {
     num: "05",
     title: "Real-Time Monitoring",
-    body: "The app turns the signal into a live readout: current temperature, target, percent cooked, and an ETA you can plan dinner around.",
+    body: "The app turns the signal into a live readout: internal and ambient temperature, target, percent cooked, and an ETA you can plan dinner around.",
     bg: "#FBF9F3",
   },
 ];
@@ -571,7 +571,7 @@ export default function HowItWorksPage() {
                 sizes="220px"
               />
             </div>
-            <div style={{ width: "min(220px,42vw)", aspectRatio: "862/1658", marginTop: 36 }}>
+            <div style={{ width: "min(220px,42vw)", aspectRatio: "862/1658" }}>
               <ImageSlot
                 src={IMAGES.uiMyProbes}
                 alt="InfiniteProbe app My Probes screen — pairing"

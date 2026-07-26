@@ -20,10 +20,10 @@ export const LINKS = {
   userManualPdf: "[/downloads/user-manual.pdf]",
   quickStartPdf: "[/downloads/quick-start.pdf]",
   declarationPdf: "[/downloads/declaration-of-conformity.pdf]",
-  shippingPolicy: "[SHIPPING POLICY URL]",
-  warrantyPolicy: "[WARRANTY POLICY URL]",
-  privacyPolicy: "[PRIVACY POLICY URL]",
-  termsOfService: "[TERMS OF SERVICE URL]",
+  shippingPolicy: "/shipping-policy",
+  warrantyPolicy: "/warranty",
+  privacyPolicy: "/privacy-policy",
+  termsOfService: "/terms-of-service",
 };
 
 /** True if the value is still a [bracketed] placeholder. */

@@ -32,7 +32,7 @@ const PILLARS = [
   {
     num: "02",
     title: "Wireless, Real-Time Monitoring",
-    body: "Close the lid and walk away. Internal temperature, target, progress, and ETA stream live to your phone for the entire cook.",
+    body: "Close the lid and walk away. Internal and ambient temperature, target, progress, and ETA stream live to your phone for the entire cook.",
   },
   {
     num: "03",
@@ -54,9 +54,9 @@ const USE_CASES = ["GRILL", "SMOKER", "OVEN", "OPEN FIRE", "STEAK", "TURKEY", "B
 const APP_BLOCKS = [
   {
     dir: "row" as const,
-    tag: "LIVE READOUT · UI02",
+    tag: "LIVE READOUT",
     title: "Live readout.",
-    body: "Current temperature and target, side by side — with percent cooked, degrees to go, and a live ETA. You'll know the brisket lands at 02:59 before anyone asks.",
+    body: "Current temperature and target, side by side — with percent cooked, degrees to go, and a live ETA. Ambient tracking watches the pit as well as the meat, with a recommended range for your cook.",
     src: IMAGES.uiLiveCook,
     alt: "InfiniteProbe app live cook screen",
   },
@@ -64,15 +64,15 @@ const APP_BLOCKS = [
     dir: "row-reverse" as const,
     tag: "COOKING LIBRARY · UI05",
     title: "A library of 26+ cuts.",
-    body: "Beef, pork, poultry, and more — each with an editable reference target. Tap to adjust any temperature, or add your own custom cuts.",
+    body: "Beef, pork, poultry, and more — each with an editable reference target and a recommended ambient range for the cooker. Tap to adjust any temperature, or add your own custom cuts.",
     src: IMAGES.uiLibrary,
     alt: "InfiniteProbe app cooking library",
   },
   {
     dir: "row" as const,
-    tag: "MULTI-PROBE · UI04",
+    tag: "MULTI-PROBE",
     title: "Every probe, one screen.",
-    body: "Run the brisket, the pork shoulder, and the salmon at once. Pair as many probes as your table demands; the home screen shows them all, live.",
+    body: "Run the brisket, the pork shoulder, and the salmon at once. Pair as many probes as your table demands; the home screen shows them all, live — with ambient at a glance.",
     src: IMAGES.uiMyProbes,
     alt: "InfiniteProbe app My Probes home screen",
   },
@@ -206,12 +206,13 @@ export default function HomePage() {
                   color: "#F2EFE6",
                   borderRadius: 999,
                   padding: "12px 22px",
-                  fontSize: 12,
-                  letterSpacing: "0.12em",
+                  fontSize: "clamp(9px, 2.6vw, 12px)",
+                  letterSpacing: "0.1em",
                   display: "flex",
                   alignItems: "center",
                   gap: 10,
                   whiteSpace: "nowrap",
+                  maxWidth: "94vw",
                   boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
                 }}
               >
@@ -224,8 +225,8 @@ export default function HomePage() {
                     animation: "livePulse 1.6s infinite",
                   }}
                 />
-                INTERNAL <span style={{ color: "#C9661A", fontWeight: 600 }}>54.2°C</span> · TARGET
-                58.0 · CH-1 · LIVE
+                INTERNAL <span style={{ color: "#C9661A", fontWeight: 600 }}>54.2°</span> · AMBIENT
+                116° · TARGET 58.0 · LIVE
               </div>
             </div>
           </div>
@@ -532,7 +533,8 @@ export default function HomePage() {
               className="mono"
               style={{ fontSize: 12, letterSpacing: "0.18em", color: "rgba(242,239,230,0.65)" }}
             >
-              °C OR °F · MULTI-LANGUAGE · BLUETOOTH 5.0 · NOTHING LEAVES YOUR DEVICE
+              INTERNAL + AMBIENT · °C OR °F · MULTI-LANGUAGE · BLUETOOTH 5.0 · NOTHING LEAVES YOUR
+              DEVICE
             </div>
             <div style={{ display: "flex", gap: 14 }}>
               <StoreBadges variant="light" />
@@ -541,23 +543,34 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 6 · Why It's Different */}
+      {/* 6 · Why It's Different (teaser) */}
       <div id="different" style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
         <SectionRule eyebrow="§ 05 · WHY IT'S DIFFERENT" />
-        <h2
-          style={{
-            margin: "0 0 48px",
-            fontSize: "clamp(30px,4vw,48px)",
-            fontWeight: 800,
-            letterSpacing: "-0.028em",
-            lineHeight: 1.05,
-            maxWidth: 820,
-          }}
-        >
-          The Last Thermometer Habit You&apos;ll Break Is Charging It
-        </h2>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 40, alignItems: "flex-start", justifyContent: "space-between" }}>
+          <h2
+            style={{
+              margin: "0 0 0",
+              fontSize: "clamp(30px,4vw,48px)",
+              fontWeight: 800,
+              letterSpacing: "-0.028em",
+              lineHeight: 1.05,
+              maxWidth: 640,
+            }}
+          >
+            The Last Thermometer Habit You&apos;ll Break Is Charging It
+          </h2>
+          <Link href="/why-different">
+            <button
+              className="btn-outline-dark"
+              style={{ padding: "15px 30px", fontSize: 13, whiteSpace: "nowrap" }}
+            >
+              SEE WHY IT&apos;S DIFFERENT →
+            </button>
+          </Link>
+        </div>
         <div
           style={{
+            marginTop: 40,
             background: "#FBF9F3",
             borderRadius: 20,
             overflow: "hidden",
@@ -585,13 +598,12 @@ export default function HomePage() {
               INFINITEPROBE
             </div>
           </div>
-          {COMPARISON.map((row) => (
+          {COMPARISON.slice(0, 1).map((row) => (
             <div
               key={row.label}
               style={{
                 display: "grid",
                 gridTemplateColumns: "minmax(120px,1.1fr) 1fr 1fr",
-                borderBottom: "1px solid rgba(20,20,20,0.08)",
               }}
             >
               <div style={{ padding: "22px 24px", fontWeight: 700, fontSize: 14 }}>{row.label}</div>

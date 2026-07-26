@@ -7,7 +7,7 @@ import { useCart } from "@/components/cart/CartProvider";
 
 const NAV = [
   { label: "HOW IT WORKS", href: "/how-it-works" },
-  { label: "WHY DIFFERENT", href: "/#different" },
+  { label: "WHY DIFFERENT", href: "/why-different" },
   { label: "APP", href: "/app" },
   { label: "SPECS", href: "/specs" },
   { label: "SUPPORT", href: "/support" },

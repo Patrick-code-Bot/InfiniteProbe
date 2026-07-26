@@ -26,24 +26,25 @@ const SCREENS = [
     eyebrow: "§ 01 · LIVE READOUT",
     meta: "REAL-TIME MONITORING",
     title: "The only number that matters, front and center.",
-    body: "Current temperature and target, side by side — with percent cooked, degrees to go, and a live ETA. You'll know the brisket lands at 02:59 before anyone asks.",
+    body: "Current temperature and target, side by side — with percent cooked, degrees to go, and a live ETA. Ambient tracking watches the pit as well as the meat, so you can hold your cooker in the recommended range.",
     points: [
       "Oversized current → target readout with progress bar",
-      "Time remaining with started / ETA timeline",
-      "Live temperature chart, record mode, and cook history",
+      "Live ambient temperature with recommended cook range",
+      "Internal + ambient chart, record mode, and cook history",
       "Per-cook alert and vibrate toggles right on the screen",
     ],
     src: IMAGES.uiLiveCook,
-    alt: "Live cook screen",
+    alt: "Live cook screen with ambient tracking",
   },
   {
     dir: "row-reverse" as const,
     eyebrow: "§ 02 · COOKING LIBRARY",
     meta: "26 CUTS · TAP TEMP TO EDIT",
     title: "A library of 26+ cuts.",
-    body: "Beef, pork, poultry, and more — each with an editable reference target. Tap to adjust any temperature, or add your own custom cuts.",
+    body: "Beef, pork, poultry, and more — each with an editable reference target and a recommended ambient range for the cooker. Tap to adjust any temperature, or add your own custom cuts.",
     points: [
       "Reference targets for every cut, from rare steak to brisket",
+      "Recommended oven / pit range per cut — e.g. brisket at 110–120 °C",
       "Tap any temperature to edit it in place",
       "Add custom cuts with your own targets",
     ],
@@ -179,6 +180,8 @@ export default function AppPage() {
             color: "rgba(20,20,20,0.7)",
           }}
         >
+          <span>INTERNAL + AMBIENT</span>
+          <span style={{ color: "#C9661A" }}>·</span>
           <span>°C OR °F</span>
           <span style={{ color: "#C9661A" }}>·</span>
           <span>MULTI-LANGUAGE</span>

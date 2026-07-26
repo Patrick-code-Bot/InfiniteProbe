@@ -24,7 +24,9 @@
         { "label": "Internal (meat) sensor range", "value": "[XX °C – XXX °C / XX °F – XXX °F]", "tbc": true },
         { "label": "Maximum ambient exposure", "value": "[XXX °C / XXX °F]", "tbc": true },
         { "label": "Accuracy", "value": "[± X.X °C across XX–XX °C]", "tbc": true },
-        { "label": "Sensor type / count", "value": "[single-point core sensor — confirm]", "tbc": true },
+        { "label": "Sensing", "value": "Internal core + ambient tracking with recommended range", "tbc": false },
+        { "label": "Sensor type / count", "value": "[internal + ambient — confirm]", "tbc": true },
+        { "label": "Ambient sensor range", "value": "[XX °C – XXX °C — confirm]", "tbc": true },
         { "label": "Resolution", "value": "[X.X °]", "tbc": true },
         { "label": "Sampling rate", "value": "[every X s]", "tbc": true }
       ]
@@ -81,7 +83,7 @@
         { "label": "Units", "value": "°C / °F", "tbc": false },
         { "label": "Languages", "value": "[list — app shows \"Follow system\"]", "tbc": true },
         { "label": "Alerts", "value": "Target reached, offline alert; per-probe sounds & vibration", "tbc": false },
-        { "label": "Data", "value": "Live chart, cook history, record mode", "tbc": false },
+        { "label": "Data", "value": "Live internal + ambient chart, cook history, record mode", "tbc": false },
         { "label": "Privacy", "value": "Bluetooth-local; nothing leaves your device", "tbc": false }
       ]
     },

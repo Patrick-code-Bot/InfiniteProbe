@@ -7,8 +7,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/shop", priority: 0.9 },
     { path: "/how-it-works", priority: 0.8 },
     { path: "/specs", priority: 0.8 },
+    { path: "/why-different", priority: 0.7 },
     { path: "/app", priority: 0.7 },
     { path: "/support", priority: 0.6 },
+    { path: "/warranty", priority: 0.4 },
+    { path: "/shipping-policy", priority: 0.3 },
+    { path: "/privacy-policy", priority: 0.3 },
+    { path: "/terms-of-service", priority: 0.3 },
   ];
   return routes.map(({ path, priority }) => ({
     url: `${SITE_URL}${path}`,
