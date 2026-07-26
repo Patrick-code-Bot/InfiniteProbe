@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoMark, Wordmark } from "@/components/Logo";
@@ -25,6 +25,22 @@ export default function Header() {
   const onShop = pathname === "/shop";
   const count = cart?.totalQuantity ?? 0;
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const [headerBottom, setHeaderBottom] = useState(68);
+
+  // How far the header's bottom edge sits from the top of the viewport. The
+  // announcement bar scrolls away above the sticky header, so this shrinks
+  // toward the bar height as the page scrolls.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const measure = () => {
+      const rect = headerRef.current?.getBoundingClientRect();
+      if (rect) setHeaderBottom(Math.max(0, rect.bottom));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [menuOpen]);
 
   // Close on route change — the panel would otherwise stay open over the new page.
   useEffect(() => {
@@ -48,6 +64,7 @@ export default function Header() {
 
   return (
     <div
+      ref={headerRef}
       style={{
         position: "sticky",
         top: 0,
@@ -208,7 +225,7 @@ export default function Header() {
               top: "100%",
               left: 0,
               right: 0,
-              height: "100vh",
+              height: `calc(100dvh - ${headerBottom}px)`,
               zIndex: 1,
               background: "rgba(20,19,17,0.45)",
             }}
@@ -224,8 +241,13 @@ export default function Header() {
               background: "#F2EFE6",
               borderBottom: "2px solid #141414",
               boxShadow: "0 16px 40px rgba(20,19,17,0.18)",
-              maxHeight: "calc(100vh - 68px)",
+              // The panel hangs below whatever the header's bottom edge happens
+              // to be — which the announcement bar pushes down — so cap against
+              // the measured offset rather than the 68px bar height alone, or
+              // the last item is unreachable on short viewports.
+              maxHeight: `calc(100dvh - ${headerBottom}px)`,
               overflowY: "auto",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             <nav
