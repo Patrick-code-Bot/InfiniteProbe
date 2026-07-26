@@ -533,8 +533,7 @@ export default function HomePage() {
               className="mono"
               style={{ fontSize: 12, letterSpacing: "0.18em", color: "rgba(242,239,230,0.65)" }}
             >
-              INTERNAL + AMBIENT · °C OR °F · MULTI-LANGUAGE · BLUETOOTH 5.0 · NOTHING LEAVES YOUR
-              DEVICE
+              °C OR °F · MULTI-LANGUAGE · BLUETOOTH 5.0 · NOTHING LEAVES YOUR DEVICE
             </div>
             <div style={{ display: "flex", gap: 14 }}>
               <StoreBadges variant="light" />
@@ -543,34 +542,23 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* 6 · Why It's Different (teaser) */}
+      {/* 6 · Why It's Different */}
       <div id="different" style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
         <SectionRule eyebrow="§ 05 · WHY IT'S DIFFERENT" />
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 40, alignItems: "flex-start", justifyContent: "space-between" }}>
-          <h2
-            style={{
-              margin: "0 0 0",
-              fontSize: "clamp(30px,4vw,48px)",
-              fontWeight: 800,
-              letterSpacing: "-0.028em",
-              lineHeight: 1.05,
-              maxWidth: 640,
-            }}
-          >
-            The Last Thermometer Habit You&apos;ll Break Is Charging It
-          </h2>
-          <Link href="/why-different">
-            <button
-              className="btn-outline-dark"
-              style={{ padding: "15px 30px", fontSize: 13, whiteSpace: "nowrap" }}
-            >
-              SEE WHY IT&apos;S DIFFERENT →
-            </button>
-          </Link>
-        </div>
+        <h2
+          style={{
+            margin: "0 0 48px",
+            fontSize: "clamp(30px,4vw,48px)",
+            fontWeight: 800,
+            letterSpacing: "-0.028em",
+            lineHeight: 1.05,
+            maxWidth: 820,
+          }}
+        >
+          The Last Thermometer Habit You&apos;ll Break Is Charging It
+        </h2>
         <div
           style={{
-            marginTop: 40,
             background: "#FBF9F3",
             borderRadius: 20,
             overflow: "hidden",
@@ -598,12 +586,13 @@ export default function HomePage() {
               INFINITEPROBE
             </div>
           </div>
-          {COMPARISON.slice(0, 1).map((row) => (
+          {COMPARISON.map((row) => (
             <div
               key={row.label}
               style={{
                 display: "grid",
                 gridTemplateColumns: "minmax(120px,1.1fr) 1fr 1fr",
+                borderBottom: "1px solid rgba(20,20,20,0.08)",
               }}
             >
               <div style={{ padding: "22px 24px", fontWeight: 700, fontSize: 14 }}>{row.label}</div>
