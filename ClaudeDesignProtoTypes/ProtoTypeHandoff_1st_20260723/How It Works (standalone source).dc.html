@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="./image-slot.js"></script>
+<meta name="ext-resource-dependency" content="uploads/UI01.png" data-resource-id="ui01" />
+<meta name="ext-resource-dependency" content="uploads/UI04.png" data-resource-id="ui04" />
+<template id="__bundler_thumbnail" data-bg-color="#161513">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#161513"/>
+    <path d="M600,400 C540,292 414,262 342,307 C270,352 270,448 342,493 C414,538 540,508 600,400 C552,484 432,508 366,469 C312,436 312,364 366,331 C432,292 552,316 600,400 Z" fill="#F2EFE6"/>
+    <path d="M600,400 C660,292 786,262 858,307 C930,352 930,448 858,493 C786,538 660,508 600,400 C648,484 768,508 834,469 C888,436 888,364 834,331 C768,292 648,316 600,400 Z" fill="#F2EFE6"/>
+    <circle cx="600" cy="400" r="18" fill="#C9661A"/>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F2EFE6; color:#141414; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#141414; text-decoration:none; } a:hover { color:#C9661A; }
+  @keyframes chainGlow { 0%,100% { box-shadow:0 0 0 0 rgba(201,102,26,0) } 50% { box-shadow:0 0 0 4px rgba(201,102,26,0.25) } }
+  @keyframes electronFlow { from { stroke-dashoffset: 24 } to { stroke-dashoffset: 0 } }
+</style>
+</helmet>
+
+<!-- Navigation -->
+<div style="position:sticky; top:0; z-index:50; background:rgba(242,239,230,0.92); backdrop-filter:blur(10px); border-bottom:1px solid rgba(20,20,20,0.1)">
+  <div style="max-width:1280px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between; gap:16px">
+    <a href="Home.dc.html" style="display:flex; align-items:center; gap:10px">
+      <svg width="48" height="24" viewBox="0 0 240 120"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <span style="font-weight:800; font-size:15px; letter-spacing:0.12em"><span style="color:#C9661A">INFINITE</span>PROBE</span>
+    </a>
+    <div style="display:none; align-items:center; gap:28px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em" ref="{{ navRef }}">
+      <a href="#" style="color:#C9661A">HOW IT WORKS</a><a href="Home.dc.html#different">WHY DIFFERENT</a><a href="Home.dc.html#app">APP</a><a href="Home.dc.html#specs">SPECS</a><a href="Home.dc.html#support">SUPPORT</a>
+    </div>
+    <button style="background:#141414; color:#FFFFFF; border:none; border-radius:999px; padding:11px 22px; font-family:'Inter',sans-serif; font-weight:700; font-size:12px; letter-spacing:0.08em; cursor:pointer; white-space:nowrap" style-hover="background:#C9661A">SHOP NOW</button>
+  </div>
+</div>
+
+<!-- 1 · Hero (dark band) -->
+<div style="background:#161513; color:#F2EFE6">
+  <div style="max-width:1280px; margin:0 auto; padding:clamp(64px,9vw,120px) 24px clamp(56px,7vw,96px); display:flex; flex-wrap:wrap; gap:56px; align-items:center">
+    <div style="flex:1 1 480px; min-width:300px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.24em; color:#C9661A; margin-bottom:28px">HOW IT WORKS</div>
+      <h1 style="margin:0 0 28px; font-size:clamp(40px,6.5vw,80px); font-weight:800; letter-spacing:-0.035em; line-height:0.98">Powered by the Cook Itself</h1>
+      <p style="margin:0 0 40px; font-size:clamp(16px,1.4vw,18px); line-height:1.7; color:rgba(242,239,230,0.75); max-width:560px">Every wireless thermometer before this one had the same weakness: a battery. InfiniteProbe removed it. Inside the probe, a thermoelectric core converts the heat of your cook into electricity — powering the sensor and the wireless link for as long as there's fire.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:16px">
+        <button style="background:#F2EFE6; color:#141414; border:none; border-radius:999px; padding:17px 34px; font-family:'Inter',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.08em; cursor:pointer" style-hover="background:#C9661A; color:#FFFFFF">SHOP NOW →</button>
+        <button style="background:transparent; color:#F2EFE6; border:1.5px solid rgba(242,239,230,0.5); border-radius:999px; padding:16px 34px; font-family:'Inter',sans-serif; font-weight:600; font-size:14px; letter-spacing:0.08em; cursor:pointer" style-hover="border-color:#F2EFE6; background:rgba(242,239,230,0.08)">SEE THE SPECS</button>
+      </div>
+    </div>
+    <div style="flex:1 1 380px; min-width:280px; aspect-ratio:4/3">
+      <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hiw-hero" shape="rounded" radius="20" hint-size="100%,100%" style="width:100%; height:100%" placeholder="Exploded / cutaway probe render — or Probe3.jpg with annotated overlay"></x-import>
+    </div>
+  </div>
+</div>
+
+<!-- 2 · The Energy Chain -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(72px,9vw,128px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 01 · FROM FIRE TO SIGNAL</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.4)">05 STEPS</span>
+  </div>
+  <h2 style="margin:0 0 48px; font-size:clamp(32px,4.5vw,52px); font-weight:800; letter-spacing:-0.028em; line-height:1.02">Five Steps, Zero Batteries</h2>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px">
+    <sc-for list="{{ chainSteps }}" as="s" hint-placeholder-count="5">
+      <div style="background:{{ s.bg }}; border-radius:20px; padding:32px 28px; box-shadow:0 1px 2px rgba(20,20,20,0.05); transition:box-shadow 0.4s; animation:{{ s.anim }}">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.2em; color:#C9661A; margin-bottom:20px">{{ s.num }}</div>
+        <div style="font-weight:800; font-size:19px; letter-spacing:-0.015em; line-height:1.2; margin-bottom:12px">{{ s.title }}</div>
+        <div style="font-size:14px; line-height:1.6; color:rgba(20,20,20,0.72)">{{ s.body }}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<!-- 3 · The Principle -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(72px,9vw,128px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 02 · THE SCIENCE, BRIEFLY</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:center">
+    <div style="flex:1 1 440px; min-width:300px">
+      <h2 style="margin:0 0 28px; font-size:clamp(30px,4vw,48px); font-weight:800; letter-spacing:-0.028em; line-height:1.05">Heat Wants to Move. We Put It to Work.</h2>
+      <p style="margin:0 0 20px; font-size:16px; line-height:1.7; color:rgba(20,20,20,0.78)">Whenever one end of a thermoelectric material is hotter than the other, electrons flow — a physical effect known for nearly two centuries and trusted in applications from spacecraft to industrial sensors. InfiniteProbe brings it to the kitchen: the same heat gradient that cooks your meat generates the power that monitors it.</p>
+      <p style="margin:0; font-size:16px; line-height:1.7; color:rgba(20,20,20,0.78)">The result is a probe with no charging port, no battery door, and no countdown clock. It cannot die mid-brisket, because the brisket is what's powering it.</p>
+    </div>
+    <div style="flex:1 1 380px; min-width:290px; background:#EAE6DA; border-radius:20px; padding:40px 32px">
+      <div style="display:flex; justify-content:space-between; margin-bottom:18px">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#C9661A">HOT END · FIRE SIDE</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(20,20,20,0.5)">COLD END · MEAT CORE</span>
+      </div>
+      <div style="height:56px; border-radius:999px; background:linear-gradient(90deg, #C9661A 0%, #DFA269 45%, #EAE0CB 100%); position:relative; margin-bottom:22px">
+        <svg style="position:absolute; inset:0; width:100%; height:100%" viewBox="0 0 400 56" preserveAspectRatio="none">
+          <line x1="30" y1="28" x2="370" y2="28" stroke="#141414" stroke-width="2" stroke-dasharray="4 8" style="animation:electronFlow 1.2s linear infinite"></line>
+          <polygon points="370,22 382,28 370,34" fill="#141414"></polygon>
+        </svg>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline">
+        <span style="font-size:34px; font-weight:800; letter-spacing:-0.03em; color:#C9661A">ΔT</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.55)">TEMPERATURE DIFFERENCE → ELECTRON FLOW → POWER</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 · Placement -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(72px,9vw,128px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 03 · PLACEMENT IS PRECISION</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.4)">MANUAL FIG. 07</span>
+  </div>
+  <h2 style="margin:0 0 16px; font-size:clamp(30px,4vw,48px); font-weight:800; letter-spacing:-0.028em; line-height:1.05">Accurate Readings Start with Placement</h2>
+  <p style="margin:0 0 48px; font-size:17px; line-height:1.6; color:rgba(20,20,20,0.75); max-width:560px">Bury the sensor in the dense center of the meat — and keep the tip safely inside.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:24px; margin-bottom:24px">
+    <div style="flex:1 1 420px; min-width:300px; background:#FBF9F3; border-radius:20px; box-shadow:0 1px 2px rgba(20,20,20,0.05); padding:28px 28px 20px">
+      <div style="display:flex; align-items:center; gap:14px; margin-bottom:8px">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A">FIG. 07</span>
+        <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">SIDE INSERTION · CROSS-SECTION</span>
+      </div>
+      <svg viewBox="0 0 560 340" style="width:100%; height:auto; display:block" aria-label="Probe insertion diagram: side insertion into meat cross-section">
+        <!-- meat cross-section -->
+        <path d="M60 190 C55 120 130 72 235 68 C340 64 430 96 448 160 C464 220 400 282 285 290 C170 298 66 262 60 190 Z" fill="#EAE6DA" stroke="#141414" stroke-width="2.5"></path>
+        <path d="M105 188 C102 138 158 104 240 101 C322 98 390 121 403 166 C415 208 366 251 278 257 C190 263 109 238 105 188 Z" fill="none" stroke="#141414" stroke-width="1" stroke-dasharray="2 5" opacity="0.35"></path>
+        <!-- probe: handle cap outside, needle to centre -->
+        <rect x="470" y="164" width="58" height="26" rx="13" fill="#141414"></rect>
+        <circle cx="499" cy="177" r="4" fill="#C9661A"></circle>
+        <rect x="253" y="172" width="220" height="10" rx="5" fill="#141414"></rect>
+        <circle cx="256" cy="177" r="7" fill="#C9661A"></circle>
+        <!-- minimum insertion line across the needle -->
+        <line x1="392" y1="120" x2="392" y2="238" stroke="#C9661A" stroke-width="2" stroke-dasharray="6 6"></line>
+        <text x="392" y="110" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.5" fill="#C9661A">MINIMUM INSERTION LINE</text>
+        <text x="392" y="256" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="rgba(20,20,20,0.5)">COVER PAST THIS MARK</text>
+        <!-- sensor tip callout -->
+        <line x1="256" y1="168" x2="210" y2="94" stroke="#141414" stroke-width="1"></line>
+        <circle cx="210" cy="94" r="2.5" fill="#141414"></circle>
+        <text x="14" y="66" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.2" fill="#141414">SENSOR TIP · THICKEST CENTRE</text>
+        <text x="14" y="84" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1" fill="#C9661A">TIP STAYS INSIDE</text>
+        <!-- surface warning callout -->
+        <line x1="150" y1="255" x2="120" y2="298" stroke="#141414" stroke-width="1"></line>
+        <circle cx="150" cy="255" r="2.5" fill="#141414"></circle>
+        <text x="116" y="314" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.2" fill="rgba(20,20,20,0.5)">READ THE CORE, NOT THE SURFACE</text>
+      </svg>
+    </div>
+    <div style="flex:1 1 380px; min-width:290px; display:flex; flex-direction:column; gap:20px">
+      <div style="background:#FBF9F3; border-radius:20px; padding:30px 32px; box-shadow:0 1px 2px rgba(20,20,20,0.05)">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#C9661A; margin-bottom:16px">BEST PRACTICE</div>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <sc-for list="{{ dos }}" as="d" hint-placeholder-count="3">
+            <div style="display:flex; gap:12px; font-size:15px; line-height:1.5"><span style="color:#C9661A; font-weight:800">✓</span><span>{{ d }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background:#FBF9F3; border-radius:20px; padding:30px 32px; box-shadow:0 1px 2px rgba(20,20,20,0.05)">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; color:rgba(20,20,20,0.5); margin-bottom:16px">AVOID</div>
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <sc-for list="{{ donts }}" as="d" hint-placeholder-count="4">
+            <div style="display:flex; gap:12px; font-size:15px; line-height:1.5; color:rgba(20,20,20,0.7)"><span style="font-weight:800">✕</span><span>{{ d }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px">
+    <sc-for list="{{ byCut }}" as="c" hint-placeholder-count="4">
+      <div style="border:1px solid rgba(20,20,20,0.15); border-radius:16px; padding:22px 24px">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.2em; color:#C9661A; margin-bottom:10px">{{ c.name }}</div>
+        <div style="font-size:14px; line-height:1.55; color:rgba(20,20,20,0.75)">{{ c.tip }}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<!-- 5 · Range & Signal -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(72px,9vw,128px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 04 · STAYING CONNECTED</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; gap:48px; align-items:center">
+    <div style="flex:1 1 460px; min-width:300px">
+      <h2 style="margin:0 0 24px; font-size:clamp(30px,4vw,48px); font-weight:800; letter-spacing:-0.028em; line-height:1.05">A Clear Line to Your Phone</h2>
+      <p style="margin:0; font-size:16px; line-height:1.7; color:rgba(20,20,20,0.78); max-width:600px">InfiniteProbe streams over Bluetooth Low Energy 5.0. Keep your phone within the app's working range and avoid heavy obstacles — thick walls, metal enclosures, or closed metal lids can weaken any Bluetooth signal. If a probe ever drops its connection, the app's offline alert tells you immediately, and reconnects the moment the signal returns.</p>
+    </div>
+    <div style="flex:0 1 340px; min-width:270px; border:1.5px dashed #C9661A; background:rgba(201,102,26,0.04); border-radius:20px; padding:32px; text-align:center">
+      <div style="font-size:clamp(34px,3.5vw,46px); font-weight:800; letter-spacing:-0.03em; color:rgba(20,20,20,0.35)">up to [XX] m</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#C9661A; margin-top:10px">LINE-OF-SIGHT RANGE · AWAITING ENGINEERING</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 · Pairing -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(72px,9vw,128px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 05 · SET UP IN SECONDS</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.4)">IOS · ANDROID</span>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; gap:56px; align-items:center">
+    <div style="flex:1 1 440px; min-width:300px">
+      <h2 style="margin:0 0 24px; font-size:clamp(30px,4vw,48px); font-weight:800; letter-spacing:-0.028em; line-height:1.05">Wake. Tap. Cook.</h2>
+      <p style="margin:0 0 36px; font-size:16px; line-height:1.7; color:rgba(20,20,20,0.78); max-width:560px">InfiniteProbe pairs with the free companion app over Bluetooth Low Energy. Download it for iOS or Android — or scan the QR code on the package — then wake a probe and tap to pair. Your probes appear on the home screen with live status, ready to be named, assigned a cut, and put to work.</p>
+      <div style="display:flex; gap:14px">
+        <span style="border:1.5px solid #141414; border-radius:12px; padding:12px 20px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em"> APP STORE</span>
+        <span style="border:1.5px solid #141414; border-radius:12px; padding:12px 20px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em">▷ GOOGLE PLAY</span>
+      </div>
+    </div>
+    <div style="flex:1 1 400px; min-width:280px; display:flex; gap:20px; justify-content:center">
+      <div style="width:min(220px,42vw); aspect-ratio:862/1658">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hiw-ui01" shape="rounded" radius="24" fit="contain" src="uploads/UI01.png" hint-size="100%,100%" style="width:100%; height:100%" placeholder="UI01 — welcome / enable Bluetooth"></x-import>
+      </div>
+      <div style="width:min(220px,42vw); aspect-ratio:862/1658; margin-top:36px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="hiw-ui04" shape="rounded" radius="24" fit="contain" src="uploads/UI02.png" hint-size="100%,100%" style="width:100%; height:100%" placeholder="UI04 — My Probes, cloud pairing"></x-import>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7 · Closing CTA -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(80px,10vw,140px) 24px; text-align:center">
+  <h2 style="margin:0 0 40px; font-size:clamp(36px,5.5vw,68px); font-weight:800; letter-spacing:-0.035em; line-height:1.02">No Battery. No Guessing.<br>No Limits.</h2>
+  <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center">
+    <button style="background:#141414; color:#FFFFFF; border:none; border-radius:999px; padding:19px 40px; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.08em; cursor:pointer" style-hover="background:#C9661A">BUY INFINITEPROBE →</button>
+    <button style="background:transparent; color:#141414; border:1.5px solid #141414; border-radius:999px; padding:18px 40px; font-family:'Inter',sans-serif; font-weight:600; font-size:15px; letter-spacing:0.08em; cursor:pointer" style-hover="background:#141414; color:#F2EFE6">FULL SPECIFICATIONS</button>
+  </div>
+</div>
+
+<!-- 12 · Footer -->
+<div id="support" style="border-top:2px solid #141414">
+  <div style="max-width:1280px; margin:0 auto; padding:64px 24px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px">
+    <div>
+      <svg width="56" height="28" viewBox="0 0 240 120" style="margin-bottom:16px; display:block"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <div style="font-weight:800; font-size:15px; letter-spacing:0.12em; margin-bottom:10px"><span style="color:#C9661A">INFINITE</span>PROBE</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.24em; color:rgba(20,20,20,0.5)">INFINITE POWER · PERFECT MEAT</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">SUPPORT</div>
+      <a href="#" style="font-size:14px">Getting Started</a><a href="#" style="font-size:14px">User Manual (PDF)</a><a href="#" style="font-size:14px">FAQ</a><a href="#" style="font-size:14px">Contact Us</a><a href="#" style="font-size:14px">App for iOS</a><a href="#" style="font-size:14px">App for Android</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">CONNECT</div>
+      <a href="#" style="font-size:14px">Instagram</a><a href="#" style="font-size:14px">YouTube</a><a href="#" style="font-size:14px">Facebook</a><a href="#" style="font-size:14px">X</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">POLICIES</div>
+      <a href="#" style="font-size:14px">Shipping</a><a href="#" style="font-size:14px">Warranty</a><a href="#" style="font-size:14px">Privacy Policy</a><a href="#" style="font-size:14px">Terms of Service</a>
+    </div>
+  </div>
+  <div style="max-width:1280px; margin:48px auto 0; padding:0 24px">
+    <div style="border-top:1px solid rgba(20,20,20,0.12); padding:20px 0; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:rgba(20,20,20,0.5)">INFINITEPROBE.COM · POWERED BY HEAT. ENGINEERED FOR PRECISION.</div>
+    <div style="border-top:1px solid rgba(20,20,20,0.12); padding:22px 0 36px; display:flex; justify-content:space-between; align-items:center">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; font-weight:600">LEIZIG INSIDE</span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:rgba(20,20,20,0.55)">WWW.INFINITEPROBE.COM</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  navRef = (el) => { if (el) { const mq = window.matchMedia('(min-width: 900px)'); const apply = () => { el.style.display = mq.matches ? 'flex' : 'none'; }; apply(); mq.addEventListener('change', apply); } };
+  renderVals() {
+    const glow = (i) => `chainGlow 6s ${i * 1.2}s infinite`;
+    return {
+      navRef: this.navRef,
+      chainSteps: [
+        { num: "01", title: "Cooking Heat", body: "Your grill, smoker, oven, or open fire creates a temperature difference between the hot end of the probe and the cooler core of the meat.", bg: "#EAE6DA", anim: glow(0) },
+        { num: "02", title: "Thermoelectric Conversion", body: "That temperature difference drives InfiniteProbe's thermoelectric generator, converting heat flow directly into electrical energy. No moving parts. Nothing to wear out.", bg: "#FBF9F3", anim: glow(1) },
+        { num: "03", title: "Power Supply", body: "Power management circuitry conditions and stores the harvested energy, keeping the electronics running smoothly through the swings of a real cook.", bg: "#FBF9F3", anim: glow(2) },
+        { num: "04", title: "Wireless Transmission", body: "A Bluetooth Low Energy 5.0 radio streams readings to your phone — continuously, for the entire cook.", bg: "#FBF9F3", anim: glow(3) },
+        { num: "05", title: "Real-Time Monitoring", body: "The app turns the signal into a live readout: current temperature, target, percent cooked, and an ETA you can plan dinner around.", bg: "#FBF9F3", anim: glow(4) },
+      ],
+      dos: [
+        "Insert into the thickest part, reaching the centre",
+        "Cover the needle past the minimum insertion line",
+        "Read the internal temperature, not the surface",
+      ],
+      donts: [
+        "Touching bone",
+        "Resting the tip in fat-only areas",
+        "Shallow placement",
+        "Letting the tip poke through the meat",
+      ],
+      byCut: [
+        { name: "STEAK", tip: "In from the side, to the centre." },
+        { name: "CHICKEN BREAST", tip: "Thickest centre." },
+        { name: "TURKEY", tip: "Thickest meat, away from bone." },
+        { name: "BRISKET / ROAST", tip: "Deepest central portion." },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

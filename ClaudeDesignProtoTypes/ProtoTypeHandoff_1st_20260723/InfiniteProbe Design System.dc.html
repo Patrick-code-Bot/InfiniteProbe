@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F2EFE6; color:#141414; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#141414; } a:hover { color:#C9661A; }
+</style>
+</helmet>
+<div style="max-width:1200px; margin:0 auto; padding:72px 48px 0">
+
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid #141414; padding-bottom:24px">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; margin-bottom:12px">§ 00 · DESIGN SYSTEM · V1.0</div>
+      <div style="font-size:clamp(36px,5vw,56px); font-weight:800; letter-spacing:-0.03em; line-height:1">InfiniteProbe<br>Style Sheet</div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; text-align:right; color:#141414; line-height:2">WWW.INFINITEPROBE.COM<br>LEIZIG TECHNOLOGIES GROUP</div>
+  </div>
+
+  <!-- 01 Logo -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">01 · LOGO &amp; WORDMARK</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">MARK ——— 01</span>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px">
+    <div style="background:#EAE6DA; border-radius:20px; padding:48px; display:flex; flex-direction:column; align-items:center; gap:28px">
+      <svg width="144" height="72" viewBox="0 0 240 120" aria-label="InfiniteProbe mark"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px">
+        <div style="font-weight:800; font-size:26px; letter-spacing:0.14em"><span style="color:#C9661A">INFINITE</span><span>PROBE</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.32em; color:rgba(20,20,20,0.6)">INFINITE POWER · PERFECT MEAT</div>
+      </div>
+    </div>
+    <div style="background:#141414; border-radius:20px; padding:48px; display:flex; flex-direction:column; align-items:center; gap:28px">
+      <svg width="144" height="72" viewBox="0 0 240 120" aria-label="InfiniteProbe mark on dark"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#F2EFE6"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#F2EFE6"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px">
+        <div style="font-weight:800; font-size:26px; letter-spacing:0.14em"><span style="color:#C9661A">INFINITE</span><span style="color:#F2EFE6">PROBE</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.32em; color:rgba(242,239,230,0.6)">INFINITE POWER · PERFECT MEAT</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 Color -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">02 · COLOR</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">PALETTE ——— 06</span>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px">
+    <sc-for list="{{ colors }}" as="c" hint-placeholder-count="6">
+      <div style="border-radius:16px; overflow:hidden; border:1px solid rgba(20,20,20,0.12)">
+        <div style="height:110px; background:{{ c.hex }}"></div>
+        <div style="background:#FBF9F3; padding:14px 16px">
+          <div style="font-weight:700; font-size:14px">{{ c.name }}</div>
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; color:rgba(20,20,20,0.55); margin-top:4px">{{ c.hex }}</div>
+          <div style="font-size:12px; color:rgba(20,20,20,0.65); margin-top:6px; line-height:1.5">{{ c.use }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:#C9661A; margin-top:16px">RULE — ORANGE IS ACCENT ONLY, NEVER A LARGE FILL. DARK BANDS: HERO · APP SHOWCASE · CATEGORY STATEMENT — NOWHERE ELSE.</div>
+
+  <!-- 03 Typography -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">03 · TYPOGRAPHY</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">INTER + IBM PLEX MONO</span>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:0">
+    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:24px; padding:28px 0; border-bottom:1px solid rgba(20,20,20,0.12)">
+      <div style="flex:1; min-width:280px; font-size:clamp(44px,6vw,76px); font-weight:800; letter-spacing:-0.035em; line-height:0.98">Infinite Power<br>for Perfect Meat</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:rgba(20,20,20,0.5); line-height:2">H1 · INTER 800<br>72–96PX / −0.035EM / 0.98LH</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:24px; padding:28px 0; border-bottom:1px solid rgba(20,20,20,0.12)">
+      <div style="flex:1; min-width:280px; font-size:clamp(28px,3.5vw,44px); font-weight:800; letter-spacing:-0.025em; line-height:1.05">From Fire to Signal</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:rgba(20,20,20,0.5); line-height:2">H2 · INTER 800<br>36–44PX / −0.025EM</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:24px; padding:28px 0; border-bottom:1px solid rgba(20,20,20,0.12)">
+      <div style="flex:1; min-width:280px; font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.22em; color:#C9661A">§ 01 · POWERED BY HEAT, NOT BY HASSLE</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:rgba(20,20,20,0.5); line-height:2">EYEBROW · PLEX MONO 500<br>12–13PX / +0.22EM / ORANGE</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:24px; padding:28px 0; border-bottom:1px solid rgba(20,20,20,0.12)">
+      <div style="flex:1; min-width:280px; font-size:17px; line-height:1.65; color:rgba(20,20,20,0.85); max-width:560px">InfiniteProbe converts cooking heat into electricity — powering real-time wireless monitoring of your meat's internal temperature. No batteries. No charging. No guessing.</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:rgba(20,20,20,0.5); line-height:2">BODY · INTER 400<br>16–17PX / 1.65LH</div>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; align-items:baseline; gap:24px; padding:28px 0">
+      <div style="flex:1; min-width:280px; display:flex; align-items:baseline; gap:12px">
+        <span style="font-size:clamp(64px,8vw,110px); font-weight:800; letter-spacing:-0.04em; line-height:1">74<span style="font-size:0.45em; font-weight:600; vertical-align:0.7em">°</span></span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:20px; color:rgba(20,20,20,0.4)">→</span>
+        <span style="font-size:clamp(64px,8vw,110px); font-weight:800; letter-spacing:-0.04em; line-height:1; color:#C9661A">95<span style="font-size:0.45em; font-weight:600; vertical-align:0.7em">°</span></span>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; color:rgba(20,20,20,0.5); line-height:2">DATA NUMERALS · INTER 800<br>OVERSIZED · TARGET IN ORANGE</div>
+    </div>
+  </div>
+
+  <!-- 04 Rules & meta labels -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">04 · HAIRLINES &amp; META LABELS</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">FROM APP UI</span>
+  </div>
+  <div style="background:#EAE6DA; border-radius:20px; padding:36px 40px; display:flex; flex-direction:column; gap:22px">
+    <div style="display:flex; align-items:center; gap:16px">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; color:#C9661A">BEEF</span>
+      <span style="flex:1; height:1px; background:rgba(20,20,20,0.18)"></span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.2em; color:rgba(20,20,20,0.45)">08</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; color:rgba(20,20,20,0.7)">26 CUTS</span>
+      <span style="flex:1; height:1px; background:rgba(20,20,20,0.18)"></span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.2em; color:rgba(20,20,20,0.45)">TAP TEMP TO EDIT</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:16px">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; color:#C9661A">§ 04</span>
+      <span style="flex:1; height:1px; background:rgba(20,20,20,0.18)"></span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.2em; color:rgba(20,20,20,0.45)">YOUR COOK, LIVE</span>
+    </div>
+  </div>
+
+  <!-- 05 Buttons & chips -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">05 · BUTTONS &amp; CHIPS</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">PILL FAMILY</span>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; align-items:center; gap:20px">
+    <button style="background:#141414; color:#FFFFFF; border:none; border-radius:999px; padding:16px 32px; font-family:'Inter',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.08em; cursor:pointer" style-hover="background:#2A2A2A">SHOP NOW →</button>
+    <button style="background:transparent; color:#141414; border:1.5px solid #141414; border-radius:999px; padding:15px 32px; font-family:'Inter',sans-serif; font-weight:600; font-size:14px; letter-spacing:0.08em; cursor:pointer" style-hover="background:#141414; color:#F2EFE6">SEE HOW IT WORKS</button>
+    <span style="background:#E3DECE; border-radius:999px; padding:10px 18px; font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:500; display:inline-flex; align-items:center; gap:8px">95°C <span style="font-size:11px; color:rgba(20,20,20,0.5)">✎</span></span>
+    <span style="background:#141414; color:#F2EFE6; border-radius:999px; padding:10px 18px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; display:inline-flex; align-items:center; gap:10px"><span style="width:7px; height:7px; border-radius:50%; background:#C9661A; display:inline-block"></span>INTERNAL 54.2°C · TARGET 58.0 · CH-1 · LIVE</span>
+  </div>
+
+  <!-- 06 Cards & dark band -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">06 · SURFACES</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">CARD · LIST ROW · DARK BAND</span>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px">
+    <div style="background:#FBF9F3; border-radius:20px; padding:36px; box-shadow:0 1px 2px rgba(20,20,20,0.05)">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; margin-bottom:18px">01</div>
+      <div style="font-weight:800; font-size:22px; letter-spacing:-0.02em; margin-bottom:12px">Self-Powered Innovation</div>
+      <div style="font-size:15px; line-height:1.65; color:rgba(20,20,20,0.75)">Pillar card: white-cream surface, mono number, tight bold title, calm body.</div>
+    </div>
+    <div style="background:#FBF9F3; border-radius:20px; overflow:hidden; box-shadow:0 1px 2px rgba(20,20,20,0.05); align-self:start">
+      <div style="display:flex; align-items:center; gap:14px; padding:20px 24px; border-bottom:1px solid rgba(20,20,20,0.08)">
+        <span style="width:18px; height:18px; border-radius:50%; border:2px solid #C9661A; background:#C9661A; box-shadow:inset 0 0 0 3px #FBF9F3"></span>
+        <span style="font-weight:600; font-size:16px; flex:1">Brisket</span>
+        <span style="background:#E3DECE; border-radius:999px; padding:8px 14px; font-family:'IBM Plex Mono',monospace; font-size:13px">95°C ✎</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:14px; padding:20px 24px">
+        <span style="width:18px; height:18px; border-radius:50%; border:2px solid rgba(20,20,20,0.25)"></span>
+        <span style="font-weight:600; font-size:16px; flex:1">Short Ribs</span>
+        <span style="background:#E3DECE; border-radius:999px; padding:8px 14px; font-family:'IBM Plex Mono',monospace; font-size:13px">88°C ✎</span>
+      </div>
+    </div>
+    <div style="background:#161513; border-radius:20px; padding:36px; color:#F2EFE6">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; margin-bottom:18px">§ 04 · YOUR COOK, LIVE</div>
+      <div style="font-weight:800; font-size:22px; letter-spacing:-0.02em; margin-bottom:12px">Dark band</div>
+      <div style="font-size:15px; line-height:1.65; color:rgba(242,239,230,0.7)">Charcoal #161513, cream text, orange eyebrow. Used exactly three times per page maximum: hero, app showcase, category statement.</div>
+    </div>
+  </div>
+
+  <!-- 07 Placeholder style -->
+  <div style="display:flex; justify-content:space-between; align-items:baseline; margin:64px 0 24px; border-bottom:1px solid rgba(20,20,20,0.18); padding-bottom:8px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A">07 · PLACEHOLDER TREATMENT</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.45)">NEVER INVENT NUMBERS</span>
+  </div>
+  <div style="display:flex; flex-wrap:wrap; gap:20px; align-items:stretch">
+    <div style="border:1.5px dashed #C9661A; border-radius:16px; padding:24px 32px; text-align:center; background:rgba(201,102,26,0.04)">
+      <div style="font-size:40px; font-weight:800; letter-spacing:-0.03em; color:rgba(20,20,20,0.35)">[X.X] mm</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#C9661A; margin-top:8px">PROBE DIAMETER · AWAITING ENGINEERING</div>
+    </div>
+    <div style="border:1.5px dashed #C9661A; border-radius:16px; padding:24px 32px; text-align:center; background:rgba(201,102,26,0.04)">
+      <div style="font-size:40px; font-weight:800; letter-spacing:-0.03em; color:rgba(20,20,20,0.35)">[IPXX]</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#C9661A; margin-top:8px">WATER RESISTANCE · AWAITING ENGINEERING</div>
+    </div>
+  </div>
+  <div style="font-size:14px; color:rgba(20,20,20,0.65); margin-top:16px; max-width:640px; line-height:1.6">Anything in [brackets] renders in this dashed-orange placeholder style — visibly unfinished, impossible to mistake for a verified value. Specs, warranty terms, and review quotes stay in this state until confirmed.</div>
+
+  <!-- Footer signature -->
+  <div style="display:flex; justify-content:space-between; align-items:center; border-top:2px solid #141414; margin-top:80px; padding:24px 0 48px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; font-weight:600">LEIZIG INSIDE</span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:rgba(20,20,20,0.55)">WWW.INFINITEPROBE.COM</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      colors: [
+        { name: "Ivory", hex: "#F2EFE6", use: "Primary background" },
+        { name: "Beige", hex: "#EAE6DA", use: "Card surfaces, panels" },
+        { name: "Cream White", hex: "#FBF9F3", use: "List cards, elevated rows" },
+        { name: "Ink", hex: "#141414", use: "Text, primary buttons, rules" },
+        { name: "Burnt Orange", hex: "#C9661A", use: "Accent only — labels, targets, brand word" },
+        { name: "Charcoal Band", hex: "#161513", use: "Hero, app showcase, category statement" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

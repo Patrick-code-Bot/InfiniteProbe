@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="./image-slot.js"></script>
+<meta name="ext-resource-dependency" content="uploads/UI01.png" data-resource-id="ui01" />
+<template id="__bundler_thumbnail" data-bg-color="#F2EFE6">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#F2EFE6"/>
+    <path d="M600,400 C540,292 414,262 342,307 C270,352 270,448 342,493 C414,538 540,508 600,400 C552,484 432,508 366,469 C312,436 312,364 366,331 C432,292 552,316 600,400 Z" fill="#141414"/>
+    <path d="M600,400 C660,292 786,262 858,307 C930,352 930,448 858,493 C786,538 660,508 600,400 C648,484 768,508 834,469 C888,436 888,364 834,331 C768,292 648,316 600,400 Z" fill="#141414"/>
+    <circle cx="600" cy="400" r="18" fill="#C9661A"/>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F2EFE6; color:#141414; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#141414; text-decoration:none; } a:hover { color:#C9661A; }
+</style>
+</helmet>
+
+<!-- Navigation -->
+<div style="position:sticky; top:0; z-index:50; background:rgba(242,239,230,0.92); backdrop-filter:blur(10px); border-bottom:1px solid rgba(20,20,20,0.1)">
+  <div style="max-width:1280px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between; gap:16px">
+    <a href="Home.dc.html" style="display:flex; align-items:center; gap:10px">
+      <svg width="48" height="24" viewBox="0 0 240 120"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <span style="font-weight:800; font-size:15px; letter-spacing:0.12em"><span style="color:#C9661A">INFINITE</span>PROBE</span>
+    </a>
+    <div style="display:none; align-items:center; gap:28px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em" ref="{{ navRef }}">
+      <a href="How It Works.dc.html">HOW IT WORKS</a><a href="Home.dc.html#different">WHY DIFFERENT</a><a href="App.dc.html">APP</a><a href="Specs.dc.html">SPECS</a><a href="#" style="color:#C9661A">SUPPORT</a>
+    </div>
+    <button style="background:#141414; color:#FFFFFF; border:none; border-radius:999px; padding:11px 22px; font-family:'Inter',sans-serif; font-weight:700; font-size:12px; letter-spacing:0.08em; cursor:pointer; white-space:nowrap" style-hover="background:#C9661A">SHOP NOW</button>
+  </div>
+</div>
+
+<!-- Hero -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(64px,9vw,112px) 24px 0">
+  <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.24em; color:#C9661A; margin-bottom:24px">SUPPORT</div>
+  <h1 style="margin:0 0 20px; font-size:clamp(42px,6.5vw,84px); font-weight:800; letter-spacing:-0.035em; line-height:0.98">How Can We Help?</h1>
+  <p style="margin:0; font-size:17px; line-height:1.65; color:rgba(20,20,20,0.75); max-width:560px">Getting started, documentation, and answers — everything you need to get from unboxing to first cook.</p>
+</div>
+
+<!-- Getting Started -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(64px,8vw,104px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 01 · GETTING STARTED</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.4)">03 STEPS</span>
+  </div>
+  <h2 style="margin:0 0 48px; font-size:clamp(30px,4vw,48px); font-weight:800; letter-spacing:-0.028em; line-height:1.05">From Box to First Cook in Minutes</h2>
+  <div style="display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,64px); align-items:center">
+    <div style="flex:1 1 420px; min-width:300px; display:flex; flex-direction:column; gap:20px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+        <div style="background:#FBF9F3; border-radius:20px; padding:30px 32px; box-shadow:0 1px 2px rgba(20,20,20,0.05); display:flex; gap:24px; align-items:flex-start">
+          <div style="font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.2em; color:#C9661A; padding-top:3px">{{ s.num }}</div>
+          <div>
+            <div style="font-weight:800; font-size:19px; letter-spacing:-0.015em; margin-bottom:8px">{{ s.title }}</div>
+            <div style="font-size:15px; line-height:1.6; color:rgba(20,20,20,0.72)">{{ s.body }}</div>
+          </div>
+        </div>
+      </sc-for>
+      <div style="display:flex; gap:14px; margin-top:8px">
+        <span style="border:1.5px solid #141414; border-radius:12px; padding:12px 20px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; cursor:pointer" style-hover="background:#141414; color:#F2EFE6"> APP STORE</span>
+        <span style="border:1.5px solid #141414; border-radius:12px; padding:12px 20px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.14em; cursor:pointer" style-hover="background:#141414; color:#F2EFE6">▷ GOOGLE PLAY</span>
+      </div>
+    </div>
+    <div style="flex:0 1 300px; min-width:260px; display:flex; justify-content:center">
+      <div style="width:min(280px,74vw); aspect-ratio:862/1658; background:#161513; border-radius:32px; overflow:hidden">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="support-ui01" shape="rounded" radius="32" fit="contain" src="uploads/UI01.png" hint-size="100%,100%" style="width:100%; height:100%" placeholder="Welcome / enable Bluetooth"></x-import>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Documentation -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(64px,8vw,104px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:32px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 02 · DOCUMENTATION</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px">
+    <div style="background:#FBF9F3; border:1px solid rgba(20,20,20,0.12); border-radius:20px; padding:34px 32px; cursor:pointer" style-hover="border-color:#C9661A">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; border:1px solid rgba(20,20,20,0.25); border-radius:6px; padding:6px 9px; color:rgba(20,20,20,0.6)">PDF</span>
+        <span style="color:#C9661A; font-weight:800; font-size:18px">↓</span>
+      </div>
+      <div style="font-weight:800; font-size:20px; letter-spacing:-0.015em; margin-bottom:8px">User Manual — Full Edition</div>
+      <div style="font-size:14px; line-height:1.6; color:rgba(20,20,20,0.65)">Complete guide: pairing, probe placement, range and signal, cooking library, care and cleaning.</div>
+    </div>
+    <div style="background:#FBF9F3; border:1px solid rgba(20,20,20,0.12); border-radius:20px; padding:34px 32px; cursor:pointer" style-hover="border-color:#C9661A">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; border:1px solid rgba(20,20,20,0.25); border-radius:6px; padding:6px 9px; color:rgba(20,20,20,0.6)">PDF</span>
+        <span style="color:#C9661A; font-weight:800; font-size:18px">↓</span>
+      </div>
+      <div style="font-weight:800; font-size:20px; letter-spacing:-0.015em; margin-bottom:8px">Quick Start Guide</div>
+      <div style="font-size:14px; line-height:1.6; color:rgba(20,20,20,0.65)">The three steps above, on one printable page — the same guide that ships in the box.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div style="max-width:1080px; margin:0 auto; padding:clamp(64px,8vw,104px) 24px 0">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">§ 03 · FAQ</span>
+    <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#C9661A">[DRAFT — CONFIRM ANSWERS]</span>
+  </div>
+  <h2 style="margin:0 0 40px; font-size:clamp(30px,4vw,48px); font-weight:800; letter-spacing:-0.028em; line-height:1.05">Asked Before You Ask</h2>
+  <div style="display:flex; flex-direction:column; gap:12px">
+    <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="6">
+      <div style="background:#FBF9F3; border-radius:16px; box-shadow:0 1px 2px rgba(20,20,20,0.05); overflow:hidden">
+        <button onClick="{{ f.toggle }}" style="width:100%; background:none; border:none; cursor:pointer; padding:24px 28px; display:flex; align-items:center; gap:18px; text-align:left; font-family:'Inter',sans-serif" style-hover="background:rgba(20,20,20,0.02)">
+          <span style="font-weight:700; font-size:16px; letter-spacing:-0.01em; flex:1; line-height:1.4">{{ f.q }}</span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:16px; color:#C9661A">{{ f.chevron }}</span>
+        </button>
+        <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 28px 26px">
+            <div style="border:1.5px dashed #C9661A; background:rgba(201,102,26,0.04); border-radius:12px; padding:18px 22px">
+              <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.18em; color:#C9661A; margin-bottom:10px">DRAFT ANSWER — CONFIRM BEFORE PUBLISH</div>
+              <div style="font-size:15px; line-height:1.65; color:rgba(20,20,20,0.55)">{{ f.a }}</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</div>
+
+<!-- Contact -->
+<div style="max-width:1080px; margin:0 auto; padding:clamp(64px,8vw,104px) 24px clamp(80px,10vw,128px)">
+  <div style="background:#EAE6DA; border-radius:24px; padding:clamp(40px,5vw,64px); text-align:center">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; margin-bottom:20px">§ 04 · STILL STUCK?</div>
+    <h2 style="margin:0 auto 16px; font-size:clamp(26px,3.4vw,40px); font-weight:800; letter-spacing:-0.025em; line-height:1.05">Talk to a Human</h2>
+    <p style="margin:0 auto 32px; font-size:16px; line-height:1.65; color:rgba(20,20,20,0.7); max-width:480px">Write to us and we'll get back within one business day.</p>
+    <div style="display:inline-flex; align-items:center; gap:14px; border:1.5px dashed #C9661A; background:rgba(201,102,26,0.04); border-radius:999px; padding:16px 30px">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:15px; letter-spacing:0.06em; color:rgba(20,20,20,0.45)">[<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f2818782829d8086b29b9c949b9c9b869782809d9097dc919d9f">[email&#160;protected]</a>]</span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.16em; color:#C9661A">CONFIRM ADDRESS</span>
+    </div>
+  </div>
+</div>
+
+<!-- 12 · Footer -->
+<div id="support" style="border-top:2px solid #141414">
+  <div style="max-width:1280px; margin:0 auto; padding:64px 24px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px">
+    <div>
+      <svg width="56" height="28" viewBox="0 0 240 120" style="margin-bottom:16px; display:block"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <div style="font-weight:800; font-size:15px; letter-spacing:0.12em; margin-bottom:10px"><span style="color:#C9661A">INFINITE</span>PROBE</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.24em; color:rgba(20,20,20,0.5)">INFINITE POWER · PERFECT MEAT</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">SUPPORT</div>
+      <a href="#" style="font-size:14px">Getting Started</a><a href="#" style="font-size:14px">User Manual (PDF)</a><a href="#" style="font-size:14px">FAQ</a><a href="#" style="font-size:14px">Contact Us</a><a href="#" style="font-size:14px">App for iOS</a><a href="#" style="font-size:14px">App for Android</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">CONNECT</div>
+      <a href="#" style="font-size:14px">Instagram</a><a href="#" style="font-size:14px">YouTube</a><a href="#" style="font-size:14px">Facebook</a><a href="#" style="font-size:14px">X</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">POLICIES</div>
+      <a href="#" style="font-size:14px">Shipping</a><a href="#" style="font-size:14px">Warranty</a><a href="#" style="font-size:14px">Privacy Policy</a><a href="#" style="font-size:14px">Terms of Service</a>
+    </div>
+  </div>
+  <div style="max-width:1280px; margin:48px auto 0; padding:0 24px">
+    <div style="border-top:1px solid rgba(20,20,20,0.12); padding:20px 0; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:rgba(20,20,20,0.5)">INFINITEPROBE.COM · POWERED BY HEAT. ENGINEERED FOR PRECISION.</div>
+    <div style="border-top:1px solid rgba(20,20,20,0.12); padding:22px 0 36px; display:flex; justify-content:space-between; align-items:center">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; font-weight:600">LEIZIG INSIDE</span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:rgba(20,20,20,0.55)">WWW.INFINITEPROBE.COM</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { open: 0 };
+  navRef = (el) => { if (el) { const mq = window.matchMedia('(min-width: 900px)'); const apply = () => { el.style.display = mq.matches ? 'flex' : 'none'; }; apply(); mq.addEventListener('change', apply); } };
+  renderVals() {
+    const qs = [
+      { q: "What happens before the probe is hot enough to power itself?", a: "[Placeholder — describe cold-start behavior: stored-energy buffer / sleep state and the minimum activation temperature, per engineering.]" },
+      { q: "Is the probe dishwasher safe?", a: "[Placeholder — confirm IP rating and dishwasher vs. hand-wash guidance from engineering before publishing.]" },
+      { q: "How many probes can I run at once?", a: "[Placeholder — confirm the maximum simultaneous probes per phone.]" },
+      { q: "What's the wireless range?", a: "[Placeholder — confirm line-of-sight and closed-lid range figures from engineering.]" },
+      { q: "Does the app work without an internet connection?", a: "[Placeholder — confirm: Bluetooth-local operation, no account or cloud required.]" },
+      { q: "What temperatures can the probe survive?", a: "[Placeholder — confirm maximum ambient exposure and internal sensor range.]" },
+    ];
+    return {
+      navRef: this.navRef,
+      steps: [
+        { num: "01", title: "Download the app", body: "Free for iOS and Android — or scan the QR code on the package. No account required." },
+        { num: "02", title: "Enable Bluetooth", body: "The app walks you through it on first launch. Probes connect over Bluetooth Low Energy; nothing leaves your device." },
+        { num: "03", title: "Wake the probe and tap to pair", body: "Wake a probe, tap the pairing card, and it appears on your home screen — ready to be named, assigned a cut, and put to work." },
+      ],
+      faqs: qs.map((f, i) => ({
+        ...f,
+        open: this.state.open === i,
+        chevron: this.state.open === i ? "−" : "+",
+        toggle: () => this.setState({ open: this.state.open === i ? -1 : i }),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<script src="./image-slot.js"></script>
+<meta name="ext-resource-dependency" content="uploads/UI01.png" data-resource-id="ui01" />
+<meta name="ext-resource-dependency" content="uploads/UI02.png" data-resource-id="ui02" />
+<meta name="ext-resource-dependency" content="uploads/UI03.png" data-resource-id="ui03" />
+<meta name="ext-resource-dependency" content="uploads/UI04.png" data-resource-id="ui04" />
+<meta name="ext-resource-dependency" content="uploads/UI05.png" data-resource-id="ui05" />
+<template id="__bundler_thumbnail" data-bg-color="#161513">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#161513"/>
+    <path d="M600,400 C540,292 414,262 342,307 C270,352 270,448 342,493 C414,538 540,508 600,400 C552,484 432,508 366,469 C312,436 312,364 366,331 C432,292 552,316 600,400 Z" fill="#F2EFE6"/>
+    <path d="M600,400 C660,292 786,262 858,307 C930,352 930,448 858,493 C786,538 660,508 600,400 C648,484 768,508 834,469 C888,436 888,364 834,331 C768,292 648,316 600,400 Z" fill="#F2EFE6"/>
+    <circle cx="600" cy="400" r="18" fill="#C9661A"/>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F2EFE6; color:#141414; font-family:'Inter',sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#141414; text-decoration:none; } a:hover { color:#C9661A; }
+</style>
+</helmet>
+
+<!-- Navigation -->
+<div style="position:sticky; top:0; z-index:50; background:rgba(242,239,230,0.92); backdrop-filter:blur(10px); border-bottom:1px solid rgba(20,20,20,0.1)">
+  <div style="max-width:1280px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; justify-content:space-between; gap:16px">
+    <a href="Home.dc.html" style="display:flex; align-items:center; gap:10px">
+      <svg width="48" height="24" viewBox="0 0 240 120"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <span style="font-weight:800; font-size:15px; letter-spacing:0.12em"><span style="color:#C9661A">INFINITE</span>PROBE</span>
+    </a>
+    <div style="display:none; align-items:center; gap:28px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.16em" ref="{{ navRef }}">
+      <a href="How It Works.dc.html">HOW IT WORKS</a><a href="Home.dc.html#different">WHY DIFFERENT</a><a href="#" style="color:#C9661A">APP</a><a href="Specs.dc.html">SPECS</a><a href="Home.dc.html#support">SUPPORT</a>
+    </div>
+    <button style="background:#141414; color:#FFFFFF; border:none; border-radius:999px; padding:11px 22px; font-family:'Inter',sans-serif; font-weight:700; font-size:12px; letter-spacing:0.08em; cursor:pointer; white-space:nowrap" style-hover="background:#C9661A">SHOP NOW</button>
+  </div>
+</div>
+
+<!-- Hero (dark band) -->
+<div style="background:#161513; color:#F2EFE6; overflow:hidden">
+  <div style="max-width:1280px; margin:0 auto; padding:clamp(64px,9vw,120px) 24px 0; display:flex; flex-wrap:wrap; gap:56px; align-items:flex-end">
+    <div style="flex:1 1 460px; min-width:300px; padding-bottom:clamp(56px,7vw,96px)">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.24em; color:#C9661A; margin-bottom:28px">THE INFINITEPROBE APP · IOS + ANDROID · FREE</div>
+      <h1 style="margin:0 0 28px; font-size:clamp(40px,6.5vw,80px); font-weight:800; letter-spacing:-0.035em; line-height:0.98">The Whole Cook, On One Screen</h1>
+      <p style="margin:0 0 40px; font-size:clamp(16px,1.4vw,18px); line-height:1.7; color:rgba(242,239,230,0.75); max-width:520px">Every probe, every temperature, every alert — live on your phone for the entire cook. Download it free, pair in seconds, and never open the lid to check again.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:14px">
+        <span style="border:1.5px solid rgba(242,239,230,0.4); border-radius:12px; padding:14px 24px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; color:rgba(242,239,230,0.85); cursor:pointer" style-hover="border-color:#F2EFE6"> APP STORE</span>
+        <span style="border:1.5px solid rgba(242,239,230,0.4); border-radius:12px; padding:14px 24px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; color:rgba(242,239,230,0.85); cursor:pointer" style-hover="border-color:#F2EFE6">▷ GOOGLE PLAY</span>
+      </div>
+    </div>
+    <div style="flex:1 1 340px; min-width:280px; display:flex; justify-content:center">
+      <div style="width:min(340px,80vw); aspect-ratio:862/1658; margin-bottom:-1px">
+        <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="apppage-hero" shape="rounded" radius="28" fit="contain" src="uploads/UI03.png" hint-size="100%,100%" style="width:100%; height:100%" placeholder="Live cook screen"></x-import>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Capabilities strip -->
+<div style="border-bottom:1px solid rgba(20,20,20,0.12)">
+  <div style="max-width:1280px; margin:0 auto; padding:22px 24px; display:flex; flex-wrap:wrap; gap:12px 32px; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.18em; color:rgba(20,20,20,0.7)">
+    <span>°C OR °F</span><span style="color:#C9661A">·</span><span>MULTI-LANGUAGE</span><span style="color:#C9661A">·</span><span>BLUETOOTH 5.0</span><span style="color:#C9661A">·</span><span>NOTHING LEAVES YOUR DEVICE</span>
+  </div>
+</div>
+
+<!-- Screen sections -->
+<div style="max-width:1280px; margin:0 auto; padding:0 24px; display:flex; flex-direction:column">
+  <sc-for list="{{ screens }}" as="s" hint-placeholder-count="5">
+    <div style="display:flex; flex-wrap:wrap; gap:clamp(32px,5vw,72px); align-items:center; padding:clamp(56px,7vw,96px) 0; border-bottom:1px solid rgba(20,20,20,0.1); flex-direction:{{ s.dir }}">
+      <div style="flex:1 1 300px; min-width:270px; display:flex; justify-content:center">
+        <div style="width:min(300px,78vw); aspect-ratio:862/1658; background:#161513; border-radius:32px; overflow:hidden">
+          <x-import component-from-global-scope="image-slot" from="./image-slot.js" dc-props="{{ s.slotProps }}" shape="rounded" radius="32" fit="contain" hint-size="100%,100%" style="width:100%; height:100%"></x-import>
+        </div>
+      </div>
+      <div style="flex:1 1 380px; min-width:290px">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:#C9661A; white-space:nowrap">{{ s.eyebrow }}</span>
+          <span style="flex:1; height:1px; background:rgba(20,20,20,0.15)"></span>
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.18em; color:rgba(20,20,20,0.4)">{{ s.meta }}</span>
+        </div>
+        <h2 style="margin:0 0 18px; font-size:clamp(28px,3.6vw,42px); font-weight:800; letter-spacing:-0.025em; line-height:1.05">{{ s.title }}</h2>
+        <p style="margin:0 0 24px; font-size:16px; line-height:1.7; color:rgba(20,20,20,0.78); max-width:520px">{{ s.body }}</p>
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <sc-for list="{{ s.points }}" as="pt">
+            <div style="display:flex; gap:12px; font-size:14px; line-height:1.55; color:rgba(20,20,20,0.75); max-width:520px"><span style="color:#C9661A; font-weight:800">✓</span><span>{{ pt }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+</div>
+
+<!-- Closing CTA -->
+<div style="max-width:1280px; margin:0 auto; padding:clamp(80px,10vw,140px) 24px; text-align:center">
+  <div style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.24em; color:#C9661A; margin-bottom:24px">FREE DOWNLOAD · NO ACCOUNT REQUIRED</div>
+  <h2 style="margin:0 0 40px; font-size:clamp(34px,5vw,64px); font-weight:800; letter-spacing:-0.035em; line-height:1.02">Get the App,<br>Then Get the Probe.</h2>
+  <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-bottom:28px">
+    <span style="border:1.5px solid #141414; border-radius:12px; padding:14px 26px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; cursor:pointer" style-hover="background:#141414; color:#F2EFE6"> APP STORE</span>
+    <span style="border:1.5px solid #141414; border-radius:12px; padding:14px 26px; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em; cursor:pointer" style-hover="background:#141414; color:#F2EFE6">▷ GOOGLE PLAY</span>
+  </div>
+  <button style="background:#141414; color:#FFFFFF; border:none; border-radius:999px; padding:19px 40px; font-family:'Inter',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.08em; cursor:pointer" style-hover="background:#C9661A">BUY INFINITEPROBE →</button>
+</div>
+
+<!-- 12 · Footer -->
+<div id="support" style="border-top:2px solid #141414">
+  <div style="max-width:1280px; margin:0 auto; padding:64px 24px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px">
+    <div>
+      <svg width="56" height="28" viewBox="0 0 240 120" style="margin-bottom:16px; display:block"><path d="M120,60 C100,24 58,14 34,29 C10,44 10,76 34,91 C58,106 100,96 120,60 C104,88 64,96 42,83 C24,72 24,48 42,37 C64,24 104,32 120,60 Z" fill="#141414"></path><path d="M120,60 C140,24 182,14 206,29 C230,44 230,76 206,91 C182,106 140,96 120,60 C136,88 176,96 198,83 C216,72 216,48 198,37 C176,24 136,32 120,60 Z" fill="#141414"></path><circle cx="120" cy="60" r="6" fill="#C9661A"></circle></svg>
+      <div style="font-weight:800; font-size:15px; letter-spacing:0.12em; margin-bottom:10px"><span style="color:#C9661A">INFINITE</span>PROBE</div>
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.24em; color:rgba(20,20,20,0.5)">INFINITE POWER · PERFECT MEAT</div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">SUPPORT</div>
+      <a href="#" style="font-size:14px">Getting Started</a><a href="#" style="font-size:14px">User Manual (PDF)</a><a href="#" style="font-size:14px">FAQ</a><a href="#" style="font-size:14px">Contact Us</a><a href="#" style="font-size:14px">App for iOS</a><a href="#" style="font-size:14px">App for Android</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">CONNECT</div>
+      <a href="#" style="font-size:14px">Instagram</a><a href="#" style="font-size:14px">YouTube</a><a href="#" style="font-size:14px">Facebook</a><a href="#" style="font-size:14px">X</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:12px">
+      <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.22em; color:#C9661A; margin-bottom:6px">POLICIES</div>
+      <a href="#" style="font-size:14px">Shipping</a><a href="#" style="font-size:14px">Warranty</a><a href="#" style="font-size:14px">Privacy Policy</a><a href="#" style="font-size:14px">Terms of Service</a>
+    </div>
+  </div>
+  <div style="max-width:1280px; margin:48px auto 0; padding:0 24px">
+    <div style="border-top:1px solid rgba(20,20,20,0.12); padding:20px 0; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.2em; color:rgba(20,20,20,0.5)">INFINITEPROBE.COM · POWERED BY HEAT. ENGINEERED FOR PRECISION.</div>
+    <div style="border-top:1px solid rgba(20,20,20,0.12); padding:22px 0 36px; display:flex; justify-content:space-between; align-items:center">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.28em; font-weight:600">LEIZIG INSIDE</span>
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.22em; color:rgba(20,20,20,0.55)">WWW.INFINITEPROBE.COM</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  navRef = (el) => { if (el) { const mq = window.matchMedia('(min-width: 900px)'); const apply = () => { el.style.display = mq.matches ? 'flex' : 'none'; }; apply(); mq.addEventListener('change', apply); } };
+  renderVals() {
+    // File contents differ from copy-doc labels: UI01=welcome, UI02=My Probes, UI03=live cook, UI04=settings, UI05=library
+    return {
+      navRef: this.navRef,
+      screens: [
+        { dir: "row", eyebrow: "§ 01 · LIVE READOUT", meta: "REAL-TIME MONITORING", title: "The only number that matters, front and center.", body: "Current temperature and target, side by side — with percent cooked, degrees to go, and a live ETA. You'll know the brisket lands at 02:59 before anyone asks.", points: ["Oversized current → target readout with progress bar", "Time remaining with started / ETA timeline", "Live temperature chart, record mode, and cook history", "Per-cook alert and vibrate toggles right on the screen"], slotProps: { id: "apppage-live", placeholder: "Live cook screen", src: "uploads/UI03.png" } },
+        { dir: "row-reverse", eyebrow: "§ 02 · COOKING LIBRARY", meta: "26 CUTS · TAP TEMP TO EDIT", title: "A library of 26+ cuts.", body: "Beef, pork, poultry, and more — each with an editable reference target. Tap to adjust any temperature, or add your own custom cuts.", points: ["Reference targets for every cut, from rare steak to brisket", "Tap any temperature to edit it in place", "Add custom cuts with your own targets"], slotProps: { id: "apppage-library", placeholder: "Cooking Library", src: "uploads/UI05.png" } },
+        { dir: "row", eyebrow: "§ 03 · MULTI-PROBE", meta: "EVERY PROBE, ONE SCREEN", title: "Run the whole table at once.", body: "The brisket, the pork shoulder, and the salmon — together on one home screen, each with live temperature, target, and status. Pair as many probes as your table demands.", points: ["Live status for every paired probe at a glance", "Tap-to-pair a new probe in seconds", "Signal strength and probe state per device"], slotProps: { id: "apppage-probes", placeholder: "My Probes home screen", src: "uploads/UI02.png" } },
+        { dir: "row-reverse", eyebrow: "§ 04 · ALERTS & SETTINGS", meta: "PER PROBE", title: "Alerts that find you.", body: "Sound and vibration the moment your meat hits target — plus an offline alert if a probe ever drops its connection. Configure each one, per probe.", points: ["Target-reached and offline alerts, individually configurable", "Distinct alert sounds per probe — tap to preview", "°C / °F and language settings, serial and firmware info"], slotProps: { id: "apppage-settings", placeholder: "Settings & alerts", src: "uploads/UI04.png" } },
+        { dir: "row", eyebrow: "§ 05 · SET UP IN SECONDS", meta: "WAKE · TAP · COOK", title: "Paired before the grill is hot.", body: "Enable Bluetooth, wake a probe, and tap to pair. Your probes appear on the home screen with live status, ready to be named, assigned a cut, and put to work.", points: ["Bluetooth Low Energy pairing — no account required", "Probes connect locally; nothing leaves your device", "Name each probe and assign it a cut"], slotProps: { id: "apppage-welcome", placeholder: "Welcome / enable Bluetooth", src: "uploads/UI01.png" } },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

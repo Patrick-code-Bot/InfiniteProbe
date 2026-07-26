@@ -1,20 +1,23 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Repo root. The Next.js app lives in site/ and keeps its own .gitignore;
+# the patterns here are rooted at the project root, so app-level paths are
+# spelled out relative to site/.
 
 # dependencies
-/node_modules
-/.pnp
+/site/node_modules
+/site/.pnp
 .pnp.js
 .yarn/install-state.gz
 
 # testing
-/coverage
+/site/coverage
 
 # next.js
-/.next/
-/out/
+/site/.next/
+/site/out/
 
 # production
-/build
+/site/build
 
 # misc
 .DS_Store
@@ -25,8 +28,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# local env files — real secrets never tracked; the template is
 .env*.local
+.env*
+!site/.env.example
 
 # vercel
 .vercel
@@ -34,4 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env*
