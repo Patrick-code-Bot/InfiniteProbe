@@ -51,15 +51,38 @@ export default function ShopPageClient() {
 
   // Live products from Shopify — prices/photos update with zero deploys.
   useEffect(() => {
-    if (!isShopifyConfigured()) return;
+    if (!isShopifyConfigured()) {
+      if (process.env.NODE_ENV === "development") {
+        console.warn(
+          "[shop] Shopify is not configured — every card will render its placeholder. " +
+            "Set NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN and NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN " +
+            "in .env.local, then restart the dev server (NEXT_PUBLIC_* is inlined at build time)."
+        );
+      }
+      return;
+    }
     let cancelled = false;
     (async () => {
       const entries = await Promise.all(
         BUNDLES.filter((b) => !isPlaceholder(b.shopifyHandle)).map(async (b) => {
           try {
             const product = await getProductByHandle(b.shopifyHandle);
+            if (!product && process.env.NODE_ENV === "development") {
+              console.warn(
+                `[shop] No Shopify product found for handle "${b.shopifyHandle}" (bundle ${b.key}) — ` +
+                  "rendering placeholder. Check the handle in data/products.ts matches the product " +
+                  "slug in Shopify admin, and that the product is published to this sales channel."
+              );
+            }
             return product ? ([b.key, product] as const) : null;
-          } catch {
+          } catch (err) {
+            if (process.env.NODE_ENV === "development") {
+              console.warn(
+                `[shop] Shopify fetch failed for handle "${b.shopifyHandle}" (bundle ${b.key}) — ` +
+                  "rendering placeholder. This is a config/network error, not a missing photo:",
+                err
+              );
+            }
             return null;
           }
         })
