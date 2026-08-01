@@ -86,6 +86,18 @@ dashed placeholder boxes) — drop files into `/public/images` and set the path:
 - [ ] Home announcement bar: confirm "FREE SHIPPING ON ALL ORDERS · LAUNCH OFFER" is accurate at launch (`app/page.tsx`)
 - [ ] Model number `IP-X1` — confirm final (`data/specs.json` → `model`)
 
+## 9b · Sanity CMS (optional — the site works without it)
+
+The site builds and renders fully with Sanity unconfigured; every field falls back to the copy committed in the components. Only do this if you want editors changing copy without deploys.
+
+- [ ] Create a project at [sanity.io/manage](https://sanity.io/manage), then set `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` (see `.env.example`)
+- [ ] Create a Viewer token → `SANITY_API_READ_TOKEN` (server-side only, never `NEXT_PUBLIC_`) — required for draft-mode preview
+- [ ] Add the deployed Studio URL (`https://www.infiniteprobe.com/studio`) to Sanity → API → CORS origins, with credentials allowed
+- [ ] Visit `/studio`, create a `page` document with slug `support`, and confirm the hero overrides the committed copy
+- [ ] **Placeholders keep their brackets in Sanity.** Typing `[TBC]` into a CMS field renders the same dashed-orange "unconfirmed" styling as a bracketed string in code — the entries in this checklist apply to CMS content too
+- [ ] All 11 pages are wired for hero + SEO. To take over a page's hero, create a `page` document whose slug matches the route: `home`, `shop`, `specs`, `support`, `how-it-works`, `why-different`, `app`, `warranty`, `privacy-policy`, `terms-of-service`, `shipping-policy`
+- [ ] Body content below the hero is still in code on every page — editing it is a deploy, not a CMS change
+
 ## 10 · Deployment (Vercel)
 
 - [ ] Push repo to GitHub and import in Vercel (project root: `site/`)

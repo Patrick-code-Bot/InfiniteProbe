@@ -5,24 +5,41 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoMark, Wordmark } from "@/components/Logo";
 import { useCart } from "@/components/cart/CartProvider";
+import {
+  defaultLocale,
+  isLocale,
+  localePath,
+  stripLocale,
+  type Dictionary,
+  type Locale,
+} from "@/lib/i18n";
 
-const NAV = [
-  { label: "HOW IT WORKS", href: "/how-it-works" },
-  { label: "WHY DIFFERENT", href: "/why-different" },
-  { label: "APP", href: "/app" },
-  { label: "SPECS", href: "/specs" },
-  { label: "SUPPORT", href: "/support" },
+/** Hrefs are locale-free; localePath() adds the prefix at render time. */
+const NAV: { key: keyof Dictionary["nav"]; href: string }[] = [
+  { key: "howItWorks", href: "/how-it-works" },
+  { key: "whyDifferent", href: "/why-different" },
+  { key: "app", href: "/app" },
+  { key: "specs", href: "/specs" },
+  { key: "support", href: "/support" },
 ];
 
+/** Compares locale-free paths — `pathname` still carries the /en prefix. */
 function isActive(pathname: string, href: string): boolean {
   if (href.includes("#")) return false;
-  return pathname === href;
+  return stripLocale(pathname) === href;
 }
 
-export default function Header() {
+export default function Header({ dict }: { dict: Dictionary }) {
   const pathname = usePathname();
   const { cart, openCart } = useCart();
-  const onShop = pathname === "/shop";
+
+  // Derived from the URL rather than passed as a prop: Header is a client
+  // component rendered inside pages that already know the locale, but reading
+  // it here keeps every call site from having to thread it through.
+  const segment = pathname.split("/").filter(Boolean)[0] ?? "";
+  const locale: Locale = isLocale(segment) ? segment : defaultLocale;
+
+  const onShop = stripLocale(pathname) === "/shop";
   const count = cart?.totalQuantity ?? 0;
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -41,11 +58,6 @@ export default function Header() {
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, [menuOpen]);
-
-  // Close on route change — the panel would otherwise stay open over the new page.
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
   // Escape to close, and lock body scroll while the panel covers the page.
   useEffect(() => {
@@ -87,18 +99,23 @@ export default function Header() {
           gap: 16,
         }}
       >
-        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <Link
+          href={localePath(locale, "/")}
+          style={{ display: "flex", alignItems: "center", gap: 10 }}
+        >
           <LogoMark />
           <Wordmark />
         </Link>
         <nav className={onShop ? "nav-links-shop" : "nav-links"}>
           {NAV.map((item) => (
             <Link
-              key={item.label}
-              href={item.href}
-              style={isActive(pathname, item.href) ? { color: "#C9661A" } : undefined}
+              key={item.key}
+              href={localePath(locale, item.href)}
+              style={
+                isActive(pathname, item.href) ? { color: "#C9661A" } : undefined
+              }
             >
-              {item.label}
+              {dict.nav[item.key]}
             </Link>
           ))}
         </nav>
@@ -106,7 +123,7 @@ export default function Header() {
           <button
             onClick={() => setMenuOpen((open) => !open)}
             className={onShop ? "nav-toggle-shop" : "nav-toggle"}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.menu}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
           >
@@ -135,68 +152,68 @@ export default function Header() {
           </button>
           {onShop ? (
             <>
-            <button
-              onClick={openCart}
-              aria-label="Open cart"
-              style={{
-                position: "relative",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "8px 4px",
-              }}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#141414"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <button
+                onClick={openCart}
+                aria-label="Open cart"
+                style={{
+                  position: "relative",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "8px 4px",
+                }}
               >
-                <path d="M6 7h12l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H8.7a1.5 1.5 0 0 1-1.5-1.3L6 7z" />
-                <path d="M9 9V6a3 3 0 0 1 6 0v3" />
-              </svg>
-              {count > 0 && (
-                <span
-                  className="mono"
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: -6,
-                    minWidth: 18,
-                    height: 18,
-                    borderRadius: 999,
-                    background: "#C9661A",
-                    color: "#FFFFFF",
-                    fontSize: 10,
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "0 4px",
-                  }}
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#141414"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  {count}
-                </span>
-              )}
-            </button>
-            <button
-              onClick={openCart}
-              className="btn-ink"
-              style={{
-                padding: "11px 22px",
-                fontSize: 12,
-                whiteSpace: "nowrap",
-              }}
-            >
-              CART
-            </button>
+                  <path d="M6 7h12l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H8.7a1.5 1.5 0 0 1-1.5-1.3L6 7z" />
+                  <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+                </svg>
+                {count > 0 && (
+                  <span
+                    className="mono"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: -6,
+                      minWidth: 18,
+                      height: 18,
+                      borderRadius: 999,
+                      background: "#C9661A",
+                      color: "#FFFFFF",
+                      fontSize: 10,
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "0 4px",
+                    }}
+                  >
+                    {count}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={openCart}
+                className="btn-ink"
+                style={{
+                  padding: "11px 22px",
+                  fontSize: 12,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                CART
+              </button>
             </>
           ) : (
-            <Link href="/shop">
+            <Link href={localePath(locale, "/shop")}>
               <button
                 className="btn-ink"
                 style={{
@@ -205,7 +222,7 @@ export default function Header() {
                   whiteSpace: "nowrap",
                 }}
               >
-                SHOP NOW
+                {dict.nav.shopNow}
               </button>
             </Link>
           )}
@@ -259,22 +276,33 @@ export default function Header() {
                 flexDirection: "column",
               }}
             >
+              {/* Each link closes the panel itself — it would otherwise stay
+                  open over the newly navigated page. */}
               {NAV.map((item) => (
                 <Link
-                  key={item.label}
-                  href={item.href}
+                  key={item.key}
+                  href={localePath(locale, item.href)}
                   className="mobile-nav-link"
-                  style={isActive(pathname, item.href) ? { color: "#C9661A" } : undefined}
+                  onClick={() => setMenuOpen(false)}
+                  style={
+                    isActive(pathname, item.href)
+                      ? { color: "#C9661A" }
+                      : undefined
+                  }
                 >
-                  {item.label}
+                  {dict.nav[item.key]}
                 </Link>
               ))}
-              <Link href="/shop" style={{ marginTop: 24 }}>
+              <Link
+                href={localePath(locale, "/shop")}
+                onClick={() => setMenuOpen(false)}
+                style={{ marginTop: 24 }}
+              >
                 <button
                   className="btn-ink"
                   style={{ width: "100%", padding: "16px 24px", fontSize: 13 }}
                 >
-                  SHOP NOW →
+                  {dict.nav.shopNowArrow}
                 </button>
               </Link>
             </nav>

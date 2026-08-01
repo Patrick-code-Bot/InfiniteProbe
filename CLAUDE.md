@@ -18,14 +18,25 @@ Run from `site/`:
 npm install       # install dependencies
 npm run dev       # dev server at localhost:3000
 npm run build     # production build (also the best "does it compile" check)
-npm run lint      # ESLint (next/core-web-vitals + next/typescript)
+npm run lint      # ESLint flat config (next/core-web-vitals + next/typescript)
 ```
 
 There is no test suite. TypeScript is in strict mode; use `npm run build` to type-check.
 
 ## What This Is
 
-Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. Next.js 14 App Router, React 18, TypeScript. Six statically generated routes: `/`, `/how-it-works`, `/shop`, `/specs`, `/app`, `/support`. Checkout is handled by Shopify (hosted checkout); this site only manages the cart. Deployed to Vercel with root directory `site/`.
+Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. Next.js 16 App Router, React 19, TypeScript. Eleven statically generated pages, all under a `[lang]` locale segment: `/[lang]`, `/how-it-works`, `/why-different`, `/shop`, `/specs`, `/app`, `/support`, `/warranty`, `/privacy-policy`, `/terms-of-service`, `/shipping-policy`. Checkout is handled by Shopify (hosted checkout); this site only manages the cart. Deployed to Vercel with root directory `site/`.
+
+### i18n routing
+
+Every page lives under `app/[lang]/`. Ships `en` only, but the structure is locale-ready.
+
+- `lib/i18n.ts` is the single source of truth: `locales`, `defaultLocale`, and the helpers `parseLocale()`, `localePath()`, `stripLocale()`, `languageAlternates()`. **Never hardcode a locale prefix** — build hrefs with `localePath(locale, "/shop")`, and compare paths with `stripLocale()`.
+- `lib/dictionaries/*.json` holds UI chrome strings only (nav, footer labels). Page copy lives in the page components.
+- `app/[lang]/layout.tsx` is the **only** root layout — it renders `<html lang>`, fonts, and `CartProvider`. There is no `app/layout.tsx`; a layout above `[lang]` cannot read the locale param without forcing dynamic rendering.
+- `proxy.ts` 308-redirects unprefixed paths (`/shop` → `/en/shop`). Locale-shaped but unsupported paths (`/fr`) pass through to a 404 rather than redirecting.
+- Pages use `generateMetadata` (not `export const metadata`) so `canonical` and `openGraph.url` carry the locale prefix.
+- Adding a locale: add it to `locales` in `lib/i18n.ts`, add `lib/dictionaries/<locale>.json`, add the field to the Sanity localized objects. No structural change.
 
 ## Architecture
 
@@ -43,9 +54,26 @@ Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. 
 - Env vars (see `site/.env.example`): `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`, plus server-side `NEWSLETTER_PROVIDER` / `NEWSLETTER_API_KEY`.
 - `app/api/newsletter/route.ts` is a stub — the provider call is not implemented yet.
 
+### Sanity CMS
+
+Headless CMS for marketing copy. **Additive, never required** — the site builds and renders fully with no Sanity credentials.
+
+- `sanity/env.ts` — config + `isSanityConfigured()`. `sanity/client.ts` — `client` is `null` when unconfigured, and `sanityFetch` returns `null` instead of throwing.
+- `sanity/queries.ts` — GROQ with locale coalescing. **`locale` is interpolated as a GROQ field path and cannot be parameterized** — only ever pass a validated `Locale` from `parseLocale()`, never raw input. Values like `slug` are bound parameters and are safe.
+- `sanity/content.ts` — `firstHero()` and `text(cmsValue, fallback)`. **Every CMS read must have an in-code fallback**: `text(hero?.heading, "How Can We Help?")`. This is what makes the page-by-page migration safe and keeps a CMS outage from blanking a page.
+- `sanity/schemas/objects/locale.ts` — localized field types are **generated from `locales` in `lib/i18n.ts`**, so the schema cannot drift from the routing layer.
+- `/studio` — embedded Studio, deliberately outside `[lang]` with its own bare `app/studio/layout.tsx` (the site's root layout lives under `[lang]`). 404s when unconfigured.
+- `app/api/draft-mode/enable|disable` — visual editing; requires server-only `SANITY_API_READ_TOKEN`, 401s without it.
+- **All 11 pages are CMS-wired** for hero (eyebrow/heading/subheading) + SEO title/description. Body content below the hero is still in code. Three deliberate exceptions: `/specs`' subheading interpolates `{specs.model}`, and the `/privacy-policy` + `/terms-of-service` lead paragraphs are legal text — all three stay in code.
+- Sanity `page` documents are keyed by slug: `home`, `shop`, `specs`, `support`, `how-it-works`, `why-different`, `app`, `warranty`, `privacy-policy`, `terms-of-service`, `shipping-policy`.
+
+**Do not move `data/` to Sanity.** `specs.json` (`tbc` flags drive placeholder styling), `products.ts` (Shopify handles), and `images.ts` (`null` triggers `ImageSlot` placeholders) are structural config with behavior attached, not editorial copy.
+
 ### Placeholder convention (important)
 
 Unconfirmed content is written as `[bracketed text]` throughout the codebase and intentionally renders with dashed burnt-orange "unconfirmed" styling. This is deliberate pre-launch behavior — do not "fix" or invent values for these placeholders. `site/LAUNCH_CHECKLIST.md` tracks every placeholder that must be resolved before launch.
+
+**This convention carries into Sanity unchanged**: editors type the brackets into CMS fields, and `isPlaceholder()` still detects them. There is deliberately no separate `unconfirmed` boolean — one representation everywhere means a flag and its text can never disagree. Note that `text()` does not treat a bracketed string as empty; it is meaningful content, not a missing value.
 
 ### Styling
 

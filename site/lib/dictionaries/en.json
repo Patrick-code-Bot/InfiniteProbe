@@ -1,0 +1,33 @@
+{
+  "nav": {
+    "howItWorks": "HOW IT WORKS",
+    "whyDifferent": "WHY DIFFERENT",
+    "app": "APP",
+    "specs": "SPECS",
+    "support": "SUPPORT",
+    "shop": "SHOP",
+    "shopNow": "SHOP NOW",
+    "shopNowArrow": "SHOP NOW →",
+    "menu": "Menu",
+    "closeMenu": "Close menu"
+  },
+  "footer": {
+    "support": "SUPPORT",
+    "follow": "CONNECT",
+    "legal": "POLICIES",
+    "gettingStarted": "Getting Started",
+    "userManual": "User Manual (PDF)",
+    "faq": "FAQ",
+    "contactUs": "Contact Us",
+    "appIos": "App for iOS",
+    "appAndroid": "App for Android",
+    "instagram": "Instagram",
+    "youtube": "YouTube",
+    "facebook": "Facebook",
+    "x": "X",
+    "shipping": "Shipping",
+    "warranty": "Warranty",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  }
+}
