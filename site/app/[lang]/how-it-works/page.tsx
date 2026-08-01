@@ -9,6 +9,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import ImageSlot from "@/components/ImageSlot";
@@ -25,10 +28,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("how-it-works", locale);
+
   return {
-    title: "How It Works",
-    description:
+    title: text(page?.seo?.metaTitle, "How It Works"),
+    description: text(
+      page?.seo?.metaDescription,
       "Inside InfiniteProbe, a thermoelectric core converts the heat of your cook into electricity — powering the sensor and the wireless link for as long as there's fire. Five steps, zero batteries.",
+    ),
     alternates: {
       canonical: localePath(locale, "/how-it-works"),
       languages: languageAlternates("/how-it-works"),
@@ -102,7 +109,15 @@ export default async function HowItWorksPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("how-it-works", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -131,7 +146,7 @@ export default async function HowItWorksPage({
                 marginBottom: 28,
               }}
             >
-              HOW IT WORKS
+              {text(hero?.eyebrow, "HOW IT WORKS")}
             </div>
             <h1
               style={{
@@ -142,7 +157,7 @@ export default async function HowItWorksPage({
                 lineHeight: 0.98,
               }}
             >
-              Powered by the Cook Itself
+              {text(hero?.heading, "Powered by the Cook Itself")}
             </h1>
             <p
               style={{
@@ -153,11 +168,10 @@ export default async function HowItWorksPage({
                 maxWidth: 560,
               }}
             >
-              Every wireless thermometer before this one had the same weakness:
-              a battery. InfiniteProbe removed it. Inside the probe, a
-              thermoelectric core converts the heat of your cook into
-              electricity — powering the sensor and the wireless link for as
-              long as there&apos;s fire.
+              {text(
+                hero?.subheading,
+                "Every wireless thermometer before this one had the same weakness: a battery. InfiniteProbe removed it. Inside the probe, a thermoelectric core converts the heat of your cook into electricity — powering the sensor and the wireless link for as long as there's fire.",
+              )}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
               <Link href={localePath(locale, "/shop")}>

@@ -8,6 +8,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import FaqAccordion from "@/components/FaqAccordion";
@@ -21,10 +24,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("shipping-policy", locale);
+
   return {
-    title: "Shipping Policy",
-    description:
+    title: text(page?.seo?.metaTitle, "Shipping Policy"),
+    description: text(
+      page?.seo?.metaDescription,
       "InfiniteProbe shipping — processing times, domestic and international rates, tracking, and what to do if a shipment goes wrong.",
+    ),
     alternates: {
       canonical: localePath(locale, "/shipping-policy"),
       languages: languageAlternates("/shipping-policy"),
@@ -113,7 +120,15 @@ export default async function ShippingPolicyPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("shipping-policy", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -136,7 +151,7 @@ export default async function ShippingPolicyPage({
             marginBottom: 24,
           }}
         >
-          SHIPPING POLICY
+          {text(hero?.eyebrow, "SHIPPING POLICY")}
         </div>
         <h1
           style={{
@@ -147,7 +162,7 @@ export default async function ShippingPolicyPage({
             lineHeight: 1,
           }}
         >
-          From Our Door to Your Fire.
+          {text(hero?.heading, "From Our Door to Your Fire.")}
         </h1>
         <p
           style={{
@@ -158,10 +173,10 @@ export default async function ShippingPolicyPage({
             maxWidth: 680,
           }}
         >
-          Every InfiniteProbe ships from IPT with tracking, careful packaging,
-          and no surprise fees at the door. Here is exactly how our shipping
-          works — processing times, rates, international duties, and what to do
-          if anything goes sideways in transit.
+          {text(
+            hero?.subheading,
+            "Every InfiniteProbe ships from IPT with tracking, careful packaging, and no surprise fees at the door. Here is exactly how our shipping works — processing times, rates, international duties, and what to do if anything goes sideways in transit.",
+          )}
         </p>
         <div
           className="mono"

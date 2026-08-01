@@ -64,7 +64,8 @@ Headless CMS for marketing copy. **Additive, never required** — the site build
 - `sanity/schemas/objects/locale.ts` — localized field types are **generated from `locales` in `lib/i18n.ts`**, so the schema cannot drift from the routing layer.
 - `/studio` — embedded Studio, deliberately outside `[lang]` with its own bare `app/studio/layout.tsx` (the site's root layout lives under `[lang]`). 404s when unconfigured.
 - `app/api/draft-mode/enable|disable` — visual editing; requires server-only `SANITY_API_READ_TOKEN`, 401s without it.
-- Migrated so far: `/support` only. The other 10 pages still render entirely from their committed copy.
+- **All 11 pages are CMS-wired** for hero (eyebrow/heading/subheading) + SEO title/description. Body content below the hero is still in code. Three deliberate exceptions: `/specs`' subheading interpolates `{specs.model}`, and the `/privacy-policy` + `/terms-of-service` lead paragraphs are legal text — all three stay in code.
+- Sanity `page` documents are keyed by slug: `home`, `shop`, `specs`, `support`, `how-it-works`, `why-different`, `app`, `warranty`, `privacy-policy`, `terms-of-service`, `shipping-policy`.
 
 **Do not move `data/` to Sanity.** `specs.json` (`tbc` flags drive placeholder styling), `products.ts` (Shopify handles), and `images.ts` (`null` triggers `ImageSlot` placeholders) are structural config with behavior attached, not editorial copy.
 

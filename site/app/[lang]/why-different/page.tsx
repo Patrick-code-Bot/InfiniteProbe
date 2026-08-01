@@ -9,6 +9,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import CartDrawer from "@/components/cart/CartDrawer";
@@ -21,10 +24,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("why-different", locale);
+
   return {
-    title: "Why Different",
-    description:
+    title: text(page?.seo?.metaTitle, "Why Different"),
+    description: text(
+      page?.seo?.metaDescription,
       "InfiniteProbe removed the battery — and with it, every habit built around keeping one alive. See why a heat-powered thermometer changes everything about how you cook.",
+    ),
     alternates: {
       canonical: localePath(locale, "/why-different"),
       languages: languageAlternates("/why-different"),
@@ -92,7 +99,15 @@ export default async function WhyDifferentPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("why-different", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -117,7 +132,7 @@ export default async function WhyDifferentPage({
               marginBottom: 28,
             }}
           >
-            WHY IT&apos;S DIFFERENT
+            {text(hero?.eyebrow, "WHY IT'S DIFFERENT")}
           </div>
           <h1
             style={{
@@ -129,7 +144,10 @@ export default async function WhyDifferentPage({
               maxWidth: 820,
             }}
           >
-            The Last Thermometer Habit You&apos;ll Break Is Charging It
+            {text(
+              hero?.heading,
+              "The Last Thermometer Habit You'll Break Is Charging It",
+            )}
           </h1>
           <p
             style={{
@@ -140,9 +158,10 @@ export default async function WhyDifferentPage({
               maxWidth: 620,
             }}
           >
-            Every wireless thermometer before this one traded convenience for a
-            countdown clock. InfiniteProbe removed the battery — and with it,
-            every habit built around keeping one alive.
+            {text(
+              hero?.subheading,
+              "Every wireless thermometer before this one traded convenience for a countdown clock. InfiniteProbe removed the battery — and with it, every habit built around keeping one alive.",
+            )}
           </p>
           <div
             style={{

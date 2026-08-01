@@ -9,6 +9,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import SpecTables from "@/components/SpecTables";
@@ -24,10 +27,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("specs", locale);
+
   return {
-    title: "Specs",
-    description:
+    title: text(page?.seo?.metaTitle, "Specs"),
+    description: text(
+      page?.seo?.metaDescription,
       "Full specifications for InfiniteProbe One (model IP-X1) — the self-powered wireless meat thermometer. Temperature, power, wireless, physical, app compatibility, and warranty.",
+    ),
     alternates: {
       canonical: localePath(locale, "/specs"),
       languages: languageAlternates("/specs"),
@@ -82,7 +89,15 @@ export default async function SpecsPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("specs", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -114,7 +129,7 @@ export default async function SpecsPage({
                 marginBottom: 24,
               }}
             >
-              SPECIFICATIONS
+              {text(hero?.eyebrow, "SPECIFICATIONS")}
             </div>
             <h1
               style={{
@@ -125,7 +140,7 @@ export default async function SpecsPage({
                 lineHeight: 0.98,
               }}
             >
-              InfiniteProbe One
+              {text(hero?.heading, "InfiniteProbe One")}
             </h1>
             <p
               style={{

@@ -9,6 +9,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import ImageSlot from "@/components/ImageSlot";
 import StoreBadges from "@/components/StoreBadges";
@@ -23,10 +26,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("app", locale);
+
   return {
-    title: "App",
-    description:
+    title: text(page?.seo?.metaTitle, "App"),
+    description: text(
+      page?.seo?.metaDescription,
       "The free InfiniteProbe app for iOS and Android — every probe, every temperature, every alert, live on your phone for the entire cook. No account required, nothing leaves your device.",
+    ),
     alternates: {
       canonical: localePath(locale, "/app"),
       languages: languageAlternates("/app"),
@@ -123,7 +130,15 @@ export default async function AppPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("app", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -160,7 +175,10 @@ export default async function AppPage({
                 marginBottom: 28,
               }}
             >
-              THE INFINITEPROBE APP · IOS + ANDROID · FREE
+              {text(
+                hero?.eyebrow,
+                "THE INFINITEPROBE APP · IOS + ANDROID · FREE",
+              )}
             </div>
             <h1
               style={{
@@ -171,7 +189,7 @@ export default async function AppPage({
                 lineHeight: 0.98,
               }}
             >
-              The Whole Cook, On One Screen
+              {text(hero?.heading, "The Whole Cook, On One Screen")}
             </h1>
             <p
               style={{
@@ -182,9 +200,10 @@ export default async function AppPage({
                 maxWidth: 520,
               }}
             >
-              Every probe, every temperature, every alert — live on your phone
-              for the entire cook. Download it free, pair in seconds, and never
-              open the lid to check again.
+              {text(
+                hero?.subheading,
+                "Every probe, every temperature, every alert — live on your phone for the entire cook. Download it free, pair in seconds, and never open the lid to check again.",
+              )}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
               <StoreBadges variant="light" padding="14px 24px" fontSize={12} />

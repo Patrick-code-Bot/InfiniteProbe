@@ -64,12 +64,21 @@ const FAQS = [
   },
 ];
 
+/** Hero copy, already resolved against CMS + fallbacks by the server wrapper. */
+interface ShopHero {
+  eyebrow: string;
+  heading: string;
+  subheading: string;
+}
+
 export default function ShopPageClient({
   dict,
   locale,
+  hero,
 }: {
   dict: Dictionary;
   locale: Locale;
+  hero: ShopHero;
 }) {
   const { addItem, openCart } = useCart();
   const [products, setProducts] = useState<Record<string, ShopifyProduct>>({});
@@ -163,7 +172,7 @@ export default function ShopPageClient({
             marginBottom: 22,
           }}
         >
-          SHOP
+          {hero.eyebrow}
         </div>
         <h1
           style={{
@@ -174,7 +183,7 @@ export default function ShopPageClient({
             lineHeight: 0.98,
           }}
         >
-          Choose Your Setup
+          {hero.heading}
         </h1>
         <p
           style={{
@@ -185,7 +194,7 @@ export default function ShopPageClient({
             maxWidth: 520,
           }}
         >
-          One probe or the whole table — every setup is self-powered, forever.
+          {hero.subheading}
         </p>
         <div
           className="mono"

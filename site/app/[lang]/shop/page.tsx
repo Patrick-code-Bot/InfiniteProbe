@@ -7,6 +7,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import ShopPageClient from "./ShopPageClient";
 
 export async function generateMetadata({
@@ -17,10 +20,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("shop", locale);
+
   return {
-    title: "Shop",
-    description:
+    title: text(page?.seo?.metaTitle, "Shop"),
+    description: text(
+      page?.seo?.metaDescription,
       "Choose your InfiniteProbe setup — one probe or the whole table, every setup is self-powered, forever. Free shipping on all orders.",
+    ),
     alternates: {
       canonical: localePath(locale, "/shop"),
       languages: languageAlternates("/shop"),
@@ -35,8 +42,12 @@ export async function generateMetadata({
 }
 
 /**
- * Server wrapper: resolves the locale and dictionary, then hands them to the
- * client component that owns the cart interactivity.
+ * Server wrapper: resolves the locale, dictionary, and CMS hero, then hands
+ * them to the client component that owns the cart interactivity.
+ *
+ * The hero is resolved to plain strings here rather than passed as the raw
+ * document — a client component cannot call getPage(), and only these three
+ * fields cross the boundary.
  */
 export default async function ShopPage({
   params,
@@ -46,7 +57,22 @@ export default async function ShopPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
 
-  return <ShopPageClient dict={dict} locale={locale} />;
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("shop", locale, { draft: isDraft }),
+  ]);
+
+  const cms = firstHero(page);
+  const hero = {
+    eyebrow: text(cms?.eyebrow, "SHOP"),
+    heading: text(cms?.heading, "Choose Your Setup"),
+    subheading: text(
+      cms?.subheading,
+      "One probe or the whole table — every setup is self-powered, forever.",
+    ),
+  };
+
+  return <ShopPageClient dict={dict} locale={locale} hero={hero} />;
 }

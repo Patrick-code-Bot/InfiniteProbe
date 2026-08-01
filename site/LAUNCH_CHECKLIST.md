@@ -95,7 +95,8 @@ The site builds and renders fully with Sanity unconfigured; every field falls ba
 - [ ] Add the deployed Studio URL (`https://www.infiniteprobe.com/studio`) to Sanity → API → CORS origins, with credentials allowed
 - [ ] Visit `/studio`, create a `page` document with slug `support`, and confirm the hero overrides the committed copy
 - [ ] **Placeholders keep their brackets in Sanity.** Typing `[TBC]` into a CMS field renders the same dashed-orange "unconfirmed" styling as a bracketed string in code — the entries in this checklist apply to CMS content too
-- [ ] Only `/support` is CMS-wired so far; the other 10 pages render from committed copy regardless of what exists in Sanity
+- [ ] All 11 pages are wired for hero + SEO. To take over a page's hero, create a `page` document whose slug matches the route: `home`, `shop`, `specs`, `support`, `how-it-works`, `why-different`, `app`, `warranty`, `privacy-policy`, `terms-of-service`, `shipping-policy`
+- [ ] Body content below the hero is still in code on every page — editing it is a deploy, not a CMS change
 
 ## 10 · Deployment (Vercel)
 

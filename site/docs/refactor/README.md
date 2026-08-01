@@ -154,13 +154,30 @@ does **not** treat a bracketed string as empty — it is meaningful content.
 **Schema i18n is generated from `lib/i18n.ts`.** The locale fields are built by
 mapping over `locales`, so the schema cannot drift from the routing layer.
 
-Migrated so far: **`/support`** (hero + SEO metadata) — chosen as the low-risk
-validation case. Its FAQ answers are full of `[Placeholder — ...]` strings,
-which made it a good test of the bracket convention.
+**All 11 pages are migrated** — hero (eyebrow / heading / subheading) plus SEO
+title and description on each. Verified that all 24 fallback strings match the
+pre-migration committed copy byte-for-byte, so the migration changed no visible
+text.
 
-**Remaining:** migrate the other 10 pages' copy one at a time, then wire live
-preview (`defineLive`) once a real project exists. Do not migrate `data/`
-(see below).
+Three places where the generic pattern did not apply, and what was done instead:
+
+- **`/specs` subheading** interpolates `{specs.model}` mid-sentence with nested
+  JSX. Left in code — a flat CMS string cannot express it. Heading and eyebrow
+  are wired.
+- **`/privacy-policy` and `/terms-of-service` lead paragraphs** are dense legal
+  text with `&quot;` entities and `§` cross-references. Left in code: this is
+  legal copy, not marketing copy, and an editor should not be able to reword it
+  without review. Headings and eyebrows are wired.
+- **`/shop`** renders from a client component, which cannot call `getPage()`.
+  The server wrapper resolves the hero to plain strings and passes them as a
+  `hero` prop, so only three resolved fields cross the boundary.
+
+Entity handling was the main hazard: source copy contains `&apos;` and `&quot;`,
+which must become real characters in the fallback strings. Verified at runtime
+that apostrophes render as `&#x27;` with zero raw `&apos;` leaking into output.
+
+**Remaining in phase 2:** wire live preview (`defineLive`) once a real Sanity
+project exists. Do not migrate `data/` (see below).
 
 **Watch:** `getPage()` is called in both `generateMetadata` and the page body,
 i.e. twice per render. Published fetches use `cache: "force-cache"`, so this

@@ -9,6 +9,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import WarrantyAccordion from "@/components/WarrantyAccordion";
@@ -22,10 +25,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("warranty", locale);
+
   return {
-    title: "Warranty & Returns",
-    description:
+    title: text(page?.seo?.metaTitle, "Warranty & Returns"),
+    description: text(
+      page?.seo?.metaDescription,
       "The InfiniteProbe limited warranty and return policy — coverage, exclusions, and how to file a claim.",
+    ),
     alternates: {
       canonical: localePath(locale, "/warranty"),
       languages: languageAlternates("/warranty"),
@@ -226,7 +233,15 @@ export default async function WarrantyPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("warranty", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -249,7 +264,7 @@ export default async function WarrantyPage({
             marginBottom: 24,
           }}
         >
-          WARRANTY & RETURNS · POLICY
+          {text(hero?.eyebrow, "WARRANTY & RETURNS · POLICY")}
         </div>
         <h1
           style={{
@@ -260,7 +275,7 @@ export default async function WarrantyPage({
             lineHeight: 1,
           }}
         >
-          Built for the Fire. Backed in Writing.
+          {text(hero?.heading, "Built for the Fire. Backed in Writing.")}
         </h1>
         <p
           style={{
@@ -271,10 +286,10 @@ export default async function WarrantyPage({
             maxWidth: 680,
           }}
         >
-          Every InfiniteProbe is engineered to outlast your longest cook — and
-          covered by a warranty written to be read, not skimmed. Here is exactly
-          what we promise, what we cover, and how to reach us if something goes
-          wrong.
+          {text(
+            hero?.subheading,
+            "Every InfiniteProbe is engineered to outlast your longest cook — and covered by a warranty written to be read, not skimmed. Here is exactly what we promise, what we cover, and how to reach us if something goes wrong.",
+          )}
         </p>
         <div
           style={{

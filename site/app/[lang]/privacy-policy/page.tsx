@@ -8,6 +8,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import CartDrawer from "@/components/cart/CartDrawer";
 
@@ -19,10 +22,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("privacy-policy", locale);
+
   return {
-    title: "Privacy Policy",
-    description:
+    title: text(page?.seo?.metaTitle, "Privacy Policy"),
+    description: text(
+      page?.seo?.metaDescription,
       "How InfiniteProbe Technologies Company collects, uses, and protects your information across our website, store, and app.",
+    ),
     alternates: {
       canonical: localePath(locale, "/privacy-policy"),
       languages: languageAlternates("/privacy-policy"),
@@ -169,7 +176,15 @@ export default async function PrivacyPolicyPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("privacy-policy", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -192,7 +207,7 @@ export default async function PrivacyPolicyPage({
             marginBottom: 24,
           }}
         >
-          PRIVACY POLICY
+          {text(hero?.eyebrow, "PRIVACY POLICY")}
         </div>
         <h1
           style={{
@@ -203,7 +218,7 @@ export default async function PrivacyPolicyPage({
             lineHeight: 1,
           }}
         >
-          Your Cook Is Your Business.
+          {text(hero?.heading, "Your Cook Is Your Business.")}
         </h1>
         <p
           style={{

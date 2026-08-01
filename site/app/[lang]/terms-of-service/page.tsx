@@ -8,6 +8,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import CartDrawer from "@/components/cart/CartDrawer";
 
@@ -19,10 +22,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("terms-of-service", locale);
+
   return {
-    title: "Terms of Service",
-    description:
+    title: text(page?.seo?.metaTitle, "Terms of Service"),
+    description: text(
+      page?.seo?.metaDescription,
       "The terms governing use of the InfiniteProbe website, store, and app — acceptance, purchases, intellectual property, and dispute resolution.",
+    ),
     alternates: {
       canonical: localePath(locale, "/terms-of-service"),
       languages: languageAlternates("/terms-of-service"),
@@ -190,7 +197,15 @@ export default async function TermsOfServicePage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("terms-of-service", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -213,7 +228,7 @@ export default async function TermsOfServicePage({
             marginBottom: 24,
           }}
         >
-          TERMS OF SERVICE
+          {text(hero?.eyebrow, "TERMS OF SERVICE")}
         </div>
         <h1
           style={{
@@ -224,7 +239,7 @@ export default async function TermsOfServicePage({
             lineHeight: 1,
           }}
         >
-          The Deal, in Plain Terms.
+          {text(hero?.heading, "The Deal, in Plain Terms.")}
         </h1>
         <p
           style={{

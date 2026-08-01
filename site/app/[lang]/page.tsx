@@ -9,6 +9,9 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { draftMode } from "next/headers";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import ImageSlot from "@/components/ImageSlot";
@@ -26,10 +29,17 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("home", locale);
+
   return {
-    title: "InfiniteProbe — Infinite Power for Perfect Meat",
-    description:
+    title: text(
+      page?.seo?.metaTitle,
+      "InfiniteProbe — Infinite Power for Perfect Meat",
+    ),
+    description: text(
+      page?.seo?.metaDescription,
       "The self-powered wireless meat thermometer. InfiniteProbe converts cooking heat into electricity — real-time wireless monitoring with no batteries, no charging, no guessing.",
+    ),
     alternates: {
       canonical: localePath(locale, "/"),
       languages: languageAlternates("/"),
@@ -145,7 +155,15 @@ export default async function HomePage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("home", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive — every field falls back to the copy below.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -201,7 +219,10 @@ export default async function HomePage({
                 marginBottom: 28,
               }}
             >
-              THE SELF-POWERED WIRELESS MEAT THERMOMETER
+              {text(
+                hero?.eyebrow,
+                "THE SELF-POWERED WIRELESS MEAT THERMOMETER",
+              )}
             </div>
             <h1
               style={{
@@ -212,7 +233,7 @@ export default async function HomePage({
                 lineHeight: 0.98,
               }}
             >
-              Infinite Power for Perfect Meat
+              {text(hero?.heading, "Infinite Power for Perfect Meat")}
             </h1>
             <p
               style={{
@@ -223,9 +244,10 @@ export default async function HomePage({
                 maxWidth: 520,
               }}
             >
-              InfiniteProbe converts cooking heat into electricity — powering
-              real-time wireless monitoring of your meat&apos;s internal
-              temperature. No batteries. No charging. No guessing.
+              {text(
+                hero?.subheading,
+                "InfiniteProbe converts cooking heat into electricity — powering real-time wireless monitoring of your meat's internal temperature. No batteries. No charging. No guessing.",
+              )}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
               <Link href={localePath(locale, "/shop")}>
