@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  parseLocale,
+  localePath,
+  languageAlternates,
+  getDictionary,
+  defaultLocale,
+} from "@/lib/i18n";
+import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import ImageSlot from "@/components/ImageSlot";
 import StoreBadges from "@/components/StoreBadges";
@@ -10,18 +18,30 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { IMAGES } from "@/data/images";
 import specs from "@/data/specs.json";
 
-export const metadata: Metadata = {
-  title: "InfiniteProbe — Infinite Power for Perfect Meat",
-  description:
-    "The self-powered wireless meat thermometer. InfiniteProbe converts cooking heat into electricity — real-time wireless monitoring with no batteries, no charging, no guessing.",
-  alternates: { canonical: "/" },
-  openGraph: {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = parseLocale(lang) ?? defaultLocale;
+
+  return {
     title: "InfiniteProbe — Infinite Power for Perfect Meat",
     description:
-      "The self-powered wireless meat thermometer. No batteries. No charging. No guessing.",
-    url: "/",
-  },
-};
+      "The self-powered wireless meat thermometer. InfiniteProbe converts cooking heat into electricity — real-time wireless monitoring with no batteries, no charging, no guessing.",
+    alternates: {
+      canonical: localePath(locale, "/"),
+      languages: languageAlternates("/"),
+    },
+    openGraph: {
+      title: "InfiniteProbe — Infinite Power for Perfect Meat",
+      description:
+        "The self-powered wireless meat thermometer. No batteries. No charging. No guessing.",
+      url: localePath(locale, "/"),
+    },
+  };
+}
 
 const PILLARS = [
   {
@@ -49,7 +69,15 @@ const CHAIN = [
   { num: "05", label: "REAL-TIME MONITORING", arrow: false },
 ];
 
-const USE_CASES = ["GRILL", "SMOKER", "OVEN", "OPEN FIRE", "STEAK", "TURKEY", "BRISKET"];
+const USE_CASES = [
+  "GRILL",
+  "SMOKER",
+  "OVEN",
+  "OPEN FIRE",
+  "STEAK",
+  "TURKEY",
+  "BRISKET",
+];
 
 const APP_BLOCKS = [
   {
@@ -87,13 +115,38 @@ const APP_BLOCKS = [
 ];
 
 const COMPARISON = [
-  { label: "Power source", old: "Disposable or rechargeable battery", new: "Cooking heat itself" },
-  { label: "Charging dependency", old: "Charge before every cook", new: "None — ever" },
-  { label: "Wireless monitoring", old: "Limited by battery life", new: "Real-time, for the whole cook" },
-  { label: "Freedom during cooking", old: "Tethered to charge cycles", new: "Precision without battery anxiety" },
+  {
+    label: "Power source",
+    old: "Disposable or rechargeable battery",
+    new: "Cooking heat itself",
+  },
+  {
+    label: "Charging dependency",
+    old: "Charge before every cook",
+    new: "None — ever",
+  },
+  {
+    label: "Wireless monitoring",
+    old: "Limited by battery life",
+    new: "Real-time, for the whole cook",
+  },
+  {
+    label: "Freedom during cooking",
+    old: "Tethered to charge cycles",
+    new: "Precision without battery anxiety",
+  },
 ];
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = parseLocale(lang);
+  if (!locale) notFound();
+  const dict = await getDictionary(locale);
+
   return (
     <>
       {/* 0 · Announcement bar */}
@@ -115,10 +168,18 @@ export default function HomePage() {
         </span>
       </div>
 
-      <Header />
+      <Header dict={dict} />
 
       {/* 1 · Hero (dark band 1/3) */}
-      <div id="top" style={{ background: "#161513", color: "#F2EFE6", position: "relative", overflow: "hidden" }}>
+      <div
+        id="top"
+        style={{
+          background: "#161513",
+          color: "#F2EFE6",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         <div
           style={{
             maxWidth: 1280,
@@ -133,7 +194,12 @@ export default function HomePage() {
           <div style={{ flex: "1 1 480px", minWidth: 300 }}>
             <div
               className="mono"
-              style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 28 }}
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.24em",
+                color: "#C9661A",
+                marginBottom: 28,
+              }}
             >
               THE SELF-POWERED WIRELESS MEAT THERMOMETER
             </div>
@@ -157,18 +223,24 @@ export default function HomePage() {
                 maxWidth: 520,
               }}
             >
-              InfiniteProbe converts cooking heat into electricity — powering real-time wireless
-              monitoring of your meat&apos;s internal temperature. No batteries. No charging. No
-              guessing.
+              InfiniteProbe converts cooking heat into electricity — powering
+              real-time wireless monitoring of your meat&apos;s internal
+              temperature. No batteries. No charging. No guessing.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-              <Link href="/shop">
-                <button className="btn-cream" style={{ padding: "17px 34px", fontSize: 14 }}>
+              <Link href={localePath(locale, "/shop")}>
+                <button
+                  className="btn-cream"
+                  style={{ padding: "17px 34px", fontSize: 14 }}
+                >
                   SHOP NOW →
                 </button>
               </Link>
               <a href="#how">
-                <button className="btn-outline-light" style={{ padding: "16px 34px", fontSize: 14 }}>
+                <button
+                  className="btn-outline-light"
+                  style={{ padding: "16px 34px", fontSize: 14 }}
+                >
                   SEE HOW IT WORKS
                 </button>
               </a>
@@ -184,7 +256,14 @@ export default function HomePage() {
               gap: 28,
             }}
           >
-            <div style={{ width: "100%", maxWidth: 440, aspectRatio: "4/3", position: "relative" }}>
+            <div
+              style={{
+                width: "100%",
+                maxWidth: 440,
+                aspectRatio: "4/3",
+                position: "relative",
+              }}
+            >
               <div style={{ position: "absolute", inset: 0 }}>
                 <ImageSlot
                   src={IMAGES.heroProbe}
@@ -225,8 +304,9 @@ export default function HomePage() {
                     animation: "livePulse 1.6s infinite",
                   }}
                 />
-                INTERNAL <span style={{ color: "#C9661A", fontWeight: 600 }}>54.2°</span> · AMBIENT
-                116° · TARGET 58.0 · LIVE
+                INTERNAL{" "}
+                <span style={{ color: "#C9661A", fontWeight: 600 }}>54.2°</span>{" "}
+                · AMBIENT 116° · TARGET 58.0 · LIVE
               </div>
             </div>
           </div>
@@ -242,27 +322,76 @@ export default function HomePage() {
               gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
             }}
           >
-            <div style={{ padding: "28px 24px 28px 0", borderRight: "1px solid rgba(242,239,230,0.14)" }}>
-              <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.01em", marginBottom: 6 }}>
+            <div
+              style={{
+                padding: "28px 24px 28px 0",
+                borderRight: "1px solid rgba(242,239,230,0.14)",
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: 800,
+                  fontSize: 18,
+                  letterSpacing: "-0.01em",
+                  marginBottom: 6,
+                }}
+              >
                 Self-Powered
               </div>
-              <div style={{ fontSize: 14, color: "rgba(242,239,230,0.6)", lineHeight: 1.5 }}>
+              <div
+                style={{
+                  fontSize: 14,
+                  color: "rgba(242,239,230,0.6)",
+                  lineHeight: 1.5,
+                }}
+              >
                 Runs on cooking heat itself. Never charge it.
               </div>
             </div>
-            <div style={{ padding: "28px 24px", borderRight: "1px solid rgba(242,239,230,0.14)" }}>
-              <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.01em", marginBottom: 6 }}>
+            <div
+              style={{
+                padding: "28px 24px",
+                borderRight: "1px solid rgba(242,239,230,0.14)",
+              }}
+            >
+              <div
+                style={{
+                  fontWeight: 800,
+                  fontSize: 18,
+                  letterSpacing: "-0.01em",
+                  marginBottom: 6,
+                }}
+              >
                 Truly Wireless
               </div>
-              <div style={{ fontSize: 14, color: "rgba(242,239,230,0.6)", lineHeight: 1.5 }}>
+              <div
+                style={{
+                  fontSize: 14,
+                  color: "rgba(242,239,230,0.6)",
+                  lineHeight: 1.5,
+                }}
+              >
                 Live temperature on your phone, over Bluetooth LE.
               </div>
             </div>
             <div style={{ padding: "28px 0 28px 24px" }}>
-              <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.01em", marginBottom: 6 }}>
+              <div
+                style={{
+                  fontWeight: 800,
+                  fontSize: 18,
+                  letterSpacing: "-0.01em",
+                  marginBottom: 6,
+                }}
+              >
                 Stainless Steel 304 Body
               </div>
-              <div style={{ fontSize: 14, color: "rgba(242,239,230,0.6)", lineHeight: 1.5 }}>
+              <div
+                style={{
+                  fontSize: 14,
+                  color: "rgba(242,239,230,0.6)",
+                  lineHeight: 1.5,
+                }}
+              >
                 Food-grade metal, built for the fire.
               </div>
             </div>
@@ -271,8 +400,17 @@ export default function HomePage() {
       </div>
 
       {/* 2 · Three Pillars */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
-        <SectionRule eyebrow="§ 01 · POWERED BY HEAT, NOT BY HASSLE" meta="03" />
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="§ 01 · POWERED BY HEAT, NOT BY HASSLE"
+          meta="03"
+        />
         <h2
           style={{
             margin: "0 0 48px",
@@ -304,7 +442,12 @@ export default function HomePage() {
             >
               <div
                 className="mono"
-                style={{ fontSize: 13, letterSpacing: "0.2em", color: "#C9661A", marginBottom: 22 }}
+                style={{
+                  fontSize: 13,
+                  letterSpacing: "0.2em",
+                  color: "#C9661A",
+                  marginBottom: 22,
+                }}
               >
                 {p.num}
               </div>
@@ -319,7 +462,13 @@ export default function HomePage() {
               >
                 {p.title}
               </div>
-              <div style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(20,20,20,0.72)" }}>
+              <div
+                style={{
+                  fontSize: 15,
+                  lineHeight: 1.65,
+                  color: "rgba(20,20,20,0.72)",
+                }}
+              >
                 {p.body}
               </div>
             </div>
@@ -328,7 +477,14 @@ export default function HomePage() {
       </div>
 
       {/* 3 · How It Works */}
-      <div id="how" style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        id="how"
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 02 · HOW INFINITEPROBE WORKS" meta="05 STEPS" />
         <h2
           style={{
@@ -351,8 +507,24 @@ export default function HomePage() {
           }}
         >
           {CHAIN.map((step) => (
-            <div key={step.num} style={{ display: "flex", alignItems: "center", gap: 12, flex: "1 1 auto" }}>
-              <div style={{ background: "#EAE6DA", borderRadius: 14, padding: "18px 20px", flex: 1, minWidth: 150 }}>
+            <div
+              key={step.num}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                flex: "1 1 auto",
+              }}
+            >
+              <div
+                style={{
+                  background: "#EAE6DA",
+                  borderRadius: 14,
+                  padding: "18px 20px",
+                  flex: 1,
+                  minWidth: 150,
+                }}
+              >
                 <div
                   className="mono"
                   style={{
@@ -364,12 +536,22 @@ export default function HomePage() {
                 >
                   {step.num}
                 </div>
-                <div className="mono" style={{ fontSize: 12, letterSpacing: "0.14em", fontWeight: 600 }}>
+                <div
+                  className="mono"
+                  style={{
+                    fontSize: 12,
+                    letterSpacing: "0.14em",
+                    fontWeight: 600,
+                  }}
+                >
                   {step.label}
                 </div>
               </div>
               {step.arrow && (
-                <span className="mono" style={{ color: "#C9661A", fontSize: 16 }}>
+                <span
+                  className="mono"
+                  style={{ color: "#C9661A", fontSize: 16 }}
+                >
                   →
                 </span>
               )}
@@ -385,17 +567,30 @@ export default function HomePage() {
             justifyContent: "space-between",
           }}
         >
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)", maxWidth: 680 }}>
-            The moment InfiniteProbe meets heat, its thermoelectric core begins converting the
-            temperature difference into electrical energy. That energy powers the sensor and the
-            Bluetooth link — so the probe monitors your cook for as long as the cook lasts. No
-            charging dock. No dead battery at the worst possible moment. Just heat, turned into
+          <p
+            style={{
+              margin: 0,
+              fontSize: 16,
+              lineHeight: 1.7,
+              color: "rgba(20,20,20,0.78)",
+              maxWidth: 680,
+            }}
+          >
+            The moment InfiniteProbe meets heat, its thermoelectric core begins
+            converting the temperature difference into electrical energy. That
+            energy powers the sensor and the Bluetooth link — so the probe
+            monitors your cook for as long as the cook lasts. No charging dock.
+            No dead battery at the worst possible moment. Just heat, turned into
             insight.
           </p>
-          <Link href="/how-it-works">
+          <Link href={localePath(locale, "/how-it-works")}>
             <button
               className="btn-outline-dark"
-              style={{ padding: "15px 30px", fontSize: 13, whiteSpace: "nowrap" }}
+              style={{
+                padding: "15px 30px",
+                fontSize: 13,
+                whiteSpace: "nowrap",
+              }}
             >
               LEARN THE TECHNOLOGY →
             </button>
@@ -404,7 +599,13 @@ export default function HomePage() {
       </div>
 
       {/* 4 · Built for Serious Cooking */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 03 · BUILT FOR SERIOUS COOKING" />
         <h2
           style={{
@@ -417,7 +618,14 @@ export default function HomePage() {
         >
           Wherever There&apos;s Fire
         </h2>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 36 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 12,
+            marginBottom: 36,
+          }}
+        >
           {USE_CASES.map((u) => (
             <span
               key={u}
@@ -434,14 +642,31 @@ export default function HomePage() {
             </span>
           ))}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 40, alignItems: "flex-start" }}>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)", maxWidth: 640 }}>
-            From a Tuesday-night steak to a competition brisket, InfiniteProbe keeps you in control
-            of the only number that decides the outcome — core temperature. Sear it, smoke it, roast
-            it, or cook it over open flame: if there&apos;s heat, the probe is powered and
-            reporting.
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 40,
+            alignItems: "flex-start",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: 16,
+              lineHeight: 1.7,
+              color: "rgba(20,20,20,0.78)",
+              maxWidth: 640,
+            }}
+          >
+            From a Tuesday-night steak to a competition brisket, InfiniteProbe
+            keeps you in control of the only number that decides the outcome —
+            core temperature. Sear it, smoke it, roast it, or cook it over open
+            flame: if there&apos;s heat, the probe is powered and reporting.
           </p>
-          <div style={{ flex: "1 1 320px", minWidth: 280, aspectRatio: "16/9" }}>
+          <div
+            style={{ flex: "1 1 320px", minWidth: 280, aspectRatio: "16/9" }}
+          >
             <ImageSlot
               src={IMAGES.lifestyleGrill}
               alt="Grilling over open fire with InfiniteProbe"
@@ -453,9 +678,26 @@ export default function HomePage() {
       </div>
 
       {/* 5 · App Showcase (dark band 2/3) */}
-      <div id="app" style={{ background: "#161513", color: "#F2EFE6", marginTop: "clamp(72px,9vw,128px)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,120px) 24px" }}>
-          <SectionRule eyebrow="§ 04 · YOUR COOK, LIVE" meta="IOS · ANDROID" dark />
+      <div
+        id="app"
+        style={{
+          background: "#161513",
+          color: "#F2EFE6",
+          marginTop: "clamp(72px,9vw,128px)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            padding: "clamp(72px,9vw,120px) 24px",
+          }}
+        >
+          <SectionRule
+            eyebrow="§ 04 · YOUR COOK, LIVE"
+            meta="IOS · ANDROID"
+            dark
+          />
           <h2
             style={{
               margin: "0 0 64px",
@@ -468,7 +710,13 @@ export default function HomePage() {
           >
             The Whole Cook, On One Screen
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "clamp(56px,7vw,96px)" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "clamp(56px,7vw,96px)",
+            }}
+          >
             {APP_BLOCKS.map((b) => (
               <div
                 key={b.tag}
@@ -480,8 +728,20 @@ export default function HomePage() {
                   flexDirection: b.dir,
                 }}
               >
-                <div style={{ flex: "1 1 300px", minWidth: 270, display: "flex", justifyContent: "center" }}>
-                  <div style={{ width: "min(300px,80vw)", aspectRatio: "862/1658" }}>
+                <div
+                  style={{
+                    flex: "1 1 300px",
+                    minWidth: 270,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "min(300px,80vw)",
+                      aspectRatio: "862/1658",
+                    }}
+                  >
                     <ImageSlot
                       src={b.src}
                       alt={b.alt}
@@ -495,7 +755,12 @@ export default function HomePage() {
                 <div style={{ flex: "1 1 340px", minWidth: 280 }}>
                   <div
                     className="mono"
-                    style={{ fontSize: 11, letterSpacing: "0.2em", color: "#C9661A", marginBottom: 16 }}
+                    style={{
+                      fontSize: 11,
+                      letterSpacing: "0.2em",
+                      color: "#C9661A",
+                      marginBottom: 16,
+                    }}
                   >
                     {b.tag}
                   </div>
@@ -510,7 +775,14 @@ export default function HomePage() {
                   >
                     {b.title}
                   </div>
-                  <div style={{ fontSize: 16, lineHeight: 1.7, color: "rgba(242,239,230,0.7)", maxWidth: 460 }}>
+                  <div
+                    style={{
+                      fontSize: 16,
+                      lineHeight: 1.7,
+                      color: "rgba(242,239,230,0.7)",
+                      maxWidth: 460,
+                    }}
+                  >
                     {b.body}
                   </div>
                 </div>
@@ -531,9 +803,14 @@ export default function HomePage() {
           >
             <div
               className="mono"
-              style={{ fontSize: 12, letterSpacing: "0.18em", color: "rgba(242,239,230,0.65)" }}
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.18em",
+                color: "rgba(242,239,230,0.65)",
+              }}
             >
-              °C OR °F · MULTI-LANGUAGE · BLUETOOTH 5.0 · NOTHING LEAVES YOUR DEVICE
+              °C OR °F · MULTI-LANGUAGE · BLUETOOTH 5.0 · NOTHING LEAVES YOUR
+              DEVICE
             </div>
             <div style={{ display: "flex", gap: 14 }}>
               <StoreBadges variant="light" />
@@ -543,7 +820,14 @@ export default function HomePage() {
       </div>
 
       {/* 6 · Why It's Different */}
-      <div id="different" style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        id="different"
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 05 · WHY IT'S DIFFERENT" />
         <h2
           style={{
@@ -575,13 +859,24 @@ export default function HomePage() {
             <div style={{ padding: "20px 24px" }} />
             <div
               className="mono"
-              style={{ padding: "20px 16px", fontSize: 11, letterSpacing: "0.14em", color: "rgba(20,20,20,0.5)" }}
+              style={{
+                padding: "20px 16px",
+                fontSize: 11,
+                letterSpacing: "0.14em",
+                color: "rgba(20,20,20,0.5)",
+              }}
             >
               TRADITIONAL THERMOMETERS
             </div>
             <div
               className="mono"
-              style={{ padding: "20px 16px", fontSize: 11, letterSpacing: "0.14em", color: "#C9661A", fontWeight: 600 }}
+              style={{
+                padding: "20px 16px",
+                fontSize: 11,
+                letterSpacing: "0.14em",
+                color: "#C9661A",
+                fontWeight: 600,
+              }}
             >
               INFINITEPROBE
             </div>
@@ -595,8 +890,19 @@ export default function HomePage() {
                 borderBottom: "1px solid rgba(20,20,20,0.08)",
               }}
             >
-              <div style={{ padding: "22px 24px", fontWeight: 700, fontSize: 14 }}>{row.label}</div>
-              <div style={{ padding: "22px 16px", fontSize: 14, color: "rgba(20,20,20,0.6)", lineHeight: 1.5 }}>
+              <div
+                style={{ padding: "22px 24px", fontWeight: 700, fontSize: 14 }}
+              >
+                {row.label}
+              </div>
+              <div
+                style={{
+                  padding: "22px 16px",
+                  fontSize: 14,
+                  color: "rgba(20,20,20,0.6)",
+                  lineHeight: 1.5,
+                }}
+              >
                 {row.old}
               </div>
               <div
@@ -619,7 +925,13 @@ export default function HomePage() {
       </div>
 
       {/* 7 · Social Proof (placeholder) */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="EARLY REVIEWS" meta="AWAITING QUOTES" />
         <h2
           style={{
@@ -632,7 +944,13 @@ export default function HomePage() {
         >
           Cooks Who Refuse to Guess
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+            gap: 20,
+          }}
+        >
           {[1, 2, 3].map((i) => (
             <div
               key={i}
@@ -643,7 +961,14 @@ export default function HomePage() {
                 padding: 32,
               }}
             >
-              <div style={{ color: "#C9661A", fontSize: 16, letterSpacing: "0.2em", marginBottom: 16 }}>
+              <div
+                style={{
+                  color: "#C9661A",
+                  fontSize: 16,
+                  letterSpacing: "0.2em",
+                  marginBottom: 16,
+                }}
+              >
                 ★★★★★
               </div>
               <div
@@ -657,7 +982,14 @@ export default function HomePage() {
               >
                 &quot;Quote from early tester or press outlet.&quot;
               </div>
-              <div className="mono" style={{ fontSize: 11, letterSpacing: "0.16em", color: "#C9661A" }}>
+              <div
+                className="mono"
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.16em",
+                  color: "#C9661A",
+                }}
+              >
                 NAME · TITLE / PUBLICATION
               </div>
             </div>
@@ -666,8 +998,18 @@ export default function HomePage() {
       </div>
 
       {/* 8 · Key Specs Teaser — values come from data/specs.json */}
-      <div id="specs" style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
-        <SectionRule eyebrow="§ 06 · ENGINEERED FOR PRECISION" marginBottom={40} />
+      <div
+        id="specs"
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="§ 06 · ENGINEERED FOR PRECISION"
+          marginBottom={40}
+        />
         <div
           style={{
             display: "grid",
@@ -683,7 +1025,9 @@ export default function HomePage() {
                 borderRadius: 16,
                 padding: "28px 24px",
                 textAlign: "center",
-                border: s.tbc ? "1.5px dashed #C9661A" : "1px solid rgba(20,20,20,0.15)",
+                border: s.tbc
+                  ? "1.5px dashed #C9661A"
+                  : "1px solid rgba(20,20,20,0.15)",
                 background: s.tbc ? "rgba(201,102,26,0.04)" : "#FBF9F3",
               }}
             >
@@ -712,8 +1056,11 @@ export default function HomePage() {
           ))}
         </div>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Link href="/specs">
-            <button className="btn-outline-dark" style={{ padding: "15px 30px", fontSize: 13 }}>
+          <Link href={localePath(locale, "/specs")}>
+            <button
+              className="btn-outline-dark"
+              style={{ padding: "15px 30px", fontSize: 13 }}
+            >
               FULL SPECIFICATIONS →
             </button>
           </Link>
@@ -752,7 +1099,12 @@ export default function HomePage() {
         >
           <div
             className="mono"
-            style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 28 }}
+            style={{
+              fontSize: 12,
+              letterSpacing: "0.24em",
+              color: "#C9661A",
+              marginBottom: 28,
+            }}
           >
             § 07 · A NEW CATEGORY
           </div>
@@ -777,15 +1129,21 @@ export default function HomePage() {
               maxWidth: 620,
             }}
           >
-            InfiniteProbe is more than a thermometer. It&apos;s a new approach to cooking
-            intelligence — heat-powered innovation, wireless precision, and premium design in one
-            elegant instrument.
+            InfiniteProbe is more than a thermometer. It&apos;s a new approach
+            to cooking intelligence — heat-powered innovation, wireless
+            precision, and premium design in one elegant instrument.
           </p>
         </div>
       </div>
 
       {/* 10 · Guarantee (placeholder) */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <div
           style={{
             border: "1.5px dashed #C9661A",
@@ -797,7 +1155,12 @@ export default function HomePage() {
         >
           <div
             className="mono"
-            style={{ fontSize: 12, letterSpacing: "0.22em", color: "#C9661A", marginBottom: 20 }}
+            style={{
+              fontSize: 12,
+              letterSpacing: "0.22em",
+              color: "#C9661A",
+              marginBottom: 20,
+            }}
           >
             OUR PROMISE · TERMS AWAITING CONFIRMATION
           </div>
@@ -813,13 +1176,27 @@ export default function HomePage() {
           >
             Guaranteed to Outlast Your Longest Cook
           </h2>
-          <p style={{ margin: "0 auto", fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.55)", maxWidth: 600 }}>
+          <p
+            style={{
+              margin: "0 auto",
+              fontSize: 16,
+              lineHeight: 1.7,
+              color: "rgba(20,20,20,0.55)",
+              maxWidth: 600,
+            }}
+          >
             Every InfiniteProbe One is backed by a{" "}
-            <span className="mono" style={{ color: "#C9661A", fontWeight: 600 }}>
+            <span
+              className="mono"
+              style={{ color: "#C9661A", fontWeight: 600 }}
+            >
               {specs.warranty.years}-year warranty
             </span>{" "}
             and a{" "}
-            <span className="mono" style={{ color: "#C9661A", fontWeight: 600 }}>
+            <span
+              className="mono"
+              style={{ color: "#C9661A", fontWeight: 600 }}
+            >
               {specs.warranty.returnDays}-day money-back guarantee
             </span>
             . If it doesn&apos;t change the way you cook, send it back.
@@ -849,8 +1226,11 @@ export default function HomePage() {
           <br />
           Cook Freer.
         </h2>
-        <Link href="/shop">
-          <button className="btn-ink" style={{ padding: "19px 44px", fontSize: 15 }}>
+        <Link href={localePath(locale, "/shop")}>
+          <button
+            className="btn-ink"
+            style={{ padding: "19px 44px", fontSize: 15 }}
+          >
             BUY INFINITEPROBE →
           </button>
         </Link>
@@ -862,15 +1242,24 @@ export default function HomePage() {
             paddingTop: 40,
           }}
         >
-          <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Stay in touch.</div>
-          <div style={{ fontSize: 14, color: "rgba(20,20,20,0.6)", lineHeight: 1.6, marginBottom: 24 }}>
+          <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 8 }}>
+            Stay in touch.
+          </div>
+          <div
+            style={{
+              fontSize: 14,
+              color: "rgba(20,20,20,0.6)",
+              lineHeight: 1.6,
+              marginBottom: 24,
+            }}
+          >
             Recipes, firmware updates, and new-product news — no spam, ever.
           </div>
           <NewsletterForm />
         </div>
       </div>
 
-      <Footer />
+      <Footer dict={dict} locale={locale} />
       <CartDrawer />
     </>
   );

@@ -78,17 +78,46 @@ must be awaited.
 Verified: `npm run build` clean, `npm run lint` clean, all 13 routes return 200
 from `npm start` with content rendered and no hydration errors.
 
-### Phase 1 — i18n routing
-1. Add `lib/i18n.ts` (locale list, default locale, `Dictionary` type).
-2. Move `app/*/page.tsx` → `app/[lang]/*/page.tsx`. Keep `app/layout.tsx` as
-   the root shell; add `app/[lang]/layout.tsx` that sets `<html lang>`.
-3. Add `generateStaticParams()` returning the locale list so routes stay static.
-4. Add proxy/middleware redirecting `/` → `/en`.
-5. Keep `app/api/`, `sitemap.ts`, `robots.ts`, `opengraph-image.tsx` at the root
-   (they are not locale-scoped, though `sitemap.ts` should emit per-locale URLs).
+### Phase 1 — i18n routing ✅ DONE
 
-**Watch:** `sitemap.ts` must emit one entry per locale per route, and pages need
-`alternates.languages` metadata for hreflang.
+All 11 pages now live under `app/[lang]/`, statically generated per locale.
+
+What was built:
+
+1. **`lib/i18n.ts`** — `locales`, `defaultLocale`, `parseLocale()`,
+   `localePath()`, `stripLocale()`, `languageAlternates()`, and the `Dictionary`
+   type. Every locale-dependent path reads from here.
+2. **`lib/dictionaries/en.json`** — UI chrome only (nav, footer labels). Page
+   copy stays in components until phase 2 moves it to Sanity.
+3. **`app/[lang]/layout.tsx`** — the app's *only* root layout.
+4. **`proxy.ts`** — 308-redirects unprefixed paths to the default locale.
+5. **`app/sitemap.ts`** — one entry per route per locale with hreflang
+   alternates; per-page `metadata` became `generateMetadata` so `canonical` and
+   `openGraph.url` carry the prefix.
+
+Three decisions worth knowing:
+
+**The root layout moved into `[lang]` rather than staying at `app/`.** Next
+requires the root layout to render `<html>`/`<body>`, and `lang` must reflect
+the locale — but a layout *above* `[lang]` never receives the param. Reading it
+from `headers()` would have opted the entire site out of static generation. The
+fix is to let `app/[lang]/layout.tsx` be the root layout; `app/layout.tsx` is
+deleted. `CartProvider` still wraps everything, so switching locale will not
+remount the cart.
+
+**`dynamicParams = false`.** An unknown locale is a build-time 404 rather than
+an on-demand render, so `/fr/` cannot be served English with a 200 and indexed
+as duplicate content.
+
+**Header/Footer stayed in the pages instead of being hoisted into the layout.**
+Hoisting looked obvious — it would have removed 22 duplicate renders — but the
+home page renders an announcement bar *above* `<Header />`, and every other page
+does not. Hoisting would have reordered that bar, so `dict`/`locale` are threaded
+through as props instead. Worth revisiting if the bar ever moves into the layout.
+
+**Watch (phase 2):** `Header` derives its locale from `usePathname()` rather than
+a prop, because it is a client component. That works today; if a locale switcher
+lands, confirm it still reads correctly mid-navigation.
 
 ### Phase 2 — Sanity
 1. `npm i sanity next-sanity @sanity/image-url @sanity/vision`

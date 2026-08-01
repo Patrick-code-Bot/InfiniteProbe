@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  parseLocale,
+  localePath,
+  languageAlternates,
+  getDictionary,
+  defaultLocale,
+} from "@/lib/i18n";
+import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import ImageSlot from "@/components/ImageSlot";
 import StoreBadges from "@/components/StoreBadges";
@@ -9,17 +17,29 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { IMAGES } from "@/data/images";
 import specs from "@/data/specs.json";
 
-export const metadata: Metadata = {
-  title: "How It Works",
-  description:
-    "Inside InfiniteProbe, a thermoelectric core converts the heat of your cook into electricity — powering the sensor and the wireless link for as long as there's fire. Five steps, zero batteries.",
-  alternates: { canonical: "/how-it-works" },
-  openGraph: {
-    title: "How InfiniteProbe Works — Powered by the Cook Itself",
-    description: "Five steps, zero batteries. From fire to signal.",
-    url: "/how-it-works",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = parseLocale(lang) ?? defaultLocale;
+
+  return {
+    title: "How It Works",
+    description:
+      "Inside InfiniteProbe, a thermoelectric core converts the heat of your cook into electricity — powering the sensor and the wireless link for as long as there's fire. Five steps, zero batteries.",
+    alternates: {
+      canonical: localePath(locale, "/how-it-works"),
+      languages: languageAlternates("/how-it-works"),
+    },
+    openGraph: {
+      title: "How InfiniteProbe Works — Powered by the Cook Itself",
+      description: "Five steps, zero batteries. From fire to signal.",
+      url: localePath(locale, "/how-it-works"),
+    },
+  };
+}
 
 const CHAIN_STEPS = [
   {
@@ -74,10 +94,19 @@ const BY_CUT = [
   { name: "BRISKET / ROAST", tip: "Deepest central portion." },
 ];
 
-export default function HowItWorksPage() {
+export default async function HowItWorksPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = parseLocale(lang);
+  if (!locale) notFound();
+  const dict = await getDictionary(locale);
+
   return (
     <>
-      <Header />
+      <Header dict={dict} />
 
       {/* 1 · Hero (dark band) */}
       <div style={{ background: "#161513", color: "#F2EFE6" }}>
@@ -95,7 +124,12 @@ export default function HowItWorksPage() {
           <div style={{ flex: "1 1 480px", minWidth: 300 }}>
             <div
               className="mono"
-              style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 28 }}
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.24em",
+                color: "#C9661A",
+                marginBottom: 28,
+              }}
             >
               HOW IT WORKS
             </div>
@@ -119,19 +153,26 @@ export default function HowItWorksPage() {
                 maxWidth: 560,
               }}
             >
-              Every wireless thermometer before this one had the same weakness: a battery.
-              InfiniteProbe removed it. Inside the probe, a thermoelectric core converts the heat of
-              your cook into electricity — powering the sensor and the wireless link for as long as
-              there&apos;s fire.
+              Every wireless thermometer before this one had the same weakness:
+              a battery. InfiniteProbe removed it. Inside the probe, a
+              thermoelectric core converts the heat of your cook into
+              electricity — powering the sensor and the wireless link for as
+              long as there&apos;s fire.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-              <Link href="/shop">
-                <button className="btn-cream" style={{ padding: "17px 34px", fontSize: 14 }}>
+              <Link href={localePath(locale, "/shop")}>
+                <button
+                  className="btn-cream"
+                  style={{ padding: "17px 34px", fontSize: 14 }}
+                >
                   SHOP NOW →
                 </button>
               </Link>
-              <Link href="/specs">
-                <button className="btn-outline-light" style={{ padding: "16px 34px", fontSize: 14 }}>
+              <Link href={localePath(locale, "/specs")}>
+                <button
+                  className="btn-outline-light"
+                  style={{ padding: "16px 34px", fontSize: 14 }}
+                >
                   SEE THE SPECS
                 </button>
               </Link>
@@ -150,7 +191,13 @@ export default function HowItWorksPage() {
       </div>
 
       {/* 2 · The Energy Chain */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 01 · FROM FIRE TO SIGNAL" meta="05 STEPS" />
         <h2
           style={{
@@ -163,7 +210,13 @@ export default function HowItWorksPage() {
         >
           Five Steps, Zero Batteries
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 20 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+            gap: 20,
+          }}
+        >
           {CHAIN_STEPS.map((s, i) => (
             <div
               key={s.num}
@@ -177,7 +230,12 @@ export default function HowItWorksPage() {
             >
               <div
                 className="mono"
-                style={{ fontSize: 13, letterSpacing: "0.2em", color: "#C9661A", marginBottom: 20 }}
+                style={{
+                  fontSize: 13,
+                  letterSpacing: "0.2em",
+                  color: "#C9661A",
+                  marginBottom: 20,
+                }}
               >
                 {s.num}
               </div>
@@ -192,16 +250,37 @@ export default function HowItWorksPage() {
               >
                 {s.title}
               </div>
-              <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(20,20,20,0.72)" }}>{s.body}</div>
+              <div
+                style={{
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  color: "rgba(20,20,20,0.72)",
+                }}
+              >
+                {s.body}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       {/* 3 · The Principle */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 02 · THE SCIENCE, BRIEFLY" />
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 56, alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 56,
+            alignItems: "center",
+          }}
+        >
           <div style={{ flex: "1 1 440px", minWidth: 300 }}>
             <h2
               style={{
@@ -214,15 +293,32 @@ export default function HowItWorksPage() {
             >
               Heat Wants to Move. We Put It to Work.
             </h2>
-            <p style={{ margin: "0 0 20px", fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)" }}>
-              Whenever one end of a thermoelectric material is hotter than the other, electrons flow
-              — a physical effect known for nearly two centuries and trusted in applications from
-              spacecraft to industrial sensors. InfiniteProbe brings it to the kitchen: the same
-              heat gradient that cooks your meat generates the power that monitors it.
+            <p
+              style={{
+                margin: "0 0 20px",
+                fontSize: 16,
+                lineHeight: 1.7,
+                color: "rgba(20,20,20,0.78)",
+              }}
+            >
+              Whenever one end of a thermoelectric material is hotter than the
+              other, electrons flow — a physical effect known for nearly two
+              centuries and trusted in applications from spacecraft to
+              industrial sensors. InfiniteProbe brings it to the kitchen: the
+              same heat gradient that cooks your meat generates the power that
+              monitors it.
             </p>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)" }}>
-              The result is a probe with no charging port, no battery door, and no countdown clock.
-              It cannot die mid-brisket, because the brisket is what&apos;s powering it.
+            <p
+              style={{
+                margin: 0,
+                fontSize: 16,
+                lineHeight: 1.7,
+                color: "rgba(20,20,20,0.78)",
+              }}
+            >
+              The result is a probe with no charging port, no battery door, and
+              no countdown clock. It cannot die mid-brisket, because the brisket
+              is what&apos;s powering it.
             </p>
           </div>
           <div
@@ -234,13 +330,30 @@ export default function HowItWorksPage() {
               padding: "40px 32px",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 18 }}>
-              <span className="mono" style={{ fontSize: 11, letterSpacing: "0.2em", color: "#C9661A" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 18,
+              }}
+            >
+              <span
+                className="mono"
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.2em",
+                  color: "#C9661A",
+                }}
+              >
                 HOT END · FIRE SIDE
               </span>
               <span
                 className="mono"
-                style={{ fontSize: 11, letterSpacing: "0.2em", color: "rgba(20,20,20,0.5)" }}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.2em",
+                  color: "rgba(20,20,20,0.5)",
+                }}
               >
                 COLD END · MEAT CORE
               </span>
@@ -249,13 +362,19 @@ export default function HowItWorksPage() {
               style={{
                 height: 56,
                 borderRadius: 999,
-                background: "linear-gradient(90deg, #C9661A 0%, #DFA269 45%, #EAE0CB 100%)",
+                background:
+                  "linear-gradient(90deg, #C9661A 0%, #DFA269 45%, #EAE0CB 100%)",
                 position: "relative",
                 marginBottom: 22,
               }}
             >
               <svg
-                style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                }}
                 viewBox="0 0 400 56"
                 preserveAspectRatio="none"
               >
@@ -272,13 +391,30 @@ export default function HowItWorksPage() {
                 <polygon points="370,22 382,28 370,34" fill="#141414" />
               </svg>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-              <span style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "#C9661A" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "baseline",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 34,
+                  fontWeight: 800,
+                  letterSpacing: "-0.03em",
+                  color: "#C9661A",
+                }}
+              >
                 ΔT
               </span>
               <span
                 className="mono"
-                style={{ fontSize: 11, letterSpacing: "0.18em", color: "rgba(20,20,20,0.55)" }}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.18em",
+                  color: "rgba(20,20,20,0.55)",
+                }}
               >
                 TEMPERATURE DIFFERENCE → ELECTRON FLOW → POWER
               </span>
@@ -288,8 +424,17 @@ export default function HowItWorksPage() {
       </div>
 
       {/* 4 · Placement */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
-        <SectionRule eyebrow="§ 03 · PLACEMENT IS PRECISION" meta="MANUAL FIG. 07" />
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="§ 03 · PLACEMENT IS PRECISION"
+          meta="MANUAL FIG. 07"
+        />
         <h2
           style={{
             margin: "0 0 16px",
@@ -301,10 +446,26 @@ export default function HowItWorksPage() {
         >
           Accurate Readings Start with Placement
         </h2>
-        <p style={{ margin: "0 0 48px", fontSize: 17, lineHeight: 1.6, color: "rgba(20,20,20,0.75)", maxWidth: 560 }}>
-          Bury the sensor in the dense center of the meat — and keep the tip safely inside.
+        <p
+          style={{
+            margin: "0 0 48px",
+            fontSize: 17,
+            lineHeight: 1.6,
+            color: "rgba(20,20,20,0.75)",
+            maxWidth: 560,
+          }}
+        >
+          Bury the sensor in the dense center of the meat — and keep the tip
+          safely inside.
         </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 24, marginBottom: 24 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 24,
+            marginBottom: 24,
+          }}
+        >
           <div
             style={{
               flex: "1 1 420px",
@@ -315,14 +476,38 @@ export default function HowItWorksPage() {
               padding: "28px 28px 20px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 8 }}>
-              <span className="mono" style={{ fontSize: 11, letterSpacing: "0.22em", color: "#C9661A" }}>
-                FIG. 07
-              </span>
-              <span style={{ flex: 1, height: 1, background: "rgba(20,20,20,0.15)" }} />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                marginBottom: 8,
+              }}
+            >
               <span
                 className="mono"
-                style={{ fontSize: 10, letterSpacing: "0.18em", color: "rgba(20,20,20,0.45)" }}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.22em",
+                  color: "#C9661A",
+                }}
+              >
+                FIG. 07
+              </span>
+              <span
+                style={{
+                  flex: 1,
+                  height: 1,
+                  background: "rgba(20,20,20,0.15)",
+                }}
+              />
+              <span
+                className="mono"
+                style={{
+                  fontSize: 10,
+                  letterSpacing: "0.18em",
+                  color: "rgba(20,20,20,0.45)",
+                }}
               >
                 SIDE INSERTION · CROSS-SECTION
               </span>
@@ -346,11 +531,33 @@ export default function HowItWorksPage() {
                 strokeDasharray="2 5"
                 opacity="0.35"
               />
-              <rect x="470" y="164" width="58" height="26" rx="13" fill="#141414" />
+              <rect
+                x="470"
+                y="164"
+                width="58"
+                height="26"
+                rx="13"
+                fill="#141414"
+              />
               <circle cx="499" cy="177" r="4" fill="#C9661A" />
-              <rect x="253" y="172" width="220" height="10" rx="5" fill="#141414" />
+              <rect
+                x="253"
+                y="172"
+                width="220"
+                height="10"
+                rx="5"
+                fill="#141414"
+              />
               <circle cx="256" cy="177" r="7" fill="#C9661A" />
-              <line x1="392" y1="120" x2="392" y2="238" stroke="#C9661A" strokeWidth="2" strokeDasharray="6 6" />
+              <line
+                x1="392"
+                y1="120"
+                x2="392"
+                y2="238"
+                stroke="#C9661A"
+                strokeWidth="2"
+                strokeDasharray="6 6"
+              />
               <text
                 x="392"
                 y="110"
@@ -373,7 +580,14 @@ export default function HowItWorksPage() {
               >
                 COVER PAST THIS MARK
               </text>
-              <line x1="256" y1="168" x2="210" y2="94" stroke="#141414" strokeWidth="1" />
+              <line
+                x1="256"
+                y1="168"
+                x2="210"
+                y2="94"
+                stroke="#141414"
+                strokeWidth="1"
+              />
               <circle cx="210" cy="94" r="2.5" fill="#141414" />
               <text
                 x="14"
@@ -395,7 +609,14 @@ export default function HowItWorksPage() {
               >
                 TIP STAYS INSIDE
               </text>
-              <line x1="150" y1="255" x2="120" y2="298" stroke="#141414" strokeWidth="1" />
+              <line
+                x1="150"
+                y1="255"
+                x2="120"
+                y2="298"
+                stroke="#141414"
+                strokeWidth="1"
+              />
               <circle cx="150" cy="255" r="2.5" fill="#141414" />
               <text
                 x="116"
@@ -409,7 +630,15 @@ export default function HowItWorksPage() {
               </text>
             </svg>
           </div>
-          <div style={{ flex: "1 1 380px", minWidth: 290, display: "flex", flexDirection: "column", gap: 20 }}>
+          <div
+            style={{
+              flex: "1 1 380px",
+              minWidth: 290,
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+            }}
+          >
             <div
               style={{
                 background: "#FBF9F3",
@@ -420,13 +649,28 @@ export default function HowItWorksPage() {
             >
               <div
                 className="mono"
-                style={{ fontSize: 11, letterSpacing: "0.2em", color: "#C9661A", marginBottom: 16 }}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.2em",
+                  color: "#C9661A",
+                  marginBottom: 16,
+                }}
               >
                 BEST PRACTICE
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 12 }}
+              >
                 {DOS.map((d) => (
-                  <div key={d} style={{ display: "flex", gap: 12, fontSize: 15, lineHeight: 1.5 }}>
+                  <div
+                    key={d}
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      fontSize: 15,
+                      lineHeight: 1.5,
+                    }}
+                  >
                     <span style={{ color: "#C9661A", fontWeight: 800 }}>✓</span>
                     <span>{d}</span>
                   </div>
@@ -443,15 +687,28 @@ export default function HowItWorksPage() {
             >
               <div
                 className="mono"
-                style={{ fontSize: 11, letterSpacing: "0.2em", color: "rgba(20,20,20,0.5)", marginBottom: 16 }}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.2em",
+                  color: "rgba(20,20,20,0.5)",
+                  marginBottom: 16,
+                }}
               >
                 AVOID
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 12 }}
+              >
                 {DONTS.map((d) => (
                   <div
                     key={d}
-                    style={{ display: "flex", gap: 12, fontSize: 15, lineHeight: 1.5, color: "rgba(20,20,20,0.7)" }}
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      fontSize: 15,
+                      lineHeight: 1.5,
+                      color: "rgba(20,20,20,0.7)",
+                    }}
                   >
                     <span style={{ fontWeight: 800 }}>✕</span>
                     <span>{d}</span>
@@ -461,28 +718,64 @@ export default function HowItWorksPage() {
             </div>
           </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: 16 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+            gap: 16,
+          }}
+        >
           {BY_CUT.map((c) => (
             <div
               key={c.name}
-              style={{ border: "1px solid rgba(20,20,20,0.15)", borderRadius: 16, padding: "22px 24px" }}
+              style={{
+                border: "1px solid rgba(20,20,20,0.15)",
+                borderRadius: 16,
+                padding: "22px 24px",
+              }}
             >
               <div
                 className="mono"
-                style={{ fontSize: 11, letterSpacing: "0.2em", color: "#C9661A", marginBottom: 10 }}
+                style={{
+                  fontSize: 11,
+                  letterSpacing: "0.2em",
+                  color: "#C9661A",
+                  marginBottom: 10,
+                }}
               >
                 {c.name}
               </div>
-              <div style={{ fontSize: 14, lineHeight: 1.55, color: "rgba(20,20,20,0.75)" }}>{c.tip}</div>
+              <div
+                style={{
+                  fontSize: 14,
+                  lineHeight: 1.55,
+                  color: "rgba(20,20,20,0.75)",
+                }}
+              >
+                {c.tip}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       {/* 5 · Range & Signal */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 04 · STAYING CONNECTED" />
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 48, alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 48,
+            alignItems: "center",
+          }}
+        >
           <div style={{ flex: "1 1 460px", minWidth: 300 }}>
             <h2
               style={{
@@ -495,12 +788,21 @@ export default function HowItWorksPage() {
             >
               A Clear Line to Your Phone
             </h2>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)", maxWidth: 600 }}>
-              InfiniteProbe streams over Bluetooth Low Energy 5.0. Keep your phone within the
-              app&apos;s working range and avoid heavy obstacles — thick walls, metal enclosures, or
-              closed metal lids can weaken any Bluetooth signal. If a probe ever drops its
-              connection, the app&apos;s offline alert tells you immediately, and reconnects the
-              moment the signal returns.
+            <p
+              style={{
+                margin: 0,
+                fontSize: 16,
+                lineHeight: 1.7,
+                color: "rgba(20,20,20,0.78)",
+                maxWidth: 600,
+              }}
+            >
+              InfiniteProbe streams over Bluetooth Low Energy 5.0. Keep your
+              phone within the app&apos;s working range and avoid heavy
+              obstacles — thick walls, metal enclosures, or closed metal lids
+              can weaken any Bluetooth signal. If a probe ever drops its
+              connection, the app&apos;s offline alert tells you immediately,
+              and reconnects the moment the signal returns.
             </p>
           </div>
           <div
@@ -526,7 +828,12 @@ export default function HowItWorksPage() {
             </div>
             <div
               className="mono"
-              style={{ fontSize: 11, letterSpacing: "0.18em", color: "#C9661A", marginTop: 10 }}
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.18em",
+                color: "#C9661A",
+                marginTop: 10,
+              }}
             >
               LINE-OF-SIGHT RANGE · AWAITING ENGINEERING
             </div>
@@ -535,9 +842,22 @@ export default function HowItWorksPage() {
       </div>
 
       {/* 6 · Pairing */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(72px,9vw,128px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(72px,9vw,128px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 05 · SET UP IN SECONDS" meta="IOS · ANDROID" />
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 56, alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 56,
+            alignItems: "center",
+          }}
+        >
           <div style={{ flex: "1 1 440px", minWidth: 300 }}>
             <h2
               style={{
@@ -550,17 +870,34 @@ export default function HowItWorksPage() {
             >
               Wake. Tap. Cook.
             </h2>
-            <p style={{ margin: "0 0 36px", fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)", maxWidth: 560 }}>
-              InfiniteProbe pairs with the free companion app over Bluetooth Low Energy. Download it
-              for iOS or Android — or scan the QR code on the package — then wake a probe and tap to
-              pair. Your probes appear on the home screen with live status, ready to be named,
+            <p
+              style={{
+                margin: "0 0 36px",
+                fontSize: 16,
+                lineHeight: 1.7,
+                color: "rgba(20,20,20,0.78)",
+                maxWidth: 560,
+              }}
+            >
+              InfiniteProbe pairs with the free companion app over Bluetooth Low
+              Energy. Download it for iOS or Android — or scan the QR code on
+              the package — then wake a probe and tap to pair. Your probes
+              appear on the home screen with live status, ready to be named,
               assigned a cut, and put to work.
             </p>
             <div style={{ display: "flex", gap: 14 }}>
               <StoreBadges />
             </div>
           </div>
-          <div style={{ flex: "1 1 400px", minWidth: 280, display: "flex", gap: 20, justifyContent: "center" }}>
+          <div
+            style={{
+              flex: "1 1 400px",
+              minWidth: 280,
+              display: "flex",
+              gap: 20,
+              justifyContent: "center",
+            }}
+          >
             <div style={{ width: "min(220px,42vw)", aspectRatio: "862/1658" }}>
               <ImageSlot
                 src={IMAGES.uiWelcome}
@@ -607,21 +944,34 @@ export default function HowItWorksPage() {
           <br />
           No Limits.
         </h2>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center" }}>
-          <Link href="/shop">
-            <button className="btn-ink" style={{ padding: "19px 40px", fontSize: 15 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 16,
+            justifyContent: "center",
+          }}
+        >
+          <Link href={localePath(locale, "/shop")}>
+            <button
+              className="btn-ink"
+              style={{ padding: "19px 40px", fontSize: 15 }}
+            >
               BUY INFINITEPROBE →
             </button>
           </Link>
-          <Link href="/specs">
-            <button className="btn-outline-dark" style={{ padding: "18px 40px", fontSize: 15 }}>
+          <Link href={localePath(locale, "/specs")}>
+            <button
+              className="btn-outline-dark"
+              style={{ padding: "18px 40px", fontSize: 15 }}
+            >
               FULL SPECIFICATIONS
             </button>
           </Link>
         </div>
       </div>
 
-      <Footer />
+      <Footer dict={dict} locale={locale} />
       <CartDrawer />
     </>
   );

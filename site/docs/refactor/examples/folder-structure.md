@@ -1,33 +1,35 @@
 # Target folder structure
 
-Annotated. `[NEW]` = does not exist yet, `[MOVED]` = exists, relocates,
+Annotated. `[DONE]` = built in phase 1, `[NEW]` = does not exist yet,
 `[SPLIT]` = one file becomes several. Everything unmarked stays as-is.
 
 ```
 site/
 ├── app/
-│   ├── layout.tsx                    # root shell: fonts, CartProvider. No <html lang> — that moves to [lang]
 │   ├── globals.css                   # design system (CSS vars + .btn-* utilities)
 │   ├── icon.svg
 │   ├── opengraph-image.tsx
 │   ├── robots.ts
-│   ├── sitemap.ts                    # MUST emit per-locale URLs after phase 1
+│   ├── sitemap.ts                    # [DONE] per-locale URLs + hreflang alternates
+│   │                                 # NOTE: app/layout.tsx is GONE — the root
+│   │                                 # layout lives under [lang] so it can read
+│   │                                 # the locale param (see README phase 1).
 │   │
-│   ├── [lang]/                       # [NEW] locale segment — every marketing page lives here
-│   │   ├── layout.tsx                # [NEW] sets <html lang>, loads dictionary, renders Header/Footer
-│   │   ├── page.tsx                  # [MOVED] from app/page.tsx
-│   │   ├── how-it-works/page.tsx     # [MOVED]
-│   │   ├── why-different/page.tsx    # [MOVED]
-│   │   ├── specs/page.tsx            # [MOVED]
-│   │   ├── app/page.tsx              # [MOVED]
-│   │   ├── support/page.tsx          # [MOVED]
+│   ├── [lang]/                       # [DONE] locale segment — every page lives here
+│   │   ├── layout.tsx                # [DONE] THE root layout: <html lang>, fonts, CartProvider
+│   │   ├── page.tsx                  # [DONE]
+│   │   ├── how-it-works/page.tsx     # [DONE]
+│   │   ├── why-different/page.tsx    # [DONE]
+│   │   ├── specs/page.tsx            # [DONE]
+│   │   ├── app/page.tsx              # [DONE]
+│   │   ├── support/page.tsx          # [DONE]
 │   │   ├── shop/
-│   │   │   ├── page.tsx              # [MOVED] becomes RSC: fetches products server-side
-│   │   │   └── ShopPageClient.tsx    # [MOVED] unchanged — receives products as props
-│   │   ├── privacy-policy/page.tsx   # [MOVED]
-│   │   ├── terms-of-service/page.tsx # [MOVED]
-│   │   ├── shipping-policy/page.tsx  # [MOVED]
-│   │   └── warranty/page.tsx         # [MOVED]
+│   │   │   ├── page.tsx              # [DONE] server wrapper; phase 3 adds product fetching
+│   │   │   └── ShopPageClient.tsx    # [DONE] takes dict/locale props
+│   │   ├── privacy-policy/page.tsx   # [DONE]
+│   │   ├── terms-of-service/page.tsx # [DONE]
+│   │   ├── shipping-policy/page.tsx  # [DONE]
+│   │   └── warranty/page.tsx         # [DONE]
 │   │
 │   ├── studio/
 │   │   └── [[...tool]]/page.tsx      # [NEW] embedded Sanity Studio — NOT under [lang]
@@ -39,8 +41,8 @@ site/
 │           └── disable/route.ts      # [NEW]
 │
 ├── components/                       # unchanged locations; RSC unless marked
-│   ├── Header.tsx                    # 'use client' — mobile menu. Needs locale-aware nav hrefs
-│   ├── Footer.tsx
+│   ├── Header.tsx                    # [DONE] 'use client' — locale-aware nav, dict prop
+│   ├── Footer.tsx                    # [DONE] dict/locale props
 │   ├── Logo.tsx
 │   ├── ImageSlot.tsx
 │   ├── SectionRule.tsx
@@ -76,8 +78,8 @@ site/
 │
 ├── lib/
 │   ├── site.ts                       # unchanged — placeholder convention stays
-│   ├── i18n.ts                       # [NEW] locales, defaultLocale, Locale type
-│   ├── dictionaries/                 # [NEW] UI chrome strings (nav, buttons) — NOT page copy
+│   ├── i18n.ts                       # [DONE] locales, helpers, Dictionary type
+│   ├── dictionaries/                 # [DONE] UI chrome strings — NOT page copy
 │   │   └── en.json
 │   └── shopify/                      # [SPLIT] from the single lib/shopify.ts
 │       ├── storefront.ts             # shared GraphQL fetch + types
@@ -89,7 +91,7 @@ site/
 │   ├── products.ts
 │   └── images.ts
 │
-├── proxy.ts                          # [NEW] locale detection + redirect (`middleware.ts` on Next <16)
+├── proxy.ts                          # [DONE] locale redirect (308)
 ├── sanity.config.ts                  # [NEW] Studio config
 ├── sanity.cli.ts                     # [NEW]
 └── next.config.mjs                   # add cdn.sanity.io to remotePatterns
@@ -102,17 +104,25 @@ Those are single-instance resources. A sitemap should list all locales in one
 document, not exist once per locale. The Studio is an editing tool, not
 localized output.
 
-**Why the root layout splits in two.** `app/layout.tsx` keeps fonts and
-`CartProvider` (cart is locale-independent — same Shopify cart whatever
-language you browse in). `app/[lang]/layout.tsx` owns `<html lang>` and the
-dictionary. Keeping `CartProvider` at the root means switching locale doesn't
-remount the cart.
+**Why there is no `app/layout.tsx`.** The original plan split the layout in two,
+but a layout above `[lang]` never receives the locale param, and deriving it from
+`headers()` would opt the whole site out of static generation. So
+`app/[lang]/layout.tsx` *is* the root layout — it renders `<html lang>`, fonts,
+and `CartProvider`. Cart state still sits above every page, so switching locale
+will not remount it.
 
 **Why `data/` doesn't move to Sanity.** `specs.json` drives placeholder styling
 via `tbc` flags; `images.ts` uses `null` to trigger `ImageSlot` placeholders;
 `products.ts` holds Shopify handles. These are structural config with behavior
 attached. Marketing prose goes to Sanity; these stay in code.
 
-**Why `Header.tsx` is flagged.** It hardcodes hrefs like `/shop`. After phase 1
-every nav link needs the locale prefix (`/${lang}/shop`) or navigation silently
-drops users to the default locale.
+**How `Header.tsx` gets its locale.** It is a client component, so it derives the
+locale from `usePathname()` rather than taking it as a prop; labels come from the
+`dict` prop. Every href goes through `localePath()`, and active-link comparison
+goes through `stripLocale()` — comparing the raw pathname would never match once
+paths carry an `/en` prefix.
+
+**Why Header/Footer are not in the layout.** Hoisting them would remove 22
+duplicate renders, but the home page renders an announcement bar *above*
+`<Header />` and no other page does, so hoisting would reorder it. They stay in
+the pages with `dict`/`locale` threaded through.

@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  parseLocale,
+  localePath,
+  languageAlternates,
+  getDictionary,
+  defaultLocale,
+} from "@/lib/i18n";
+import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
 import ImageSlot from "@/components/ImageSlot";
 import StoreBadges from "@/components/StoreBadges";
@@ -9,17 +17,30 @@ import CartDrawer from "@/components/cart/CartDrawer";
 import { IMAGES } from "@/data/images";
 import { LINKS, SUPPORT_EMAIL, hrefOrHash } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Support",
-  description:
-    "InfiniteProbe support — getting started, documentation, FAQ, and contact. Everything you need to get from unboxing to first cook.",
-  alternates: { canonical: "/support" },
-  openGraph: {
-    title: "InfiniteProbe Support — How Can We Help?",
-    description: "Getting started, documentation, and answers — from unboxing to first cook.",
-    url: "/support",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = parseLocale(lang) ?? defaultLocale;
+
+  return {
+    title: "Support",
+    description:
+      "InfiniteProbe support — getting started, documentation, FAQ, and contact. Everything you need to get from unboxing to first cook.",
+    alternates: {
+      canonical: localePath(locale, "/support"),
+      languages: languageAlternates("/support"),
+    },
+    openGraph: {
+      title: "InfiniteProbe Support — How Can We Help?",
+      description:
+        "Getting started, documentation, and answers — from unboxing to first cook.",
+      url: localePath(locale, "/support"),
+    },
+  };
+}
 
 const STEPS = [
   {
@@ -66,16 +87,36 @@ const FAQS = [
   },
 ];
 
-export default function SupportPage() {
+export default async function SupportPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = parseLocale(lang);
+  if (!locale) notFound();
+  const dict = await getDictionary(locale);
+
   return (
     <>
-      <Header />
+      <Header dict={dict} />
 
       {/* Hero */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(64px,9vw,112px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(64px,9vw,112px) 24px 0",
+        }}
+      >
         <div
           className="mono"
-          style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 24 }}
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.24em",
+            color: "#C9661A",
+            marginBottom: 24,
+          }}
         >
           SUPPORT
         </div>
@@ -90,16 +131,28 @@ export default function SupportPage() {
         >
           How Can We Help?
         </h1>
-        <p style={{ margin: 0, fontSize: 17, lineHeight: 1.65, color: "rgba(20,20,20,0.75)", maxWidth: 560 }}>
-          Getting started, documentation, and answers — everything you need to get from unboxing to
-          first cook.
+        <p
+          style={{
+            margin: 0,
+            fontSize: 17,
+            lineHeight: 1.65,
+            color: "rgba(20,20,20,0.75)",
+            maxWidth: 560,
+          }}
+        >
+          Getting started, documentation, and answers — everything you need to
+          get from unboxing to first cook.
         </p>
       </div>
 
       {/* Getting Started */}
       <div
         id="getting-started"
-        style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(64px,8vw,104px) 24px 0" }}
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,104px) 24px 0",
+        }}
       >
         <SectionRule eyebrow="§ 01 · GETTING STARTED" meta="03 STEPS" />
         <h2
@@ -113,8 +166,23 @@ export default function SupportPage() {
         >
           From Box to First Cook in Minutes
         </h2>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(32px,5vw,64px)", alignItems: "center" }}>
-          <div style={{ flex: "1 1 420px", minWidth: 300, display: "flex", flexDirection: "column", gap: 20 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "clamp(32px,5vw,64px)",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              flex: "1 1 420px",
+              minWidth: 300,
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+            }}
+          >
             {STEPS.map((s) => (
               <div
                 key={s.num}
@@ -130,15 +198,35 @@ export default function SupportPage() {
               >
                 <div
                   className="mono"
-                  style={{ fontSize: 13, letterSpacing: "0.2em", color: "#C9661A", paddingTop: 3 }}
+                  style={{
+                    fontSize: 13,
+                    letterSpacing: "0.2em",
+                    color: "#C9661A",
+                    paddingTop: 3,
+                  }}
                 >
                   {s.num}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 800, fontSize: 19, letterSpacing: "-0.015em", marginBottom: 8 }}>
+                  <div
+                    style={{
+                      fontWeight: 800,
+                      fontSize: 19,
+                      letterSpacing: "-0.015em",
+                      marginBottom: 8,
+                    }}
+                  >
                     {s.title}
                   </div>
-                  <div style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(20,20,20,0.72)" }}>{s.body}</div>
+                  <div
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 1.6,
+                      color: "rgba(20,20,20,0.72)",
+                    }}
+                  >
+                    {s.body}
+                  </div>
                 </div>
               </div>
             ))}
@@ -146,7 +234,14 @@ export default function SupportPage() {
               <StoreBadges />
             </div>
           </div>
-          <div style={{ flex: "0 1 300px", minWidth: 260, display: "flex", justifyContent: "center" }}>
+          <div
+            style={{
+              flex: "0 1 300px",
+              minWidth: 260,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
             <div
               style={{
                 width: "min(280px,74vw)",
@@ -170,9 +265,22 @@ export default function SupportPage() {
       </div>
 
       {/* Documentation */}
-      <div id="manual" style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(64px,8vw,104px) 24px 0" }}>
+      <div
+        id="manual"
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,104px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 02 · DOCUMENTATION" marginBottom={32} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 20 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+            gap: 20,
+          }}
+        >
           <a
             href={hrefOrHash(LINKS.userManualPdf)}
             className="card-hover-orange"
@@ -185,7 +293,14 @@ export default function SupportPage() {
               display: "block",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: 20,
+              }}
+            >
               <span
                 className="mono"
                 style={{
@@ -199,14 +314,29 @@ export default function SupportPage() {
               >
                 PDF
               </span>
-              <span style={{ color: "#C9661A", fontWeight: 800, fontSize: 18 }}>↓</span>
+              <span style={{ color: "#C9661A", fontWeight: 800, fontSize: 18 }}>
+                ↓
+              </span>
             </div>
-            <div style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-0.015em", marginBottom: 8 }}>
+            <div
+              style={{
+                fontWeight: 800,
+                fontSize: 20,
+                letterSpacing: "-0.015em",
+                marginBottom: 8,
+              }}
+            >
               User Manual — Full Edition
             </div>
-            <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(20,20,20,0.65)" }}>
-              Complete guide: pairing, probe placement, range and signal, cooking library, care and
-              cleaning.
+            <div
+              style={{
+                fontSize: 14,
+                lineHeight: 1.6,
+                color: "rgba(20,20,20,0.65)",
+              }}
+            >
+              Complete guide: pairing, probe placement, range and signal,
+              cooking library, care and cleaning.
             </div>
           </a>
           <a
@@ -221,7 +351,14 @@ export default function SupportPage() {
               display: "block",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: 20,
+              }}
+            >
               <span
                 className="mono"
                 style={{
@@ -235,21 +372,48 @@ export default function SupportPage() {
               >
                 PDF
               </span>
-              <span style={{ color: "#C9661A", fontWeight: 800, fontSize: 18 }}>↓</span>
+              <span style={{ color: "#C9661A", fontWeight: 800, fontSize: 18 }}>
+                ↓
+              </span>
             </div>
-            <div style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-0.015em", marginBottom: 8 }}>
+            <div
+              style={{
+                fontWeight: 800,
+                fontSize: 20,
+                letterSpacing: "-0.015em",
+                marginBottom: 8,
+              }}
+            >
               Quick Start Guide
             </div>
-            <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(20,20,20,0.65)" }}>
-              The three steps above, on one printable page — the same guide that ships in the box.
+            <div
+              style={{
+                fontSize: 14,
+                lineHeight: 1.6,
+                color: "rgba(20,20,20,0.65)",
+              }}
+            >
+              The three steps above, on one printable page — the same guide that
+              ships in the box.
             </div>
           </a>
         </div>
       </div>
 
       {/* FAQ */}
-      <div id="faq" style={{ maxWidth: 1080, margin: "0 auto", padding: "clamp(64px,8vw,104px) 24px 0" }}>
-        <SectionRule eyebrow="§ 03 · FAQ" meta="[DRAFT — CONFIRM ANSWERS]" metaColor="#C9661A" />
+      <div
+        id="faq"
+        style={{
+          maxWidth: 1080,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,104px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="§ 03 · FAQ"
+          meta="[DRAFT — CONFIRM ANSWERS]"
+          metaColor="#C9661A"
+        />
         <h2
           style={{
             margin: "0 0 40px",
@@ -273,10 +437,22 @@ export default function SupportPage() {
           padding: "clamp(64px,8vw,104px) 24px clamp(80px,10vw,128px)",
         }}
       >
-        <div style={{ background: "#EAE6DA", borderRadius: 24, padding: "clamp(40px,5vw,64px)", textAlign: "center" }}>
+        <div
+          style={{
+            background: "#EAE6DA",
+            borderRadius: 24,
+            padding: "clamp(40px,5vw,64px)",
+            textAlign: "center",
+          }}
+        >
           <div
             className="mono"
-            style={{ fontSize: 12, letterSpacing: "0.22em", color: "#C9661A", marginBottom: 20 }}
+            style={{
+              fontSize: 12,
+              letterSpacing: "0.22em",
+              color: "#C9661A",
+              marginBottom: 20,
+            }}
           >
             § 04 · STILL STUCK?
           </div>
@@ -291,7 +467,15 @@ export default function SupportPage() {
           >
             Talk to a Human
           </h2>
-          <p style={{ margin: "0 auto 32px", fontSize: 16, lineHeight: 1.65, color: "rgba(20,20,20,0.7)", maxWidth: 480 }}>
+          <p
+            style={{
+              margin: "0 auto 32px",
+              fontSize: 16,
+              lineHeight: 1.65,
+              color: "rgba(20,20,20,0.7)",
+              maxWidth: 480,
+            }}
+          >
             Write to us and we&apos;ll get back within one business day.
           </p>
           <div
@@ -307,18 +491,29 @@ export default function SupportPage() {
           >
             <span
               className="mono"
-              style={{ fontSize: 15, letterSpacing: "0.06em", color: "rgba(20,20,20,0.45)" }}
+              style={{
+                fontSize: 15,
+                letterSpacing: "0.06em",
+                color: "rgba(20,20,20,0.45)",
+              }}
             >
               {SUPPORT_EMAIL}
             </span>
-            <span className="mono" style={{ fontSize: 10, letterSpacing: "0.16em", color: "#C9661A" }}>
+            <span
+              className="mono"
+              style={{
+                fontSize: 10,
+                letterSpacing: "0.16em",
+                color: "#C9661A",
+              }}
+            >
               CONFIRM ADDRESS
             </span>
           </div>
         </div>
       </div>
 
-      <Footer />
+      <Footer dict={dict} locale={locale} />
       <CartDrawer />
     </>
   );

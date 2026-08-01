@@ -2,23 +2,43 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  parseLocale,
+  localePath,
+  languageAlternates,
+  getDictionary,
+  defaultLocale,
+} from "@/lib/i18n";
+import { notFound } from "next/navigation";
 import ImageSlot from "@/components/ImageSlot";
 import StoreBadges from "@/components/StoreBadges";
 import CartDrawer from "@/components/cart/CartDrawer";
 import { IMAGES } from "@/data/images";
 
-export const metadata: Metadata = {
-  title: "App",
-  description:
-    "The free InfiniteProbe app for iOS and Android — every probe, every temperature, every alert, live on your phone for the entire cook. No account required, nothing leaves your device.",
-  alternates: { canonical: "/app" },
-  openGraph: {
-    title: "The InfiniteProbe App — The Whole Cook, On One Screen",
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const locale = parseLocale(lang) ?? defaultLocale;
+
+  return {
+    title: "App",
     description:
-      "Free for iOS and Android. Live readout, 26+ cut library, multi-probe, and alerts that find you.",
-    url: "/app",
-  },
-};
+      "The free InfiniteProbe app for iOS and Android — every probe, every temperature, every alert, live on your phone for the entire cook. No account required, nothing leaves your device.",
+    alternates: {
+      canonical: localePath(locale, "/app"),
+      languages: languageAlternates("/app"),
+    },
+    openGraph: {
+      title: "The InfiniteProbe App — The Whole Cook, On One Screen",
+      description:
+        "Free for iOS and Android. Live readout, 26+ cut library, multi-probe, and alerts that find you.",
+      url: localePath(locale, "/app"),
+    },
+  };
+}
 
 const SCREENS = [
   {
@@ -95,13 +115,24 @@ const SCREENS = [
   },
 ];
 
-export default function AppPage() {
+export default async function AppPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = parseLocale(lang);
+  if (!locale) notFound();
+  const dict = await getDictionary(locale);
+
   return (
     <>
-      <Header />
+      <Header dict={dict} />
 
       {/* Hero (dark band) */}
-      <div style={{ background: "#161513", color: "#F2EFE6", overflow: "hidden" }}>
+      <div
+        style={{ background: "#161513", color: "#F2EFE6", overflow: "hidden" }}
+      >
         <div
           style={{
             maxWidth: 1280,
@@ -113,10 +144,21 @@ export default function AppPage() {
             alignItems: "flex-end",
           }}
         >
-          <div style={{ flex: "1 1 460px", minWidth: 300, paddingBottom: "clamp(56px,7vw,96px)" }}>
+          <div
+            style={{
+              flex: "1 1 460px",
+              minWidth: 300,
+              paddingBottom: "clamp(56px,7vw,96px)",
+            }}
+          >
             <div
               className="mono"
-              style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 28 }}
+              style={{
+                fontSize: 12,
+                letterSpacing: "0.24em",
+                color: "#C9661A",
+                marginBottom: 28,
+              }}
             >
               THE INFINITEPROBE APP · IOS + ANDROID · FREE
             </div>
@@ -140,15 +182,29 @@ export default function AppPage() {
                 maxWidth: 520,
               }}
             >
-              Every probe, every temperature, every alert — live on your phone for the entire cook.
-              Download it free, pair in seconds, and never open the lid to check again.
+              Every probe, every temperature, every alert — live on your phone
+              for the entire cook. Download it free, pair in seconds, and never
+              open the lid to check again.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 14 }}>
               <StoreBadges variant="light" padding="14px 24px" fontSize={12} />
             </div>
           </div>
-          <div style={{ flex: "1 1 340px", minWidth: 280, display: "flex", justifyContent: "center" }}>
-            <div style={{ width: "min(340px,80vw)", aspectRatio: "862/1658", marginBottom: -1 }}>
+          <div
+            style={{
+              flex: "1 1 340px",
+              minWidth: 280,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                width: "min(340px,80vw)",
+                aspectRatio: "862/1658",
+                marginBottom: -1,
+              }}
+            >
               <ImageSlot
                 src={IMAGES.uiLiveCook}
                 alt="InfiniteProbe app live cook screen"
@@ -193,7 +249,15 @@ export default function AppPage() {
       </div>
 
       {/* Screen sections */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", display: "flex", flexDirection: "column" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "0 24px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         {SCREENS.map((s) => (
           <div
             key={s.eyebrow}
@@ -207,7 +271,14 @@ export default function AppPage() {
               flexDirection: s.dir,
             }}
           >
-            <div style={{ flex: "1 1 300px", minWidth: 270, display: "flex", justifyContent: "center" }}>
+            <div
+              style={{
+                flex: "1 1 300px",
+                minWidth: 270,
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <div
                 style={{
                   width: "min(300px,78vw)",
@@ -228,17 +299,39 @@ export default function AppPage() {
               </div>
             </div>
             <div style={{ flex: "1 1 380px", minWidth: 290 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 16,
+                  marginBottom: 24,
+                }}
+              >
                 <span
                   className="mono"
-                  style={{ fontSize: 12, letterSpacing: "0.22em", color: "#C9661A", whiteSpace: "nowrap" }}
+                  style={{
+                    fontSize: 12,
+                    letterSpacing: "0.22em",
+                    color: "#C9661A",
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   {s.eyebrow}
                 </span>
-                <span style={{ flex: 1, height: 1, background: "rgba(20,20,20,0.15)" }} />
+                <span
+                  style={{
+                    flex: 1,
+                    height: 1,
+                    background: "rgba(20,20,20,0.15)",
+                  }}
+                />
                 <span
                   className="mono"
-                  style={{ fontSize: 11, letterSpacing: "0.18em", color: "rgba(20,20,20,0.4)" }}
+                  style={{
+                    fontSize: 11,
+                    letterSpacing: "0.18em",
+                    color: "rgba(20,20,20,0.4)",
+                  }}
                 >
                   {s.meta}
                 </span>
@@ -254,10 +347,20 @@ export default function AppPage() {
               >
                 {s.title}
               </h2>
-              <p style={{ margin: "0 0 24px", fontSize: 16, lineHeight: 1.7, color: "rgba(20,20,20,0.78)", maxWidth: 520 }}>
+              <p
+                style={{
+                  margin: "0 0 24px",
+                  fontSize: 16,
+                  lineHeight: 1.7,
+                  color: "rgba(20,20,20,0.78)",
+                  maxWidth: 520,
+                }}
+              >
                 {s.body}
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+              >
                 {s.points.map((pt) => (
                   <div
                     key={pt}
@@ -291,7 +394,12 @@ export default function AppPage() {
       >
         <div
           className="mono"
-          style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 24 }}
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.24em",
+            color: "#C9661A",
+            marginBottom: 24,
+          }}
         >
           FREE DOWNLOAD · NO ACCOUNT REQUIRED
         </div>
@@ -308,17 +416,28 @@ export default function AppPage() {
           <br />
           Then Get the Probe.
         </h2>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center", marginBottom: 28 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 16,
+            justifyContent: "center",
+            marginBottom: 28,
+          }}
+        >
           <StoreBadges padding="14px 26px" fontSize={12} />
         </div>
-        <Link href="/shop">
-          <button className="btn-ink" style={{ padding: "19px 40px", fontSize: 15 }}>
+        <Link href={localePath(locale, "/shop")}>
+          <button
+            className="btn-ink"
+            style={{ padding: "19px 40px", fontSize: 15 }}
+          >
             BUY INFINITEPROBE →
           </button>
         </Link>
       </div>
 
-      <Footer />
+      <Footer dict={dict} locale={locale} />
       <CartDrawer />
     </>
   );

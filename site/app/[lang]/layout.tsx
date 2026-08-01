@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Mono } from "next/font/google";
+import { notFound } from "next/navigation";
 import { SITE_URL, SITE_NAME, TAGLINE } from "@/lib/site";
+import {
+  locales,
+  parseLocale,
+  localeToHtmlLang,
+  languageAlternates,
+  type Locale,
+} from "@/lib/i18n";
 import { CartProvider } from "@/components/cart/CartProvider";
-import "./globals.css";
+import "../globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,13 +57,47 @@ export const metadata: Metadata = {
       "The self-powered wireless meat thermometer. No batteries. No charging. No guessing.",
   },
   robots: { index: true, follow: true },
+  alternates: { languages: languageAlternates("/") },
 };
 
-export default function RootLayout({
+/**
+ * Root layout, scoped to the locale segment.
+ *
+ * This is the app's *only* root layout: it renders <html>/<body> from inside
+ * [lang] so the locale param is available where `lang` is needed. Putting it
+ * here rather than at app/ keeps every page statically generated — an outer
+ * layout could not read the param without headers(), which would opt the whole
+ * site out of static rendering.
+ *
+ * `dynamicParams = false` makes an unknown locale a build-time 404 instead of
+ * an on-demand render, so /fr/ cannot be served English with a 200 and indexed
+ * as duplicate content.
+ *
+ * CartProvider wraps children here. Cart state is locale-independent — the same
+ * Shopify cart regardless of language.
+ */
+export const dynamicParams = false;
+
+export function generateStaticParams(): { lang: Locale }[] {
+  return locales.map((lang) => ({ lang }));
+}
+
+export default async function LocaleRootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  const locale = parseLocale(lang);
+  if (!locale) notFound();
+
   return (
-    <html lang="en" className={`${inter.variable} ${plexMono.variable}`}>
+    <html
+      lang={localeToHtmlLang[locale]}
+      className={`${inter.variable} ${plexMono.variable}`}
+    >
       <body>
         <CartProvider>{children}</CartProvider>
       </body>

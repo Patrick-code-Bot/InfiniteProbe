@@ -25,7 +25,18 @@ There is no test suite. TypeScript is in strict mode; use `npm run build` to typ
 
 ## What This Is
 
-Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. Next.js 16 App Router, React 19, TypeScript. Six statically generated routes: `/`, `/how-it-works`, `/shop`, `/specs`, `/app`, `/support`. Checkout is handled by Shopify (hosted checkout); this site only manages the cart. Deployed to Vercel with root directory `site/`.
+Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. Next.js 16 App Router, React 19, TypeScript. Eleven statically generated pages, all under a `[lang]` locale segment: `/[lang]`, `/how-it-works`, `/why-different`, `/shop`, `/specs`, `/app`, `/support`, `/warranty`, `/privacy-policy`, `/terms-of-service`, `/shipping-policy`. Checkout is handled by Shopify (hosted checkout); this site only manages the cart. Deployed to Vercel with root directory `site/`.
+
+### i18n routing
+
+Every page lives under `app/[lang]/`. Ships `en` only, but the structure is locale-ready.
+
+- `lib/i18n.ts` is the single source of truth: `locales`, `defaultLocale`, and the helpers `parseLocale()`, `localePath()`, `stripLocale()`, `languageAlternates()`. **Never hardcode a locale prefix** — build hrefs with `localePath(locale, "/shop")`, and compare paths with `stripLocale()`.
+- `lib/dictionaries/*.json` holds UI chrome strings only (nav, footer labels). Page copy lives in the page components.
+- `app/[lang]/layout.tsx` is the **only** root layout — it renders `<html lang>`, fonts, and `CartProvider`. There is no `app/layout.tsx`; a layout above `[lang]` cannot read the locale param without forcing dynamic rendering.
+- `proxy.ts` 308-redirects unprefixed paths (`/shop` → `/en/shop`). Locale-shaped but unsupported paths (`/fr`) pass through to a 404 rather than redirecting.
+- Pages use `generateMetadata` (not `export const metadata`) so `canonical` and `openGraph.url` carry the locale prefix.
+- Adding a locale: add it to `locales` in `lib/i18n.ts`, add `lib/dictionaries/<locale>.json`, add the field to the Sanity localized objects. No structural change.
 
 ## Architecture
 

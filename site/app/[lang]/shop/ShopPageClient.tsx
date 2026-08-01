@@ -16,6 +16,7 @@ import {
   isShopifyConfigured,
 } from "@/lib/shopify";
 import { isPlaceholder } from "@/lib/site";
+import type { Dictionary, Locale } from "@/lib/i18n";
 
 const DIRECT = [
   {
@@ -35,16 +36,41 @@ const DIRECT = [
   },
 ];
 
-const PAYMENTS = ["VISA", "MASTERCARD", "AMEX", "APPLE PAY", "GOOGLE PAY", "SHOP PAY"];
-
-const FAQS = [
-  { q: "When will my order ship?", a: "[Placeholder — confirm handling time and carrier options.]" },
-  { q: "Do you ship internationally?", a: "[Placeholder — confirm regions, duties, and shipping rates.]" },
-  { q: "What's included in the box?", a: "[Placeholder — confirm bundle contents per SKU.]" },
-  { q: "How do returns work?", a: "[Placeholder — confirm return window, condition requirements, and refund process.]" },
+const PAYMENTS = [
+  "VISA",
+  "MASTERCARD",
+  "AMEX",
+  "APPLE PAY",
+  "GOOGLE PAY",
+  "SHOP PAY",
 ];
 
-export default function ShopPageClient() {
+const FAQS = [
+  {
+    q: "When will my order ship?",
+    a: "[Placeholder — confirm handling time and carrier options.]",
+  },
+  {
+    q: "Do you ship internationally?",
+    a: "[Placeholder — confirm regions, duties, and shipping rates.]",
+  },
+  {
+    q: "What's included in the box?",
+    a: "[Placeholder — confirm bundle contents per SKU.]",
+  },
+  {
+    q: "How do returns work?",
+    a: "[Placeholder — confirm return window, condition requirements, and refund process.]",
+  },
+];
+
+export default function ShopPageClient({
+  dict,
+  locale,
+}: {
+  dict: Dictionary;
+  locale: Locale;
+}) {
   const { addItem, openCart } = useCart();
   const [products, setProducts] = useState<Record<string, ShopifyProduct>>({});
   const [faqOpen, setFaqOpen] = useState(-1);
@@ -56,7 +82,7 @@ export default function ShopPageClient() {
         console.warn(
           "[shop] Shopify is not configured — every card will render its placeholder. " +
             "Set NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN and NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN " +
-            "in .env.local, then restart the dev server (NEXT_PUBLIC_* is inlined at build time)."
+            "in .env.local, then restart the dev server (NEXT_PUBLIC_* is inlined at build time).",
         );
       }
       return;
@@ -64,31 +90,37 @@ export default function ShopPageClient() {
     let cancelled = false;
     (async () => {
       const entries = await Promise.all(
-        BUNDLES.filter((b) => !isPlaceholder(b.shopifyHandle)).map(async (b) => {
-          try {
-            const product = await getProductByHandle(b.shopifyHandle);
-            if (!product && process.env.NODE_ENV === "development") {
-              console.warn(
-                `[shop] No Shopify product found for handle "${b.shopifyHandle}" (bundle ${b.key}) — ` +
-                  "rendering placeholder. Check the handle in data/products.ts matches the product " +
-                  "slug in Shopify admin, and that the product is published to this sales channel."
-              );
+        BUNDLES.filter((b) => !isPlaceholder(b.shopifyHandle)).map(
+          async (b) => {
+            try {
+              const product = await getProductByHandle(b.shopifyHandle);
+              if (!product && process.env.NODE_ENV === "development") {
+                console.warn(
+                  `[shop] No Shopify product found for handle "${b.shopifyHandle}" (bundle ${b.key}) — ` +
+                    "rendering placeholder. Check the handle in data/products.ts matches the product " +
+                    "slug in Shopify admin, and that the product is published to this sales channel.",
+                );
+              }
+              return product ? ([b.key, product] as const) : null;
+            } catch (err) {
+              if (process.env.NODE_ENV === "development") {
+                console.warn(
+                  `[shop] Shopify fetch failed for handle "${b.shopifyHandle}" (bundle ${b.key}) — ` +
+                    "rendering placeholder. This is a config/network error, not a missing photo:",
+                  err,
+                );
+              }
+              return null;
             }
-            return product ? ([b.key, product] as const) : null;
-          } catch (err) {
-            if (process.env.NODE_ENV === "development") {
-              console.warn(
-                `[shop] Shopify fetch failed for handle "${b.shopifyHandle}" (bundle ${b.key}) — ` +
-                  "rendering placeholder. This is a config/network error, not a missing photo:",
-                err
-              );
-            }
-            return null;
-          }
-        })
+          },
+        ),
       );
       if (!cancelled) {
-        setProducts(Object.fromEntries(entries.filter((e): e is [string, ShopifyProduct] => Boolean(e))));
+        setProducts(
+          Object.fromEntries(
+            entries.filter((e): e is [string, ShopifyProduct] => Boolean(e)),
+          ),
+        );
       }
     })();
     return () => {
@@ -112,13 +144,24 @@ export default function ShopPageClient() {
 
   return (
     <>
-      <Header />
+      <Header dict={dict} />
 
       {/* 1 · Slim hero */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(56px,7vw,96px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(56px,7vw,96px) 24px 0",
+        }}
+      >
         <div
           className="mono"
-          style={{ fontSize: 12, letterSpacing: "0.24em", color: "#C9661A", marginBottom: 22 }}
+          style={{
+            fontSize: 12,
+            letterSpacing: "0.24em",
+            color: "#C9661A",
+            marginBottom: 22,
+          }}
         >
           SHOP
         </div>
@@ -133,7 +176,15 @@ export default function ShopPageClient() {
         >
           Choose Your Setup
         </h1>
-        <p style={{ margin: "0 0 36px", fontSize: 17, lineHeight: 1.65, color: "rgba(20,20,20,0.75)", maxWidth: 520 }}>
+        <p
+          style={{
+            margin: "0 0 36px",
+            fontSize: 17,
+            lineHeight: 1.65,
+            color: "rgba(20,20,20,0.75)",
+            maxWidth: 520,
+          }}
+        >
           One probe or the whole table — every setup is self-powered, forever.
         </p>
         <div
@@ -159,7 +210,13 @@ export default function ShopPageClient() {
       </div>
 
       {/* 2 · Product grid */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(48px,6vw,72px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(48px,6vw,72px) 24px 0",
+        }}
+      >
         <div
           style={{
             display: "grid",
@@ -177,7 +234,9 @@ export default function ShopPageClient() {
                   background: "#FBF9F3",
                   borderRadius: 20,
                   boxShadow: "0 1px 2px rgba(20,20,20,0.05)",
-                  border: bundle.tag ? "2px solid #C9661A" : "1px solid rgba(20,20,20,0.08)",
+                  border: bundle.tag
+                    ? "2px solid #C9661A"
+                    : "1px solid rgba(20,20,20,0.08)",
                   display: "flex",
                   flexDirection: "column",
                   overflow: "hidden",
@@ -209,7 +268,12 @@ export default function ShopPageClient() {
                     <img
                       src={product.featuredImage.url}
                       alt={product.featuredImage.altText ?? product.title}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
                     />
                   ) : (
                     <div
@@ -237,7 +301,14 @@ export default function ShopPageClient() {
                     </div>
                   )}
                 </div>
-                <div style={{ padding: "28px 28px 30px", display: "flex", flexDirection: "column", flex: 1 }}>
+                <div
+                  style={{
+                    padding: "28px 28px 30px",
+                    display: "flex",
+                    flexDirection: "column",
+                    flex: 1,
+                  }}
+                >
                   <div
                     style={{
                       fontWeight: 800,
@@ -249,20 +320,41 @@ export default function ShopPageClient() {
                   >
                     {product?.title ?? bundle.fallbackName}
                   </div>
-                  <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(20,20,20,0.7)", marginBottom: 16 }}>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      color: "rgba(20,20,20,0.7)",
+                      marginBottom: 16,
+                    }}
+                  >
                     {bundle.description}
                   </div>
                   <div
                     className="mono"
-                    style={{ fontSize: 10, letterSpacing: "0.18em", color: "#C9661A", marginBottom: 22 }}
+                    style={{
+                      fontSize: 10,
+                      letterSpacing: "0.18em",
+                      color: "#C9661A",
+                      marginBottom: 22,
+                    }}
                   >
                     {bundle.meta}
                   </div>
                   <div style={{ marginTop: "auto" }}>
                     {product ? (
                       <div style={{ padding: "8px 0", marginBottom: 20 }}>
-                        <span style={{ fontSize: "clamp(26px,2.4vw,34px)", fontWeight: 800, letterSpacing: "-0.03em" }}>
-                          {formatPrice(product.price.amount, product.price.currencyCode)}
+                        <span
+                          style={{
+                            fontSize: "clamp(26px,2.4vw,34px)",
+                            fontWeight: 800,
+                            letterSpacing: "-0.03em",
+                          }}
+                        >
+                          {formatPrice(
+                            product.price.amount,
+                            product.price.currencyCode,
+                          )}
                         </span>
                       </div>
                     ) : (
@@ -288,14 +380,26 @@ export default function ShopPageClient() {
                         </span>
                       </div>
                     )}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 12,
+                      }}
+                    >
                       <button
                         onClick={() => handleAdd(bundle)}
                         disabled={Boolean(product && !product.availableForSale)}
                         className="btn-ink"
-                        style={{ width: "100%", padding: "15px 24px", fontSize: 13 }}
+                        style={{
+                          width: "100%",
+                          padding: "15px 24px",
+                          fontSize: 13,
+                        }}
                       >
-                        {product && !product.availableForSale ? "SOLD OUT" : "ADD TO CART"}
+                        {product && !product.availableForSale
+                          ? "SOLD OUT"
+                          : "ADD TO CART"}
                       </button>
                       <a
                         href="#compare"
@@ -321,8 +425,19 @@ export default function ShopPageClient() {
       </div>
 
       {/* 3 · Compare the Bundles */}
-      <div id="compare" style={{ maxWidth: 1080, margin: "0 auto", padding: "clamp(64px,8vw,112px) 24px 0" }}>
-        <SectionRule eyebrow="§ 01 · COMPARE" meta="CONTENTS TBC" metaColor="#C9661A" />
+      <div
+        id="compare"
+        style={{
+          maxWidth: 1080,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,112px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="§ 01 · COMPARE"
+          meta="CONTENTS TBC"
+          metaColor="#C9661A"
+        />
         <h2
           style={{
             margin: "0 0 40px",
@@ -353,19 +468,35 @@ export default function ShopPageClient() {
               <div style={{ padding: "20px 24px" }} />
               <div
                 className="mono"
-                style={{ padding: "20px 14px", fontSize: 11, letterSpacing: "0.14em", color: "rgba(20,20,20,0.55)" }}
+                style={{
+                  padding: "20px 14px",
+                  fontSize: 11,
+                  letterSpacing: "0.14em",
+                  color: "rgba(20,20,20,0.55)",
+                }}
               >
                 {products.a?.title ?? "[BUNDLE A]"}
               </div>
               <div
                 className="mono"
-                style={{ padding: "20px 14px", fontSize: 11, letterSpacing: "0.14em", color: "#C9661A", fontWeight: 600 }}
+                style={{
+                  padding: "20px 14px",
+                  fontSize: 11,
+                  letterSpacing: "0.14em",
+                  color: "#C9661A",
+                  fontWeight: 600,
+                }}
               >
                 {products.b?.title ?? "[BUNDLE B]"}
               </div>
               <div
                 className="mono"
-                style={{ padding: "20px 14px", fontSize: 11, letterSpacing: "0.14em", color: "rgba(20,20,20,0.55)" }}
+                style={{
+                  padding: "20px 14px",
+                  fontSize: 11,
+                  letterSpacing: "0.14em",
+                  color: "rgba(20,20,20,0.55)",
+                }}
               >
                 {products.c?.title ?? "[BUNDLE C]"}
               </div>
@@ -379,20 +510,59 @@ export default function ShopPageClient() {
                   borderBottom: "1px solid rgba(20,20,20,0.08)",
                 }}
               >
-                <div style={{ padding: "20px 24px", fontWeight: 700, fontSize: 14 }}>{row.label}</div>
-                <div className="mono" style={{ padding: "20px 14px", fontSize: 13, color: "rgba(20,20,20,0.6)" }}>
+                <div
+                  style={{
+                    padding: "20px 24px",
+                    fontWeight: 700,
+                    fontSize: 14,
+                  }}
+                >
+                  {row.label}
+                </div>
+                <div
+                  className="mono"
+                  style={{
+                    padding: "20px 14px",
+                    fontSize: 13,
+                    color: "rgba(20,20,20,0.6)",
+                  }}
+                >
                   {row.label === "Price" && products.a
-                    ? formatPrice(products.a.price.amount, products.a.price.currencyCode)
+                    ? formatPrice(
+                        products.a.price.amount,
+                        products.a.price.currencyCode,
+                      )
                     : row.a}
                 </div>
-                <div className="mono" style={{ padding: "20px 14px", fontSize: 13, fontWeight: 600, color: "#141414" }}>
+                <div
+                  className="mono"
+                  style={{
+                    padding: "20px 14px",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: "#141414",
+                  }}
+                >
                   {row.label === "Price" && products.b
-                    ? formatPrice(products.b.price.amount, products.b.price.currencyCode)
+                    ? formatPrice(
+                        products.b.price.amount,
+                        products.b.price.currencyCode,
+                      )
                     : row.b}
                 </div>
-                <div className="mono" style={{ padding: "20px 14px", fontSize: 13, color: "rgba(20,20,20,0.6)" }}>
+                <div
+                  className="mono"
+                  style={{
+                    padding: "20px 14px",
+                    fontSize: 13,
+                    color: "rgba(20,20,20,0.6)",
+                  }}
+                >
                   {row.label === "Price" && products.c
-                    ? formatPrice(products.c.price.amount, products.c.price.currencyCode)
+                    ? formatPrice(
+                        products.c.price.amount,
+                        products.c.price.currencyCode,
+                      )
                     : row.c}
                 </div>
               </div>
@@ -402,29 +572,78 @@ export default function ShopPageClient() {
       </div>
 
       {/* 4 · Why Buy Direct */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(64px,8vw,112px) 24px 0" }}>
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,112px) 24px 0",
+        }}
+      >
         <SectionRule eyebrow="§ 02 · WHY BUY DIRECT" marginBottom={32} />
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 20 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
+            gap: 20,
+          }}
+        >
           {DIRECT.map((d) => (
-            <div key={d.num} style={{ background: "#EAE6DA", borderRadius: 20, padding: "32px 30px" }}>
+            <div
+              key={d.num}
+              style={{
+                background: "#EAE6DA",
+                borderRadius: 20,
+                padding: "32px 30px",
+              }}
+            >
               <div
                 className="mono"
-                style={{ fontSize: 12, letterSpacing: "0.2em", color: "#C9661A", marginBottom: 16 }}
+                style={{
+                  fontSize: 12,
+                  letterSpacing: "0.2em",
+                  color: "#C9661A",
+                  marginBottom: 16,
+                }}
               >
                 {d.num}
               </div>
-              <div style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-0.015em", marginBottom: 10 }}>
+              <div
+                style={{
+                  fontWeight: 800,
+                  fontSize: 18,
+                  letterSpacing: "-0.015em",
+                  marginBottom: 10,
+                }}
+              >
                 {d.title}
               </div>
-              <div style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(20,20,20,0.72)" }}>{d.body}</div>
+              <div
+                style={{
+                  fontSize: 14,
+                  lineHeight: 1.6,
+                  color: "rgba(20,20,20,0.72)",
+                }}
+              >
+                {d.body}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
       {/* 5 · Reassurance row */}
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(64px,8vw,112px) 24px 0" }}>
-        <SectionRule eyebrow="EARLY REVIEWS" meta="AWAITING QUOTES" marginBottom={32} />
+      <div
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,112px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="EARLY REVIEWS"
+          meta="AWAITING QUOTES"
+          marginBottom={32}
+        />
         <div
           style={{
             display: "grid",
@@ -443,7 +662,14 @@ export default function ShopPageClient() {
                 padding: 28,
               }}
             >
-              <div style={{ color: "#C9661A", fontSize: 15, letterSpacing: "0.2em", marginBottom: 14 }}>
+              <div
+                style={{
+                  color: "#C9661A",
+                  fontSize: 15,
+                  letterSpacing: "0.2em",
+                  marginBottom: 14,
+                }}
+              >
                 ★★★★★
               </div>
               <div
@@ -457,13 +683,28 @@ export default function ShopPageClient() {
               >
                 &quot;Quote from verified buyer.&quot;
               </div>
-              <div className="mono" style={{ fontSize: 10, letterSpacing: "0.16em", color: "#C9661A" }}>
+              <div
+                className="mono"
+                style={{
+                  fontSize: 10,
+                  letterSpacing: "0.16em",
+                  color: "#C9661A",
+                }}
+              >
                 NAME · VERIFIED PURCHASE
               </div>
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 12,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           {PAYMENTS.map((pay) => (
             <span
               key={pay}
@@ -485,8 +726,19 @@ export default function ShopPageClient() {
       </div>
 
       {/* 6 · Mini FAQ */}
-      <div style={{ maxWidth: 880, margin: "0 auto", padding: "clamp(64px,8vw,112px) 24px 0" }}>
-        <SectionRule eyebrow="§ 03 · ORDERING FAQ" meta="[DRAFT]" metaColor="#C9661A" marginBottom={32} />
+      <div
+        style={{
+          maxWidth: 880,
+          margin: "0 auto",
+          padding: "clamp(64px,8vw,112px) 24px 0",
+        }}
+      >
+        <SectionRule
+          eyebrow="§ 03 · ORDERING FAQ"
+          meta="[DRAFT]"
+          metaColor="#C9661A"
+          marginBottom={32}
+        />
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {FAQS.map((f, i) => (
             <div
@@ -514,8 +766,20 @@ export default function ShopPageClient() {
                   textAlign: "left",
                 }}
               >
-                <span style={{ fontWeight: 700, fontSize: 15, flex: 1, lineHeight: 1.4 }}>{f.q}</span>
-                <span className="mono" style={{ fontSize: 16, color: "#C9661A" }}>
+                <span
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 15,
+                    flex: 1,
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {f.q}
+                </span>
+                <span
+                  className="mono"
+                  style={{ fontSize: 16, color: "#C9661A" }}
+                >
                   {faqOpen === i ? "−" : "+"}
                 </span>
               </button>
@@ -531,11 +795,24 @@ export default function ShopPageClient() {
                   >
                     <div
                       className="mono"
-                      style={{ fontSize: 10, letterSpacing: "0.18em", color: "#C9661A", marginBottom: 8 }}
+                      style={{
+                        fontSize: 10,
+                        letterSpacing: "0.18em",
+                        color: "#C9661A",
+                        marginBottom: 8,
+                      }}
                     >
                       DRAFT ANSWER — CONFIRM BEFORE PUBLISH
                     </div>
-                    <div style={{ fontSize: 14, lineHeight: 1.65, color: "rgba(20,20,20,0.55)" }}>{f.a}</div>
+                    <div
+                      style={{
+                        fontSize: 14,
+                        lineHeight: 1.65,
+                        color: "rgba(20,20,20,0.55)",
+                      }}
+                    >
+                      {f.a}
+                    </div>
                   </div>
                 </div>
               )}
@@ -566,12 +843,16 @@ export default function ShopPageClient() {
           <br />
           Cook Freer.
         </h2>
-        <button onClick={handleBuyPrimary} className="btn-ink" style={{ padding: "19px 44px", fontSize: 15 }}>
+        <button
+          onClick={handleBuyPrimary}
+          className="btn-ink"
+          style={{ padding: "19px 44px", fontSize: 15 }}
+        >
           BUY INFINITEPROBE →
         </button>
       </div>
 
-      <Footer />
+      <Footer dict={dict} locale={locale} />
       <CartDrawer />
     </>
   );
