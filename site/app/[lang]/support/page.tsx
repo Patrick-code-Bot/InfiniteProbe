@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
@@ -16,6 +17,8 @@ import FaqAccordion from "@/components/FaqAccordion";
 import CartDrawer from "@/components/cart/CartDrawer";
 import { IMAGES } from "@/data/images";
 import { LINKS, SUPPORT_EMAIL, hrefOrHash } from "@/lib/site";
+import { getPage } from "@/sanity/queries";
+import { firstHero, text } from "@/sanity/content";
 
 export async function generateMetadata({
   params,
@@ -25,10 +28,14 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = parseLocale(lang) ?? defaultLocale;
 
+  const page = await getPage("support", locale);
+
   return {
-    title: "Support",
-    description:
-      "InfiniteProbe support — getting started, documentation, FAQ, and contact. Everything you need to get from unboxing to first cook.",
+    title: text(page?.seo?.metaTitle, "Support"),
+    description: text(
+      page?.seo?.metaDescription,
+      "InfiniteProbe support — getting started, documentation, FAQ, and contact. Everything you need to get from unboxing to first cook."
+    ),
     alternates: {
       canonical: localePath(locale, "/support"),
       languages: languageAlternates("/support"),
@@ -95,7 +102,16 @@ export default async function SupportPage({
   const { lang } = await params;
   const locale = parseLocale(lang);
   if (!locale) notFound();
-  const dict = await getDictionary(locale);
+
+  const { isEnabled: isDraft } = await draftMode();
+  const [dict, page] = await Promise.all([
+    getDictionary(locale),
+    getPage("support", locale, { draft: isDraft }),
+  ]);
+
+  // CMS content is additive: every field falls back to the copy below, so this
+  // page renders identically whether or not Sanity is configured or populated.
+  const hero = firstHero(page);
 
   return (
     <>
@@ -118,7 +134,7 @@ export default async function SupportPage({
             marginBottom: 24,
           }}
         >
-          SUPPORT
+          {text(hero?.eyebrow, "SUPPORT")}
         </div>
         <h1
           style={{
@@ -129,7 +145,7 @@ export default async function SupportPage({
             lineHeight: 0.98,
           }}
         >
-          How Can We Help?
+          {text(hero?.heading, "How Can We Help?")}
         </h1>
         <p
           style={{
@@ -140,8 +156,10 @@ export default async function SupportPage({
             maxWidth: 560,
           }}
         >
-          Getting started, documentation, and answers — everything you need to
-          get from unboxing to first cook.
+          {text(
+            hero?.subheading,
+            "Getting started, documentation, and answers — everything you need to get from unboxing to first cook."
+          )}
         </p>
       </div>
 

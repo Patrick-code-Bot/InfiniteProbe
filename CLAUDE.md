@@ -54,9 +54,25 @@ Every page lives under `app/[lang]/`. Ships `en` only, but the structure is loca
 - Env vars (see `site/.env.example`): `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`, plus server-side `NEWSLETTER_PROVIDER` / `NEWSLETTER_API_KEY`.
 - `app/api/newsletter/route.ts` is a stub — the provider call is not implemented yet.
 
+### Sanity CMS
+
+Headless CMS for marketing copy. **Additive, never required** — the site builds and renders fully with no Sanity credentials.
+
+- `sanity/env.ts` — config + `isSanityConfigured()`. `sanity/client.ts` — `client` is `null` when unconfigured, and `sanityFetch` returns `null` instead of throwing.
+- `sanity/queries.ts` — GROQ with locale coalescing. **`locale` is interpolated as a GROQ field path and cannot be parameterized** — only ever pass a validated `Locale` from `parseLocale()`, never raw input. Values like `slug` are bound parameters and are safe.
+- `sanity/content.ts` — `firstHero()` and `text(cmsValue, fallback)`. **Every CMS read must have an in-code fallback**: `text(hero?.heading, "How Can We Help?")`. This is what makes the page-by-page migration safe and keeps a CMS outage from blanking a page.
+- `sanity/schemas/objects/locale.ts` — localized field types are **generated from `locales` in `lib/i18n.ts`**, so the schema cannot drift from the routing layer.
+- `/studio` — embedded Studio, deliberately outside `[lang]` with its own bare `app/studio/layout.tsx` (the site's root layout lives under `[lang]`). 404s when unconfigured.
+- `app/api/draft-mode/enable|disable` — visual editing; requires server-only `SANITY_API_READ_TOKEN`, 401s without it.
+- Migrated so far: `/support` only. The other 10 pages still render entirely from their committed copy.
+
+**Do not move `data/` to Sanity.** `specs.json` (`tbc` flags drive placeholder styling), `products.ts` (Shopify handles), and `images.ts` (`null` triggers `ImageSlot` placeholders) are structural config with behavior attached, not editorial copy.
+
 ### Placeholder convention (important)
 
 Unconfirmed content is written as `[bracketed text]` throughout the codebase and intentionally renders with dashed burnt-orange "unconfirmed" styling. This is deliberate pre-launch behavior — do not "fix" or invent values for these placeholders. `site/LAUNCH_CHECKLIST.md` tracks every placeholder that must be resolved before launch.
+
+**This convention carries into Sanity unchanged**: editors type the brackets into CMS fields, and `isPlaceholder()` still detects them. There is deliberately no separate `unconfirmed` boolean — one representation everywhere means a flag and its text can never disagree. Note that `text()` does not treat a bracketed string as empty; it is meaningful content, not a missing value.
 
 ### Styling
 

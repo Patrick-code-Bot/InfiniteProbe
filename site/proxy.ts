@@ -41,12 +41,15 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   /**
-   * Skip everything that is not a page: API routes, Next internals, the
-   * generated SEO files, and any path with a file extension (favicon, images,
-   * fonts). Without the extension guard, /icon.svg would redirect to
-   * /en/icon.svg and 404.
+   * Skip everything that is not a localized page: API routes, the Sanity
+   * Studio, Next internals, the generated SEO files, and any path with a file
+   * extension (favicon, images, fonts).
+   *
+   * Without the extension guard, /icon.svg would redirect to /en/icon.svg and
+   * 404. Without the `studio` guard, the Studio would redirect to /en/studio,
+   * which does not exist — the Studio is deliberately not localized.
    */
   matcher: [
-    "/((?!api|_next/static|_next/image|sitemap\\.xml|robots\\.txt|opengraph-image|icon|.*\\.[\\w]+$).*)",
+    "/((?!api|studio|_next/static|_next/image|sitemap\\.xml|robots\\.txt|opengraph-image|icon|.*\\.[\\w]+$).*)",
   ],
 };

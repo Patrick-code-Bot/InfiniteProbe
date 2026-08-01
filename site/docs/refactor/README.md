@@ -119,16 +119,55 @@ through as props instead. Worth revisiting if the bar ever moves into the layout
 a prop, because it is a client component. That works today; if a locale switcher
 lands, confirm it still reads correctly mid-navigation.
 
-### Phase 2 — Sanity
-1. `npm i sanity next-sanity @sanity/image-url @sanity/vision`
-2. `sanity/` directory: `env.ts`, `client.ts`, `schemas/`, `queries.ts`.
-3. Studio mounted at `app/studio/[[...tool]]/page.tsx` (outside `[lang]` — the
-   Studio is not localized).
-4. Migrate content **one page at a time**, starting with a low-risk page
-   (`/support` or `/why-different`) to validate the schema shape before
-   touching Home.
-5. Live preview via `next-sanity`'s draft-mode + `defineLive` once static
-   rendering is confirmed working.
+### Phase 2 — Sanity 🚧 FOUNDATION DONE, CONTENT MIGRATION ONGOING
+
+Installed `sanity@6`, `next-sanity@13`, `@sanity/image-url@2`,
+`@sanity/vision@6`, `styled-components@6`.
+
+Built:
+
+1. **`sanity/env.ts`** — config + `isSanityConfigured()`, which also rejects
+   `[bracketed]` values so a copied `.env.example` reads as unconfigured.
+2. **`sanity/client.ts`** — `client` is `null` when unconfigured; `sanityFetch`
+   returns `null` instead of throwing.
+3. **`sanity/queries.ts`** — GROQ with locale coalescing via `loc()`.
+4. **`sanity/content.ts`** — `firstHero()` and `text()`, the fallback helpers.
+5. **`sanity/schemas/`** — `localeString`/`localeText`/`localeBlock` generated
+   from `locales` in `lib/i18n.ts`, three section types, `seo`, `page`.
+6. **`/studio`** — embedded Studio with its own bare layout, outside `[lang]`.
+7. **`/api/draft-mode/enable|disable`** — visual editing entry points.
+
+**The central contract: Sanity is additive.** Every field falls back to the copy
+committed in the component. If Sanity is unconfigured, the document is missing,
+the query fails, or a field is empty, the page renders exactly what it rendered
+before. This is what makes the migration safe page-by-page — an unmigrated page
+and a migrated-but-unpopulated page are indistinguishable. Verified: the site
+builds and every route 200s with no credentials at all.
+
+**Placeholders keep their brackets** (decided by the user). Editors type
+`[TBC]` into Sanity and `isPlaceholder()` in `lib/site.ts` still detects it,
+rendering the dashed burnt-orange "unconfirmed" styling. Deliberately *not* a
+separate `unconfirmed: boolean`: one representation everywhere means a flag and
+its text can never disagree, and no existing copy needs migrating. Note `text()`
+does **not** treat a bracketed string as empty — it is meaningful content.
+
+**Schema i18n is generated from `lib/i18n.ts`.** The locale fields are built by
+mapping over `locales`, so the schema cannot drift from the routing layer.
+
+Migrated so far: **`/support`** (hero + SEO metadata) — chosen as the low-risk
+validation case. Its FAQ answers are full of `[Placeholder — ...]` strings,
+which made it a good test of the bracket convention.
+
+**Remaining:** migrate the other 10 pages' copy one at a time, then wire live
+preview (`defineLive`) once a real project exists. Do not migrate `data/`
+(see below).
+
+**Watch:** `getPage()` is called in both `generateMetadata` and the page body,
+i.e. twice per render. Published fetches use `cache: "force-cache"`, so this
+should collapse to one network call — but that is unverified, and it does not
+hold in draft mode, where `cache: "no-store"` makes it two round trips per
+render. If preview feels slow, wrap `getPage` in React's `cache()` before
+looking anywhere else.
 
 **Leave in code, do not move to Sanity:**
 - `data/specs.json` — consumed by both Specs accordions and the home teaser,

@@ -1,11 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    // Shopify product photos are served from the Shopify CDN
     remotePatterns: [
+      // Shopify product photos
       {
         protocol: "https",
         hostname: "cdn.shopify.com",
+      },
+      // Sanity image assets
+      {
+        protocol: "https",
+        hostname: "cdn.sanity.io",
       },
     ],
   },
