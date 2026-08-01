@@ -27,8 +27,9 @@ import { PortableText } from "@/components/PortableText";
 import { AddToCartButton } from "@/components/cart/AddToCartButton"; // 'use client'
 
 /**
- * Next 15+ passes route params as a Promise. On Next 14 these are plain
- * objects — drop the `await` and the Promise<> wrapper if you have not upgraded.
+ * Route params are a Promise as of Next 15 and must be awaited. This project is
+ * on Next 16 (see docs/refactor/README.md phase 0), so the Promise form below
+ * is correct — no conditional handling needed.
  */
 type PageProps = { params: Promise<{ lang: string }> };
 

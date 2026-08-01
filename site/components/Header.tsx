@@ -42,11 +42,6 @@ export default function Header() {
     return () => window.removeEventListener("resize", measure);
   }, [menuOpen]);
 
-  // Close on route change — the panel would otherwise stay open over the new page.
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
-
   // Escape to close, and lock body scroll while the panel covers the page.
   useEffect(() => {
     if (!menuOpen) return;
@@ -259,17 +254,24 @@ export default function Header() {
                 flexDirection: "column",
               }}
             >
+              {/* Each link closes the panel itself — it would otherwise stay
+                  open over the newly navigated page. */}
               {NAV.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
                   className="mobile-nav-link"
+                  onClick={() => setMenuOpen(false)}
                   style={isActive(pathname, item.href) ? { color: "#C9661A" } : undefined}
                 >
                   {item.label}
                 </Link>
               ))}
-              <Link href="/shop" style={{ marginTop: 24 }}>
+              <Link
+                href="/shop"
+                onClick={() => setMenuOpen(false)}
+                style={{ marginTop: 24 }}
+              >
                 <button
                   className="btn-ink"
                   style={{ width: "100%", padding: "16px 24px", fontSize: 13 }}

@@ -18,14 +18,14 @@ Run from `site/`:
 npm install       # install dependencies
 npm run dev       # dev server at localhost:3000
 npm run build     # production build (also the best "does it compile" check)
-npm run lint      # ESLint (next/core-web-vitals + next/typescript)
+npm run lint      # ESLint flat config (next/core-web-vitals + next/typescript)
 ```
 
 There is no test suite. TypeScript is in strict mode; use `npm run build` to type-check.
 
 ## What This Is
 
-Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. Next.js 14 App Router, React 18, TypeScript. Six statically generated routes: `/`, `/how-it-works`, `/shop`, `/specs`, `/app`, `/support`. Checkout is handled by Shopify (hosted checkout); this site only manages the cart. Deployed to Vercel with root directory `site/`.
+Marketing + e-commerce site for the InfiniteProbe wireless cooking thermometer. Next.js 16 App Router, React 19, TypeScript. Six statically generated routes: `/`, `/how-it-works`, `/shop`, `/specs`, `/app`, `/support`. Checkout is handled by Shopify (hosted checkout); this site only manages the cart. Deployed to Vercel with root directory `site/`.
 
 ## Architecture
 

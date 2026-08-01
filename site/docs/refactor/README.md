@@ -32,24 +32,51 @@ fetching**, and **video components**.
 | `src/` directory | Skipped | Pure churn: rewrites every import for zero functional gain, and collides with the `[lang]` move |
 | Locales | `en` only, i18n-ready | Full `[lang]` structure and localized Sanity fields ship now; adding a locale later needs no structural change |
 
-## Prerequisite: Next.js upgrade
+## Prerequisite: Next.js upgrade — DONE
 
-Current `sanity` (v6) and `next-sanity` (v13) target **Next 15/16**. This project
-is on **14.2.35**. The upgrade is therefore a **blocking prerequisite** for the
-Sanity phase, not an optional extra.
+Current `sanity` (v6) and `next-sanity` (v13) target **Next 15/16**, and this
+project was on **14.2.35**, so the upgrade blocked the Sanity phase.
 
-Options:
-1. Upgrade to Next 16 first (`npx @next/codemod@canary upgrade latest`), then add Sanity. **Recommended.**
-2. Pin older Sanity versions compatible with Next 14 — avoids the upgrade but starts on deprecated tooling.
-
-Do the upgrade on its own commit, verify `npm run build`, then start phase 1.
+**Completed.** Now on Next `16.2.12`, React `19.2.8`, ESLint `9`.
 
 ## Phased migration
 
 Each phase ends with a green `npm run build` and is independently revertible.
 
-### Phase 0 — Next.js upgrade
-Upgrade to Next 16. Verify all 13 routes still build and render.
+### Phase 0 — Next.js upgrade ✅ DONE
+
+Next 14.2.35 → **16.2.12**, React 18 → **19.2.8**, ESLint 8 → **9**.
+
+What the upgrade actually required:
+
+1. **`npx @next/codemod@canary upgrade latest`** handled deps and most codemods.
+   It stops on an interactive "Is your app deployed to Vercel?" prompt, leaving
+   two codemods unapplied — finish them by hand (below).
+2. **ESLint flat config.** `next lint` was **removed** in Next 16, so the `lint`
+   script now calls `eslint .` directly, and `.eslintrc.json` was replaced by
+   `eslint.config.mjs`. `eslint-config-next@16` exports flat-config arrays from
+   its subpaths (`eslint-config-next/core-web-vitals`, `/typescript`) — import
+   those directly. Do **not** use `FlatCompat`: it throws
+   `Converting circular structure to JSON` against v16.
+3. **ESLint pinned to 9, not 10.** The codemod installs `eslint@10`, but
+   `eslint-config-next@16` bundles `eslint-plugin-react@7.37.5`, whose peer range
+   stops at `^9.7`. On ESLint 10 every lint run dies with
+   `contextOrFilename.getFilename is not a function`. Keep `eslint@^9` until
+   the plugin ships ESLint 10 support.
+4. **One real code fix.** Next 16's React Compiler lint rules flagged
+   `components/Header.tsx`: an effect called `setMenuOpen(false)` on `pathname`
+   change, causing a cascading render on every navigation
+   (`react-hooks/set-state-in-effect`). Fixed by closing the panel in the link
+   `onClick` handlers instead of reacting to the route after the fact.
+
+What did **not** break: the async request API migration (Next 15's biggest
+breaking change) was a no-op here, because no page used `cookies()`,
+`headers()`, `draftMode()`, `params`, or `searchParams`. That changes in phase 1
+— `app/[lang]/page.tsx` takes `params`, which in Next 16 is a **Promise** and
+must be awaited.
+
+Verified: `npm run build` clean, `npm run lint` clean, all 13 routes return 200
+from `npm start` with content rendered and no hydration errors.
 
 ### Phase 1 — i18n routing
 1. Add `lib/i18n.ts` (locale list, default locale, `Dictionary` type).
