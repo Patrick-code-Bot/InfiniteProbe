@@ -301,6 +301,8 @@ export default async function SupportPage({
         >
           <a
             href={hrefOrHash(LINKS.userManualPdf)}
+            target="_blank"
+            rel="noopener noreferrer"
             className="card-hover-orange"
             style={{
               background: "#FBF9F3",
@@ -359,6 +361,8 @@ export default async function SupportPage({
           </a>
           <a
             href={hrefOrHash(LINKS.quickStartPdf)}
+            target="_blank"
+            rel="noopener noreferrer"
             className="card-hover-orange"
             style={{
               background: "#FBF9F3",

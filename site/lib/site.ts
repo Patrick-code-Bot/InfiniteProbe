@@ -17,9 +17,11 @@ export const LINKS = {
   youtube: "[YOUTUBE URL]",
   facebook: "[FACEBOOK URL]",
   x: "[X URL]",
-  userManualPdf: "[/downloads/user-manual.pdf]",
-  quickStartPdf: "[/downloads/quick-start.pdf]",
-  declarationPdf: "[/downloads/declaration-of-conformity.pdf]",
+  // Product documentation is hosted on Shopify's CDN, not in public/.
+  userManualPdf:
+    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/InfiniteProbe_One_User_Manual_EN.pdf?v=1785785178",
+  quickStartPdf:
+    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/InfiniteProbe_One_Quick_Start.pdf?v=1785785161",
   shippingPolicy: "/shipping-policy",
   warrantyPolicy: "/warranty",
   privacyPolicy: "/privacy-policy",
