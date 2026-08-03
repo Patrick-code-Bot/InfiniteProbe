@@ -71,14 +71,20 @@ const COMPARISON = [
   },
 ];
 
+/**
+ * Pulls a single value out of data/specs.json so the probe diagram's callout
+ * labels stay in sync with the spec tables instead of hardcoding a duplicate.
+ */
+function specRow(tableKey: string, label: string): string {
+  const row = specs.tables
+    .find((t) => t.key === tableKey)
+    ?.rows.find((r) => r.label === label);
+  return row?.value ?? "";
+}
+
 const DOWNLOADS = [
   { name: "User Manual — Full Edition", href: LINKS.userManualPdf, tbc: false },
   { name: "Quick Start Guide", href: LINKS.quickStartPdf, tbc: false },
-  {
-    name: "[Declaration of Conformity — if applicable]",
-    href: LINKS.declarationPdf,
-    tbc: true,
-  },
 ];
 
 export default async function SpecsPage({
@@ -165,7 +171,11 @@ export default async function SpecsPage({
                   SHOP NOW →
                 </button>
               </Link>
-              <a href={hrefOrHash(LINKS.userManualPdf)}>
+              <a
+                href={hrefOrHash(LINKS.userManualPdf)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <button
                   className="btn-outline-dark"
                   style={{ padding: "16px 34px", fontSize: 14 }}
@@ -264,7 +274,7 @@ export default async function SpecsPage({
                 letterSpacing="1"
                 fill="#C9661A"
               >
-                MIN INSERTION [XX mm]
+                MIN INSERTION {specRow("s4", "Minimum insertion depth").split("—")[0].trim()}
               </text>
               <line
                 x1="60"
@@ -318,7 +328,7 @@ export default async function SpecsPage({
                 letterSpacing="1"
                 fill="#C9661A"
               >
-                LENGTH [XXX mm]
+                LENGTH {specRow("s4", "Probe length")}
               </text>
               <line
                 x1="130"
@@ -348,7 +358,7 @@ export default async function SpecsPage({
                 letterSpacing="1"
                 fill="#C9661A"
               >
-                NEEDLE Ø [X.X mm]
+                NEEDLE Ø {specRow("s4", "Needle diameter")}
               </text>
               <line
                 x1="445"
@@ -378,7 +388,7 @@ export default async function SpecsPage({
                 letterSpacing="1"
                 fill="#C9661A"
               >
-                CAP Ø [XX mm]
+                CAP Ø {specRow("s4", "Handle (cap) diameter")}
               </text>
               <text
                 x="60"
@@ -388,7 +398,7 @@ export default async function SpecsPage({
                 letterSpacing="1.2"
                 fill="rgba(20,20,20,0.5)"
               >
-                BODY · STAINLESS STEEL 304 · WEIGHT [XX g]
+                BODY · STAINLESS STEEL 304 · WEIGHT {specRow("s4", "Weight")}
               </text>
             </svg>
           </div>
@@ -589,6 +599,9 @@ export default async function SpecsPage({
             <a
               key={d.name}
               href={isPlaceholder(d.href) ? "#" : d.href}
+              {...(isPlaceholder(d.href)
+                ? {}
+                : { target: "_blank", rel: "noopener noreferrer" })}
               className="card-hover-orange"
               style={{
                 border: d.tbc

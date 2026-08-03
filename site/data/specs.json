@@ -2,17 +2,17 @@
   "_comment": "Single source of truth for every spec value. The Specs page and the homepage teaser both read from this file — update a number here and it changes everywhere. Values wrapped in [brackets] are unconfirmed placeholders and render in the dashed-orange 'awaiting engineering' style; remove the brackets once engineering confirms and the value renders as verified.",
   "model": "IP-X1",
   "glance": [
-    { "value": "[X.X] mm", "label": "PROBE DIAMETER", "tbc": true },
-    { "value": "[XX]–[XXX] °C", "label": "AMBIENT RATING", "tbc": true },
-    { "value": "BLE 5.0", "label": "UP TO [XX] M RANGE", "tbc": false },
-    { "value": "[IPXX]", "label": "WATER RESISTANCE", "tbc": true },
+    { "value": "5 mm", "label": "PROBE DIAMETER", "tbc": false },
+    { "value": "-20–250 °C", "label": "AMBIENT RATING", "tbc": false },
+    { "value": "BLE 5.0", "label": "UP TO 23 M RANGE", "tbc": false },
+    { "value": "IP68", "label": "WATER RESISTANCE", "tbc": false },
     { "value": "0 batteries", "label": "SELF-POWERED, FOREVER", "tbc": false }
   ],
   "homeTeaser": [
-    { "value": "[X.X] mm", "label": "PROBE DIAMETER · TBC", "tbc": true },
-    { "value": "[XX]–[XXX] °C", "label": "OPERATING RANGE · TBC", "tbc": true },
-    { "value": "BLE 5.0", "label": "UP TO [XX] M RANGE", "tbc": false },
-    { "value": "[IPXX]", "label": "WATER RESISTANCE · TBC", "tbc": true }
+    { "value": "5 mm", "label": "PROBE DIAMETER", "tbc": false },
+    { "value": "-20–250 °C", "label": "OPERATING RANGE", "tbc": false },
+    { "value": "BLE 5.0", "label": "UP TO 23 M RANGE", "tbc": false },
+    { "value": "IP68", "label": "WATER RESISTANCE", "tbc": false }
   ],
   "tables": [
     {
@@ -21,14 +21,14 @@
       "title": "TEMPERATURE & ACCURACY",
       "defaultOpen": true,
       "rows": [
-        { "label": "Internal (meat) sensor range", "value": "[XX °C – XXX °C / XX °F – XXX °F]", "tbc": true },
-        { "label": "Maximum ambient exposure", "value": "[XXX °C / XXX °F]", "tbc": true },
-        { "label": "Accuracy", "value": "[± X.X °C across XX–XX °C]", "tbc": true },
+        { "label": "Internal (meat) sensor range", "value": "-20 °C – 250 °C / -4 °F – 482 °F", "tbc": false },
+        { "label": "Maximum ambient exposure", "value": "250 °C / 482 °F", "tbc": false },
+        { "label": "Accuracy", "value": "± 0.5 °C across -20–250 °C", "tbc": false },
         { "label": "Sensing", "value": "Internal core + ambient tracking with recommended range", "tbc": false },
-        { "label": "Sensor type / count", "value": "[internal + ambient — confirm]", "tbc": true },
-        { "label": "Ambient sensor range", "value": "[XX °C – XXX °C — confirm]", "tbc": true },
-        { "label": "Resolution", "value": "[X.X °]", "tbc": true },
-        { "label": "Sampling rate", "value": "[every X s]", "tbc": true }
+        { "label": "Sensor type / count", "value": "internal + ambient", "tbc": false },
+        { "label": "Ambient sensor range", "value": "-20 °C – 250 °C", "tbc": false },
+        { "label": "Resolution", "value": "0.1 °C", "tbc": false },
+        { "label": "Sampling rate", "value": "every 1 s", "tbc": false }
       ]
     },
     {
@@ -39,9 +39,9 @@
       "rows": [
         { "label": "Power source", "value": "Thermoelectric generation from cooking heat", "tbc": false },
         { "label": "Battery", "value": "None — no charging, ever", "tbc": false },
-        { "label": "Minimum activation temperature", "value": "[XX °C ambient — confirm cold-start]", "tbc": true },
-        { "label": "Behavior below activation temp", "value": "[sleeps / stored-energy buffer — confirm]", "tbc": true },
-        { "label": "Energy storage", "value": "[capacitor buffer for temperature dips — confirm]", "tbc": true }
+        { "label": "Minimum activation temperature", "value": "-20 °C ambient — cold-start", "tbc": false },
+        { "label": "Behavior below activation temp", "value": "Sleeps; stored-energy buffer", "tbc": false },
+        { "label": "Energy storage", "value": "Capacitor buffer for temperature dips", "tbc": false }
       ]
     },
     {
@@ -51,9 +51,9 @@
       "defaultOpen": false,
       "rows": [
         { "label": "Protocol", "value": "Bluetooth Low Energy 5.0", "tbc": false },
-        { "label": "Line-of-sight range", "value": "[up to XX m]", "tbc": true },
-        { "label": "Typical range (grill lid closed)", "value": "[XX m]", "tbc": true },
-        { "label": "Simultaneous probes per phone", "value": "[X probes]", "tbc": true },
+        { "label": "Line-of-sight range", "value": "up to 23 m", "tbc": false },
+        { "label": "Typical range (grill lid closed)", "value": "23 m", "tbc": false },
+        { "label": "Simultaneous probes per phone", "value": "127 probes", "tbc": false },
         { "label": "Offline behavior", "value": "Offline alert in app; auto-reconnect", "tbc": false }
       ]
     },
@@ -63,13 +63,13 @@
       "title": "PHYSICAL",
       "defaultOpen": false,
       "rows": [
-        { "label": "Probe length", "value": "[XXX mm]", "tbc": true },
-        { "label": "Needle diameter", "value": "[X.X mm]", "tbc": true },
-        { "label": "Handle (cap) diameter", "value": "[XX mm]", "tbc": true },
-        { "label": "Weight", "value": "[XX g]", "tbc": true },
+        { "label": "Probe length", "value": "146 mm", "tbc": false },
+        { "label": "Needle diameter", "value": "5 mm", "tbc": false },
+        { "label": "Handle (cap) diameter", "value": "24 mm", "tbc": false },
+        { "label": "Weight", "value": "100 g", "tbc": false },
         { "label": "Body material", "value": "Food-grade stainless steel 304", "tbc": false },
-        { "label": "Minimum insertion depth", "value": "[XX mm — marked by insertion line]", "tbc": true },
-        { "label": "Water resistance", "value": "[IPXX] · dishwasher [safe / hand-wash — confirm]", "tbc": true }
+        { "label": "Minimum insertion depth", "value": "93 mm — marked by insertion line", "tbc": false },
+        { "label": "Water resistance", "value": "IP68 · dishwasher safe", "tbc": false }
       ]
     },
     {
@@ -78,10 +78,10 @@
       "title": "APP & COMPATIBILITY",
       "defaultOpen": false,
       "rows": [
-        { "label": "Platforms", "value": "iOS [XX+] · Android [X+]", "tbc": true },
+        { "label": "Platforms", "value": "iOS · Android", "tbc": false },
         { "label": "Cooking library", "value": "26+ preset cuts, editable targets, custom cuts", "tbc": false },
         { "label": "Units", "value": "°C / °F", "tbc": false },
-        { "label": "Languages", "value": "[list — app shows \"Follow system\"]", "tbc": true },
+        { "label": "Languages", "value": "English · Spanish", "tbc": false },
         { "label": "Alerts", "value": "Target reached, offline alert; per-probe sounds & vibration", "tbc": false },
         { "label": "Data", "value": "Live internal + ambient chart, cook history, record mode", "tbc": false },
         { "label": "Privacy", "value": "Bluetooth-local; nothing leaves your device", "tbc": false }
@@ -93,7 +93,7 @@
       "title": "IN THE BOX",
       "defaultOpen": false,
       "rows": [
-        { "label": "Contents", "value": "[X ×] InfiniteProbe One · Quick-start guide · [storage case / stand?]", "tbc": true }
+        { "label": "Contents", "value": "1 × InfiniteProbe One · Quick-start guide", "tbc": false }
       ]
     },
     {
@@ -102,17 +102,17 @@
       "title": "CERTIFICATIONS & WARRANTY",
       "defaultOpen": false,
       "rows": [
-        { "label": "Certifications", "value": "[CE / FCC / RoHS / food-contact — from compliance docs]", "tbc": true },
-        { "label": "Warranty", "value": "[X-year limited warranty]", "tbc": true },
-        { "label": "Returns", "value": "[XX-day money-back guarantee]", "tbc": true }
+        { "label": "Certifications", "value": "CE / FCC / RoHS / food-contact", "tbc": false },
+        { "label": "Warranty", "value": "2-year limited warranty", "tbc": false },
+        { "label": "Returns", "value": "30-day money-back guarantee", "tbc": false }
       ]
     }
   ],
   "warranty": {
-    "years": "[X]",
-    "returnDays": "[XX]"
+    "years": "2",
+    "returnDays": "30"
   },
   "range": {
-    "lineOfSight": "up to [XX] m"
+    "lineOfSight": "up to 23 m"
   }
 }

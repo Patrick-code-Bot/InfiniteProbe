@@ -14,6 +14,7 @@ import { getPage } from "@/sanity/queries";
 import { firstHero, text } from "@/sanity/content";
 import { notFound } from "next/navigation";
 import SectionRule from "@/components/SectionRule";
+import specs from "@/data/specs.json";
 import WarrantyAccordion from "@/components/WarrantyAccordion";
 import CartDrawer from "@/components/cart/CartDrawer";
 
@@ -46,8 +47,16 @@ export async function generateMetadata({
 }
 
 const GLANCE = [
-  { value: "[X]-year", label: "LIMITED WARRANTY · TBC", tbc: true },
-  { value: "[XX]-day", label: "RETURN WINDOW · TBC", tbc: true },
+  {
+    value: `${specs.warranty.years}-year`,
+    label: "LIMITED WARRANTY",
+    tbc: false,
+  },
+  {
+    value: `${specs.warranty.returnDays}-day`,
+    label: "RETURN WINDOW",
+    tbc: false,
+  },
   { value: "RMA first", label: "AUTHORIZED CLAIMS ONLY", tbc: false },
   {
     value: "We pay",

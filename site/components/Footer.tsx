@@ -101,6 +101,9 @@ export default function Footer({
               <Link
                 key={link.key}
                 href={localePath(locale, link.href)}
+                {...(link.href.startsWith("http")
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 style={{ fontSize: 14 }}
               >
                 {dict.footer[link.key]}
