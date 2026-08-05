@@ -61,13 +61,17 @@ placeholder to verified styling. **Never invent numbers** (design-system rule).
 
 ## 6 · Photography / assets — `data/images.ts`
 
-App screenshots (UI01–UI05) are live from the handoff. Still `null` (rendering
-dashed placeholder boxes) — drop files into `/public/images` and set the path:
+App screenshots (UI01–UI05) are live from the handoff. A slot that is still
+`null` renders the dashed placeholder box. Two ways to fill one: drop a file
+into `/public/images` and set the path, or paste a **Shopify Files CDN URL**
+(`cdn.shopify.com` is already allowlisted in `next.config.mjs`, and `next/image`
+optimizes remote sources the same way). Note that a Shopify URL's `?v=` is a
+cache-buster — re-uploading the asset mints a new one, so re-copy the URL.
 
-- [ ] `heroProbe` — titanium probe hero shot on dark (Home hero, 4:3)
-- [ ] `lifestyleGrill` — grill / open-fire lifestyle scene (Home § 03, 16:9)
+- [x] `heroProbe` — titanium probe hero shot on dark (Home hero, 4:3) — Shopify Files `ProbeOne2.png`
+- [x] `lifestyleGrill` — grill / open-fire lifestyle scene (Home § 03, 16:9) — Shopify Files `IPApplication03_claude.png`
 - [ ] `categorySteak` — full-bleed seared steak cross-section (Home § 07 dark band background)
-- [ ] `howItWorksHero` — exploded / cutaway probe render (How It Works hero, 4:3)
+- [x] `howItWorksHero` — exploded / cutaway probe render (How It Works hero, 4:3) — Shopify Files `Generate2Power.jpg`
 - [ ] Product photos for the 4 shop cards — set as featured images **in Shopify admin** (not in the repo)
 
 ## 7 · Reviews & social proof
@@ -192,12 +196,12 @@ CN Version
 
 ## 6 · 摄影 / 资源文件 — `data/images.ts`
 
-App 截图（UI01–UI05）已从交接文件中上线。目前仍为 `null`（渲染为虚线占位框）— 请将文件存入 `/public/images` 并设置路径：
+App 截图（UI01–UI05）已从交接文件中上线。仍为 `null` 的插槽会渲染为虚线占位框。填充方式有两种：将文件存入 `/public/images` 并设置路径，或直接粘贴 **Shopify Files CDN 链接**（`cdn.shopify.com` 已在 `next.config.mjs` 中列入白名单，`next/image` 对远程图片同样会做优化处理）。注意 Shopify 链接中的 `?v=` 是缓存清除参数 — 重新上传素材会生成新的参数值，届时需要重新复制链接。
 
-- [ ] `heroProbe` — 深色背景下的钛合金探针特写图（首页 Hero，4:3）
-- [ ] `lifestyleGrill` — 烧烤 / 明火生活方式场景图（首页 § 03，16:9）
+- [x] `heroProbe` — 深色背景下的钛合金探针特写图（首页 Hero，4:3）— Shopify Files `ProbeOne2.png`
+- [x] `lifestyleGrill` — 烧烤 / 明火生活方式场景图（首页 § 03，16:9）— Shopify Files `IPApplication03_claude.png`
 - [ ] `categorySteak` — 香煎牛排截面全幅图（首页 § 07 深色带背景）
-- [ ] `howItWorksHero` — 探针爆炸图 / 剖面渲染图（工作原理 Hero，4:3）
+- [x] `howItWorksHero` — 探针爆炸图 / 剖面渲染图（工作原理 Hero，4:3）— Shopify Files `Generate2Power.jpg`
 - [ ] 4 个商店卡片的产品照片 — 在 **Shopify 后台** 设置为精选图片（而不是在代码库中）
 
 ## 7 · 评价与社会认同 (Reviews & social proof)

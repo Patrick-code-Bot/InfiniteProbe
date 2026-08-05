@@ -16,8 +16,17 @@ export const IMAGES = {
   uiLibrary: "/images/UI05.png", // cooking library
 
   // Photography — pending, see LAUNCH_CHECKLIST.md
-  heroProbe: null as string | null, // Probe3.jpg — titanium probe hero shot on dark
-  lifestyleGrill: null as string | null, // lifestyle photo — grill / open fire scene
+  heroProbe:
+    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/ProbeOne2.png?v=1785256637" as
+      | string
+      | null, // titanium probe hero shot on dark — hosted in Shopify Files
+  lifestyleGrill:
+    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/IPApplication03_claude.png?v=1785894240" as
+      | string
+      | null, // lifestyle photo — grill / open fire scene
   categorySteak: null as string | null, // full-bleed seared steak cross-section, dark kitchen
-  howItWorksHero: null as string | null, // exploded / cutaway probe render
+  howItWorksHero:
+    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/Generate2Power.jpg?v=1785894505" as
+      | string
+      | null, // exploded / cutaway probe render
 };
