@@ -192,12 +192,13 @@ export default async function HowItWorksPage({
               </Link>
             </div>
           </div>
-          <div style={{ flex: "1 1 380px", minWidth: 280, aspectRatio: "4/3" }}>
+          <div style={{ flex: "1 1 380px", minWidth: 280, aspectRatio: "790/484" }}>
             <ImageSlot
               src={IMAGES.howItWorksHero}
               alt="Exploded cutaway render of the InfiniteProbe"
               label="EXPLODED / CUTAWAY PROBE RENDER · AWAITING ASSET"
               radius={20}
+              fit="contain"
               priority
             />
           </div>
