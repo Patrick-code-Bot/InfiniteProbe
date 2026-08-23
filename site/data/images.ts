@@ -17,9 +17,9 @@ export const IMAGES = {
 
   // Photography — pending, see LAUNCH_CHECKLIST.md
   heroProbe:
-    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/ProbeOne2.png?v=1785256637" as
+    "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/ProbeOne_front.jpg?v=1787484998" as
       | string
-      | null, // titanium probe hero shot on dark — hosted in Shopify Files
+      | null, // titanium probe hero shot, front-on on ivory — hosted in Shopify Files
   lifestyleGrill:
     "https://cdn.shopify.com/s/files/1/0736/8877/6748/files/IPApplication03_claude.png?v=1785894240" as
       | string

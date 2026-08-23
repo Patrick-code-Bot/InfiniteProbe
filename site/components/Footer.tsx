@@ -139,7 +139,7 @@ export default function Footer({
             className="mono"
             style={{ fontSize: 12, letterSpacing: "0.28em", fontWeight: 600 }}
           >
-            LEIZIG INSIDE
+            LEIZIG CLIMATE TECHNOLOGIES INC.
           </span>
           <span
             className="mono"

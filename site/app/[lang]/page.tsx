@@ -282,7 +282,7 @@ export default async function HomePage({
               style={{
                 width: "100%",
                 maxWidth: 440,
-                aspectRatio: "4/3",
+                aspectRatio: "1/1",
                 position: "relative",
               }}
             >
@@ -292,6 +292,7 @@ export default async function HomePage({
                   alt="InfiniteProbe One — titanium probe hero shot"
                   label="PROBE HERO SHOT · AWAITING PHOTOGRAPHY"
                   radius={20}
+                  fit="contain"
                   priority
                 />
               </div>
@@ -687,13 +688,14 @@ export default async function HomePage({
             flame: if there&apos;s heat, the probe is powered and reporting.
           </p>
           <div
-            style={{ flex: "1 1 320px", minWidth: 280, aspectRatio: "16/9" }}
+            style={{ flex: "1 1 320px", minWidth: 280, aspectRatio: "2232/1044" }}
           >
             <ImageSlot
               src={IMAGES.lifestyleGrill}
               alt="Grilling over open fire with InfiniteProbe"
               label="LIFESTYLE PHOTO · GRILL / OPEN FIRE · AWAITING PHOTOGRAPHY"
               radius={20}
+              fit="contain"
             />
           </div>
         </div>
