@@ -20,10 +20,22 @@ import { NextResponse } from "next/server";
  * Note this needs a **v4** key. A v3 key (the older `api_key` query-param
  * style) authenticates only against api.convertkit.com/v3 and cannot create
  * subscribers directly — it can only subscribe to a specific form.
+ *
+ * Signups are then associated with a Kit form (NEWSLETTER_FORM_ID). This is
+ * what makes Kit automations of the form "subscriber joins form X" fire — a
+ * bare subscriber created by the call above belongs to no form, so any such
+ * automation (including a welcome-email sequence) would never trigger for it.
+ * Kit requires this as a separate call: the form endpoint takes an existing
+ * subscriber id, so creating and associating cannot be done in one request.
  */
 
 /** Kit's create-subscriber endpoint. Upserts by email address. */
 const KIT_SUBSCRIBERS_URL = "https://api.kit.com/v4/subscribers";
+
+/** Adds an existing subscriber to a form, which is what fires form automations. */
+function kitFormSubscribeUrl(formId: string) {
+  return `https://api.kit.com/v4/forms/${encodeURIComponent(formId)}/subscribers`;
+}
 
 /** Cap on how long we wait for Kit before giving up on the request. */
 const KIT_TIMEOUT_MS = 10_000;
@@ -102,6 +114,50 @@ export async function POST(request: Request) {
 
   // 200 = existing subscriber updated, 201 = created, 202 = queued.
   if (response.ok) {
+    const formId = process.env.NEWSLETTER_FORM_ID;
+    if (isConfigured(formId)) {
+      // Best-effort: the subscriber is already captured, so a failure here
+      // must not turn a successful signup into an error for the visitor. It
+      // only means Kit's form automations won't fire for them, which is an
+      // operator problem to fix from the logs.
+      try {
+        const created: unknown = await response.json();
+        const subscriberId =
+          typeof created === "object" &&
+          created !== null &&
+          "subscriber" in created
+            ? (created as { subscriber?: { id?: number } }).subscriber?.id
+            : undefined;
+
+        if (subscriberId === undefined) {
+          console.error(
+            "[newsletter] Kit returned no subscriber id; skipping form association."
+          );
+        } else {
+          const formResponse = await fetch(
+            `${kitFormSubscribeUrl(formId)}/${subscriberId}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Kit-Api-Key": apiKey,
+              },
+              body: JSON.stringify({ referrer: request.headers.get("referer") ?? undefined }),
+              signal: AbortSignal.timeout(KIT_TIMEOUT_MS),
+            }
+          );
+          if (!formResponse.ok) {
+            const formDetail = await formResponse.text().catch(() => "");
+            console.error(
+              `[newsletter] Kit form association failed (${formResponse.status}): ${formDetail.slice(0, 500)}`
+            );
+          }
+        }
+      } catch (error) {
+        console.error("[newsletter] Kit form association failed:", error);
+      }
+    }
+
     return NextResponse.json({ ok: true });
   }
 
