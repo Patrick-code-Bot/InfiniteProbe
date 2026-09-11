@@ -51,8 +51,15 @@ Every page lives under `app/[lang]/`. Ships `en` only, but the structure is loca
 
 - `lib/shopify.ts` — Storefront API client (public token, client-side). Product fetch by handle, cart create/read/add/update/remove via GraphQL.
 - `components/cart/CartProvider.tsx` — React Context for cart state. Cart ID persisted in localStorage (`infiniteprobe:cartId`). Degrades gracefully when Shopify env vars are unset (`configured: false`), so the site works without credentials.
-- Env vars (see `site/.env.example`): `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`, plus server-side `NEWSLETTER_PROVIDER` / `NEWSLETTER_API_KEY`.
-- `app/api/newsletter/route.ts` is a stub — the provider call is not implemented yet.
+- Env vars (see `site/.env.example`): `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`.
+
+### Newsletter (Kit)
+
+- `app/api/newsletter/route.ts` is fully wired to Kit (formerly ConvertKit) and live in production. It creates the subscriber (an upsert by email), then makes a second call to add them to a form — that second step is what fires Kit automations of the form "subscriber joins form X", such as a welcome sequence.
+- Server-side env vars, never `NEXT_PUBLIC_`: `NEWSLETTER_PROVIDER=kit`, `NEWSLETTER_API_KEY`, `NEWSLETTER_FORM_ID`. All three are set in Vercel production.
+- **The key must be a v4 key** (starts with `kit_`). An older v3 key authenticates only against `api.convertkit.com/v3` and cannot create subscribers, so it fails here.
+- Unset or `[bracketed]` credentials return 503 rather than failing silently — `isConfigured()` rejects placeholders the same way `lib/site.ts` does. Form association is best-effort: it logs and moves on, so a failure there never turns a captured signup into a visitor-facing error.
+- Double opt-in follows the Kit account setting, deliberately not forced in code, keeping consent handling in one place.
 
 ### Sanity CMS
 
@@ -74,6 +81,8 @@ Headless CMS for marketing copy. **Additive, never required** — the site build
 Unconfirmed content is written as `[bracketed text]` throughout the codebase and intentionally renders with dashed burnt-orange "unconfirmed" styling. This is deliberate pre-launch behavior — do not "fix" or invent values for these placeholders. `site/LAUNCH_CHECKLIST.md` tracks every placeholder that must be resolved before launch.
 
 **This convention carries into Sanity unchanged**: editors type the brackets into CMS fields, and `isPlaceholder()` still detects them. There is deliberately no separate `unconfirmed` boolean — one representation everywhere means a flag and its text can never disagree. Note that `text()` does not treat a bracketed string as empty; it is meaningful content, not a missing value.
+
+**Always derive the styling, never hardcode it.** The dashed treatment must come from `isPlaceholder(value)` (or a `tbc` flag in `specs.json`) evaluated at render time — as `ImageSlot`, `SpecTables`, and `FaqAccordion` all do. A component that applies the dashed frame unconditionally keeps announcing "DRAFT" long after the copy is finalized, and no amount of content editing will clear it. `FaqAccordion` shipped with exactly that bug; if resolved content still renders as unconfirmed, suspect the component before the data.
 
 ### Styling
 
