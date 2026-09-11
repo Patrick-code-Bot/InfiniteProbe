@@ -1,6 +1,6 @@
 {
   "_comment": "Single source of truth for every spec value. The Specs page and the homepage teaser both read from this file — update a number here and it changes everywhere. Values wrapped in [brackets] are unconfirmed placeholders and render in the dashed-orange 'awaiting engineering' style; remove the brackets once engineering confirms and the value renders as verified.",
-  "model": "IP-X1",
+  "model": "IP-ONE",
   "glance": [
     { "value": "7 mm", "label": "PROBE DIAMETER", "tbc": false },
     { "value": "-20–250 °C", "label": "AMBIENT RATING", "tbc": false },
