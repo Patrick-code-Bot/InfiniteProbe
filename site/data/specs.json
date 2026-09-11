@@ -2,16 +2,16 @@
   "_comment": "Single source of truth for every spec value. The Specs page and the homepage teaser both read from this file — update a number here and it changes everywhere. Values wrapped in [brackets] are unconfirmed placeholders and render in the dashed-orange 'awaiting engineering' style; remove the brackets once engineering confirms and the value renders as verified.",
   "model": "IP-X1",
   "glance": [
-    { "value": "5 mm", "label": "PROBE DIAMETER", "tbc": false },
+    { "value": "7 mm", "label": "PROBE DIAMETER", "tbc": false },
     { "value": "-20–250 °C", "label": "AMBIENT RATING", "tbc": false },
-    { "value": "BLE 5.0", "label": "UP TO 23 M RANGE", "tbc": false },
+    { "value": "BLE 5.5", "label": "UP TO 23 M RANGE", "tbc": false },
     { "value": "IP68", "label": "WATER RESISTANCE", "tbc": false },
-    { "value": "0 batteries", "label": "SELF-POWERED, FOREVER", "tbc": false }
+    { "value": "0 charging", "label": "NO CHARGING, EVER", "tbc": false }
   ],
   "homeTeaser": [
-    { "value": "5 mm", "label": "PROBE DIAMETER", "tbc": false },
+    { "value": "7 mm", "label": "PROBE DIAMETER", "tbc": false },
     { "value": "-20–250 °C", "label": "OPERATING RANGE", "tbc": false },
-    { "value": "BLE 5.0", "label": "UP TO 23 M RANGE", "tbc": false },
+    { "value": "BLE 5.5", "label": "UP TO 23 M RANGE", "tbc": false },
     { "value": "IP68", "label": "WATER RESISTANCE", "tbc": false }
   ],
   "tables": [
@@ -38,7 +38,7 @@
       "defaultOpen": true,
       "rows": [
         { "label": "Power source", "value": "Thermoelectric generation from cooking heat", "tbc": false },
-        { "label": "Battery", "value": "None — no charging, ever", "tbc": false },
+        { "label": "Charging", "value": "None — never needs charging", "tbc": false },
         { "label": "Minimum activation temperature", "value": "-20 °C ambient — cold-start", "tbc": false },
         { "label": "Behavior below activation temp", "value": "Sleeps; stored-energy buffer", "tbc": false },
         { "label": "Energy storage", "value": "Capacitor buffer for temperature dips", "tbc": false }
@@ -50,7 +50,7 @@
       "title": "WIRELESS",
       "defaultOpen": false,
       "rows": [
-        { "label": "Protocol", "value": "Bluetooth Low Energy 5.0", "tbc": false },
+        { "label": "Protocol", "value": "Bluetooth Low Energy 5.5", "tbc": false },
         { "label": "Line-of-sight range", "value": "up to 23 m", "tbc": false },
         { "label": "Typical range (grill lid closed)", "value": "23 m", "tbc": false },
         { "label": "Simultaneous probes per phone", "value": "127 probes", "tbc": false },
@@ -64,7 +64,7 @@
       "defaultOpen": false,
       "rows": [
         { "label": "Probe length", "value": "146 mm", "tbc": false },
-        { "label": "Needle diameter", "value": "5 mm", "tbc": false },
+        { "label": "Needle diameter", "value": "7 mm", "tbc": false },
         { "label": "Handle (cap) diameter", "value": "24 mm", "tbc": false },
         { "label": "Weight", "value": "100 g", "tbc": false },
         { "label": "Body material", "value": "Food-grade stainless steel 304", "tbc": false },
