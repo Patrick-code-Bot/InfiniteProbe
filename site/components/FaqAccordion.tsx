@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { isPlaceholder } from "@/lib/site";
 
 export interface FaqItem {
   q: string;
@@ -8,8 +9,9 @@ export interface FaqItem {
 }
 
 /**
- * Support-page FAQ accordion. Answers are still drafts — they render inside
- * the dashed-orange "confirm before publish" treatment until finalized.
+ * Support-page FAQ accordion. An answer still written as a [bracketed]
+ * placeholder renders inside the dashed-orange "confirm before publish"
+ * treatment; a finalized answer renders as normal body copy.
  */
 export default function FaqAccordion({
   items,
@@ -55,26 +57,38 @@ export default function FaqAccordion({
               {open === i ? "−" : "+"}
             </span>
           </button>
-          {open === i && (
-            <div style={{ padding: "0 28px 26px" }}>
+          {open === i &&
+            (isPlaceholder(f.a) ? (
+              <div style={{ padding: "0 28px 26px" }}>
+                <div
+                  style={{
+                    border: "1.5px dashed #C9661A",
+                    background: "rgba(201,102,26,0.04)",
+                    borderRadius: 12,
+                    padding: "18px 22px",
+                  }}
+                >
+                  <div
+                    className="mono"
+                    style={{ fontSize: 10, letterSpacing: "0.18em", color: "#C9661A", marginBottom: 10 }}
+                  >
+                    DRAFT ANSWER — CONFIRM BEFORE PUBLISH
+                  </div>
+                  <div style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(20,20,20,0.55)" }}>{f.a}</div>
+                </div>
+              </div>
+            ) : (
               <div
                 style={{
-                  border: "1.5px dashed #C9661A",
-                  background: "rgba(201,102,26,0.04)",
-                  borderRadius: 12,
-                  padding: "18px 22px",
+                  padding: "0 28px 26px",
+                  fontSize: 15,
+                  lineHeight: 1.65,
+                  color: "rgba(20,20,20,0.75)",
                 }}
               >
-                <div
-                  className="mono"
-                  style={{ fontSize: 10, letterSpacing: "0.18em", color: "#C9661A", marginBottom: 10 }}
-                >
-                  DRAFT ANSWER — CONFIRM BEFORE PUBLISH
-                </div>
-                <div style={{ fontSize: 15, lineHeight: 1.65, color: "rgba(20,20,20,0.55)" }}>{f.a}</div>
+                {f.a}
               </div>
-            </div>
-          )}
+            ))}
         </div>
       ))}
     </div>

@@ -228,7 +228,7 @@ export default async function SpecsPage({
                   color: "rgba(20,20,20,0.45)",
                 }}
               >
-                DIMENSIONS · MM · TBC
+                DIMENSIONS · MM · IP-68
               </span>
             </div>
             <svg
