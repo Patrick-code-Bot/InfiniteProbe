@@ -824,8 +824,8 @@ export default async function HowItWorksPage({
             style={{
               flex: "0 1 340px",
               minWidth: 270,
-              border: "1.5px dashed #C9661A",
-              background: "rgba(201,102,26,0.04)",
+              border: "1px solid rgba(20,20,20,0.15)",
+              background: "#FBF9F3",
               borderRadius: 20,
               padding: 32,
               textAlign: "center",
@@ -836,7 +836,7 @@ export default async function HowItWorksPage({
                 fontSize: "clamp(34px,3.5vw,46px)",
                 fontWeight: 800,
                 letterSpacing: "-0.03em",
-                color: "rgba(20,20,20,0.35)",
+                color: "#141414",
               }}
             >
               {specs.range.lineOfSight}
@@ -846,11 +846,11 @@ export default async function HowItWorksPage({
               style={{
                 fontSize: 11,
                 letterSpacing: "0.18em",
-                color: "#C9661A",
+                color: "rgba(20,20,20,0.5)",
                 marginTop: 10,
               }}
             >
-              LINE-OF-SIGHT RANGE · AWAITING ENGINEERING
+              LINE-OF-SIGHT RANGE
             </div>
           </div>
         </div>

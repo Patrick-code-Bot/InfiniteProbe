@@ -1186,7 +1186,7 @@ export default async function HomePage({
               marginBottom: 20,
             }}
           >
-            OUR PROMISE · TERMS AWAITING CONFIRMATION
+            OUR PROMISE
           </div>
           <h2
             style={{
