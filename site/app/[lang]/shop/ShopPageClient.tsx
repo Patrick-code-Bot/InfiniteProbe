@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SectionRule from "@/components/SectionRule";
+import FaqAccordion from "@/components/FaqAccordion";
 import CartDrawer from "@/components/cart/CartDrawer";
 import { useCart } from "@/components/cart/CartProvider";
 import { BUNDLES, COMPARE_ROWS, type BundleConfig } from "@/data/products";
@@ -15,19 +16,19 @@ import {
   getProductByHandle,
   isShopifyConfigured,
 } from "@/lib/shopify";
-import { isPlaceholder } from "@/lib/site";
+import { isPlaceholder, SUPPORT_EMAIL } from "@/lib/site";
 import type { Dictionary, Locale } from "@/lib/i18n";
 
 const DIRECT = [
   {
     num: "01",
-    title: "Direct from Leizig",
+    title: "Direct from InfiniteProbe Inc.",
     body: "Every probe ships from the people who engineered it — firmware-current, quality-checked, never grey-market.",
   },
   {
     num: "02",
-    title: "[XX]-Day Returns",
-    body: "If it doesn't change the way you cook, send it back. Terms awaiting confirmation.",
+    title: "30-Day Returns",
+    body: "If it doesn't change the way you cook, send it back within 30 days.",
   },
   {
     num: "03",
@@ -47,20 +48,28 @@ const PAYMENTS = [
 
 const FAQS = [
   {
-    q: "When will my order ship?",
-    a: "[Placeholder — confirm handling time and carrier options.]",
+    q: "What payment methods do you accept?",
+    a: "We accept all major credit and debit cards, including Visa, MasterCard, and American Express, as well as express checkout options via Apple Pay, Google Pay, and Shop Pay. All transactions are securely processed and encrypted.",
   },
   {
-    q: "Do you ship internationally?",
-    a: "[Placeholder — confirm regions, duties, and shipping rates.]",
+    q: "How much is shipping, and how long does delivery take?",
+    a: "Standard shipping is free on all domestic orders. Orders are processed within 1 business day. Standard domestic transit typically takes 3 business days. International shipping rates and delivery estimates (typically 14 business days) are calculated at checkout based on your location.",
   },
   {
-    q: "What's included in the box?",
-    a: "[Placeholder — confirm bundle contents per SKU.]",
+    q: "Will I have to pay import duties or customs fees on international orders?",
+    a: "No. All international orders ship DDP (Delivered Duties Paid). Any applicable taxes and customs duties are calculated and collected during checkout, meaning no unexpected fees or surprise charges upon delivery.",
   },
   {
-    q: "How do returns work?",
-    a: "[Placeholder — confirm return window, condition requirements, and refund process.]",
+    q: "Can I modify or cancel my order after placing it?",
+    a: `We process orders quickly to ensure rapid dispatch. You can request changes or cancellations only while your order is still in the processing phase. Please reach out immediately to ${SUPPORT_EMAIL} with your order number, and our team will do their best to assist.`,
+  },
+  {
+    q: "How do I track my shipment?",
+    a: "Once your order ships, you will automatically receive a shipping confirmation email containing a direct tracking link. You can use this link to monitor your package from our warehouse to your door. Tracking updates may take up to 24 hours after dispatch to show initial scans.",
+  },
+  {
+    q: "What is your return policy and warranty coverage?",
+    a: "Every direct purchase from InfiniteProbe comes with our 30-day money-back return policy — if it doesn't transform the way you cook, return it hassle-free. Additionally, your hardware is covered by a 2-year manufacturer warranty against defects in materials and craftsmanship.",
   },
 ];
 
@@ -82,7 +91,6 @@ export default function ShopPageClient({
 }) {
   const { addItem, openCart } = useCart();
   const [products, setProducts] = useState<Record<string, ShopifyProduct>>({});
-  const [faqOpen, setFaqOpen] = useState(-1);
 
   // Live products from Shopify — prices/photos update with zero deploys.
   useEffect(() => {
@@ -212,9 +220,9 @@ export default function ShopPageClient({
         >
           <span>FREE SHIPPING</span>
           <span style={{ color: "#C9661A" }}>·</span>
-          <span style={{ color: "#C9661A" }}>[XX]-DAY RETURNS</span>
+          <span style={{ color: "#C9661A" }}>30-DAY RETURNS</span>
           <span style={{ color: "#C9661A" }}>·</span>
-          <span style={{ color: "#C9661A" }}>[X]-YEAR WARRANTY</span>
+          <span style={{ color: "#C9661A" }}>2-YEAR WARRANTY</span>
         </div>
       </div>
 
@@ -742,92 +750,8 @@ export default function ShopPageClient({
           padding: "clamp(64px,8vw,112px) 24px 0",
         }}
       >
-        <SectionRule
-          eyebrow="§ 03 · ORDERING FAQ"
-          meta="[DRAFT]"
-          metaColor="#C9661A"
-          marginBottom={32}
-        />
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {FAQS.map((f, i) => (
-            <div
-              key={f.q}
-              style={{
-                background: "#FBF9F3",
-                borderRadius: 16,
-                boxShadow: "0 1px 2px rgba(20,20,20,0.05)",
-                overflow: "hidden",
-              }}
-            >
-              <button
-                onClick={() => setFaqOpen(faqOpen === i ? -1 : i)}
-                className="row-hover"
-                aria-expanded={faqOpen === i}
-                style={{
-                  width: "100%",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "22px 26px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 18,
-                  textAlign: "left",
-                }}
-              >
-                <span
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 15,
-                    flex: 1,
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {f.q}
-                </span>
-                <span
-                  className="mono"
-                  style={{ fontSize: 16, color: "#C9661A" }}
-                >
-                  {faqOpen === i ? "−" : "+"}
-                </span>
-              </button>
-              {faqOpen === i && (
-                <div style={{ padding: "0 26px 24px" }}>
-                  <div
-                    style={{
-                      border: "1.5px dashed #C9661A",
-                      background: "rgba(201,102,26,0.04)",
-                      borderRadius: 12,
-                      padding: "16px 20px",
-                    }}
-                  >
-                    <div
-                      className="mono"
-                      style={{
-                        fontSize: 10,
-                        letterSpacing: "0.18em",
-                        color: "#C9661A",
-                        marginBottom: 8,
-                      }}
-                    >
-                      DRAFT ANSWER — CONFIRM BEFORE PUBLISH
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 14,
-                        lineHeight: 1.65,
-                        color: "rgba(20,20,20,0.55)",
-                      }}
-                    >
-                      {f.a}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <SectionRule eyebrow="§ 03 · ORDERING FAQ" marginBottom={32} />
+        <FaqAccordion items={FAQS} defaultOpen={-1} />
       </div>
 
       {/* 7 · Closing CTA */}

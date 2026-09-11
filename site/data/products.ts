@@ -39,7 +39,7 @@ export const BUNDLES: BundleConfig[] = [
     fallbackPrice: "$199.00",
     tag: "MOST POPULAR",
     description: "Two probes for two zones — or dinner and dessert.",
-    meta: "2 × PROBE · [CASE INCLUDED — TBC]",
+    meta: "2 × PROBE",
     imagePlaceholder: "Product photo — two probes with case",
   },
   {
@@ -56,11 +56,11 @@ export const BUNDLES: BundleConfig[] = [
 
 export const COMPARE_ROWS = [
   { label: "What it is", a: "Thermometer", b: "Thermometer", c: "Display accessory" },
-  { label: "Probes", a: "1", b: "[2 — TBC]", c: "Requires probe" },
-  { label: "Range", a: "Bluetooth · MeatNet", b: "[TBC]", c: "WiFi — monitor anywhere" },
-  { label: "Cook without phone", a: "No", b: "[TBC]", c: "Yes" },
+  { label: "Probes", a: "1", b: "2", c: "Requires probe" },
+  { label: "Range", a: "Bluetooth · 23 m", b: "Bluetooth · 23 m", c: "WiFi — monitor anywhere" },
+  { label: "Cook without phone", a: "No", b: "No", c: "Yes" },
   { label: "Probes managed", a: "—", b: "—", c: "Up to 4" },
-  { label: "Best for", a: "[Weeknight cooks]", b: "[Grill + oven]", c: "Phone-free monitoring" },
-  { label: "Warranty", a: "2 yr", b: "[X yr]", c: "2 yr" },
+  { label: "Best for", a: "Weeknight cooks", b: "Grill + oven", c: "Phone-free monitoring" },
+  { label: "Warranty", a: "2 yr", b: "2 yr", c: "2 yr" },
   { label: "Price", a: "[$XXX]", b: "[$XXX]", c: "[$XXX]" },
 ];
