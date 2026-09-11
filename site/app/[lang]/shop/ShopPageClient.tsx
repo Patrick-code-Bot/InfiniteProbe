@@ -656,63 +656,6 @@ export default function ShopPageClient({
           padding: "clamp(64px,8vw,112px) 24px 0",
         }}
       >
-        <SectionRule
-          eyebrow="EARLY REVIEWS"
-          meta="AWAITING QUOTES"
-          marginBottom={32}
-        />
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
-            gap: 20,
-            marginBottom: 36,
-          }}
-        >
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              style={{
-                border: "1.5px dashed #C9661A",
-                background: "rgba(201,102,26,0.04)",
-                borderRadius: 20,
-                padding: 28,
-              }}
-            >
-              <div
-                style={{
-                  color: "#C9661A",
-                  fontSize: 15,
-                  letterSpacing: "0.2em",
-                  marginBottom: 14,
-                }}
-              >
-                ★★★★★
-              </div>
-              <div
-                style={{
-                  fontSize: 15,
-                  lineHeight: 1.6,
-                  color: "rgba(20,20,20,0.4)",
-                  fontStyle: "italic",
-                  marginBottom: 16,
-                }}
-              >
-                &quot;Quote from verified buyer.&quot;
-              </div>
-              <div
-                className="mono"
-                style={{
-                  fontSize: 10,
-                  letterSpacing: "0.16em",
-                  color: "#C9661A",
-                }}
-              >
-                NAME · VERIFIED PURCHASE
-              </div>
-            </div>
-          ))}
-        </div>
         <div
           style={{
             display: "flex",
