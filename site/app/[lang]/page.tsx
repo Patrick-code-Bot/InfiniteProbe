@@ -948,80 +948,7 @@ export default async function HomePage({
         </div>
       </div>
 
-      {/* 7 · Social Proof (placeholder) */}
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          padding: "clamp(72px,9vw,128px) 24px 0",
-        }}
-      >
-        <SectionRule eyebrow="EARLY REVIEWS" meta="AWAITING QUOTES" />
-        <h2
-          style={{
-            margin: "0 0 40px",
-            fontSize: "clamp(30px,4vw,48px)",
-            fontWeight: 800,
-            letterSpacing: "-0.028em",
-            lineHeight: 1.05,
-          }}
-        >
-          Cooks Who Refuse to Guess
-        </h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-            gap: 20,
-          }}
-        >
-          {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              style={{
-                border: "1.5px dashed #C9661A",
-                background: "rgba(201,102,26,0.04)",
-                borderRadius: 20,
-                padding: 32,
-              }}
-            >
-              <div
-                style={{
-                  color: "#C9661A",
-                  fontSize: 16,
-                  letterSpacing: "0.2em",
-                  marginBottom: 16,
-                }}
-              >
-                ★★★★★
-              </div>
-              <div
-                style={{
-                  fontSize: 16,
-                  lineHeight: 1.6,
-                  color: "rgba(20,20,20,0.4)",
-                  fontStyle: "italic",
-                  marginBottom: 20,
-                }}
-              >
-                &quot;Quote from early tester or press outlet.&quot;
-              </div>
-              <div
-                className="mono"
-                style={{
-                  fontSize: 11,
-                  letterSpacing: "0.16em",
-                  color: "#C9661A",
-                }}
-              >
-                NAME · TITLE / PUBLICATION
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* 8 · Key Specs Teaser — values come from data/specs.json */}
+      {/* 7 · Key Specs Teaser — values come from data/specs.json */}
       <div
         id="specs"
         style={{
@@ -1091,7 +1018,7 @@ export default async function HomePage({
         </div>
       </div>
 
-      {/* 9 · Category Statement (dark band 3/3) */}
+      {/* 8 · Category Statement (dark band 3/3) */}
       <div
         style={{
           background: "#161513",
@@ -1160,7 +1087,7 @@ export default async function HomePage({
         </div>
       </div>
 
-      {/* 10 · Guarantee (placeholder) */}
+      {/* 9 · Guarantee */}
       <div
         style={{
           maxWidth: 1280,
@@ -1170,8 +1097,8 @@ export default async function HomePage({
       >
         <div
           style={{
-            border: "1.5px dashed #C9661A",
-            background: "rgba(201,102,26,0.04)",
+            border: "1px solid rgba(20,20,20,0.15)",
+            background: "#FBF9F3",
             borderRadius: 24,
             padding: "clamp(40px,5vw,64px)",
             textAlign: "center",
@@ -1186,7 +1113,7 @@ export default async function HomePage({
               marginBottom: 20,
             }}
           >
-            OUR PROMISE · TERMS AWAITING CONFIRMATION
+            OUR PROMISE
           </div>
           <h2
             style={{
@@ -1228,7 +1155,7 @@ export default async function HomePage({
         </div>
       </div>
 
-      {/* 11 · Final CTA + newsletter */}
+      {/* 10 · Final CTA + newsletter */}
       <div
         style={{
           maxWidth: 1280,

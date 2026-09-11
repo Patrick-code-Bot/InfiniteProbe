@@ -431,11 +431,7 @@ export default async function SupportPage({
           padding: "clamp(64px,8vw,104px) 24px 0",
         }}
       >
-        <SectionRule
-          eyebrow="§ 03 · FAQ"
-          meta="[DRAFT — CONFIRM ANSWERS]"
-          metaColor="#C9661A"
-        />
+        <SectionRule eyebrow="§ 03 · FAQ" />
         <h2
           style={{
             margin: "0 0 40px",
