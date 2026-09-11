@@ -70,7 +70,7 @@ const CHAIN_STEPS = [
   {
     num: "04",
     title: "Wireless Transmission",
-    body: "A Bluetooth Low Energy 5.0 radio streams readings to your phone — continuously, for the entire cook.",
+    body: "A Bluetooth Low Energy 5.5 radio streams readings to your phone — continuously, for the entire cook.",
     bg: "#FBF9F3",
   },
   {
@@ -812,7 +812,7 @@ export default async function HowItWorksPage({
                 maxWidth: 600,
               }}
             >
-              InfiniteProbe streams over Bluetooth Low Energy 5.0. Keep your
+              InfiniteProbe streams over Bluetooth Low Energy 5.5. Keep your
               phone within the app&apos;s working range and avoid heavy
               obstacles — thick walls, metal enclosures, or closed metal lids
               can weaken any Bluetooth signal. If a probe ever drops its

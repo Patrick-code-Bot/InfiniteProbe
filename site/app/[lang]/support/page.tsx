@@ -70,27 +70,27 @@ const STEPS = [
 const FAQS = [
   {
     q: "What happens before the probe is hot enough to power itself?",
-    a: "[Placeholder — describe cold-start behavior: stored-energy buffer / sleep state and the minimum activation temperature, per engineering.]",
+    a: "Before use, simply pick up the probe and tap the minimum insertion line to wake it up and connect it to the mobile app via Bluetooth. Once the probe is placed in an oven or touches a heat source, the internal thermoelectric core immediately converts the temperature difference into electricity, continuously powering the sensor and Bluetooth throughout the entire cook.",
   },
   {
     q: "Is the probe dishwasher safe?",
-    a: "[Placeholder — confirm IP rating and dishwasher vs. hand-wash guidance from engineering before publishing.]",
+    a: "Yes, the probe is made of food-grade 304 stainless steel and features an IP68 water resistance rating, meaning it can be washed directly in the dishwasher.",
   },
   {
     q: "How many probes can I run at once?",
-    a: "[Placeholder — confirm the maximum simultaneous probes per phone.]",
+    a: "If you connect directly via the mobile app, the system allows you to pair as many probes as your table demands and view the status of all your probes simultaneously on a single screen. If you use the optional official Wi-Fi Display, that accessory can manage up to 4 probes at the same time.",
   },
   {
     q: "What's the wireless range?",
-    a: "[Placeholder — confirm line-of-sight and closed-lid range figures from engineering.]",
+    a: "The probe utilizes Bluetooth 5.5 (BLE 5.5) for direct connection, with a maximum transmission range of up to 23 meters. If paired with the Wi-Fi Display, you can achieve seamless remote monitoring over your network.",
   },
   {
     q: "Does the app work without an internet connection?",
-    a: "[Placeholder — confirm: Bluetooth-local operation, no account or cloud required.]",
+    a: "Yes. The app requires no account registration, and the probe pairs locally with your phone via Bluetooth Low Energy (BLE). The connection is entirely local — nothing leaves your device — so an internet connection is completely unnecessary for normal use.",
   },
   {
     q: "What temperatures can the probe survive?",
-    a: "[Placeholder — confirm maximum ambient exposure and internal sensor range.]",
+    a: "The probe is designed specifically for environments like open fires, grills, and ovens. Its specific operating range allows it to withstand temperatures up to 250 °C.",
   },
 ];
 
