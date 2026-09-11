@@ -5,6 +5,20 @@ bracketed renders on the site in the dashed-orange "unconfirmed" treatment
 (per the design system), so nothing can silently ship half-done — but it all
 must be resolved before going live.
 
+**Everything still unchecked below needs a decision or a fact from a person —
+you, legal, ops, or Shopify.** None of it can be closed by editing code: the
+values are warranty terms, shipping rates, jurisdiction and arbitration, store
+URLs, real review quotes, and product handles. Per the design-system rule
+repeated in § 3, **never invent these** — a plausible-looking liability cap or
+a fabricated testimonial is worse than a visible bracket. Route each group to
+whoever owns it, then replace the value and drop the brackets.
+
+One caveat learned the hard way: if resolved content still renders with the
+dashed "unconfirmed" frame, suspect the **component** before the data. The
+treatment must be derived from `isPlaceholder()` or a `tbc` flag at render
+time; `FaqAccordion` once hardcoded it, so finished answers kept showing as
+drafts no matter what the content said.
+
 ## 1 · Shopify (blocks checkout)
 
 - [ ] **Store credentials** — set in Vercel → Project → Settings → Environment Variables (and locally in `.env.local`):
@@ -32,9 +46,11 @@ Single source of truth; the Specs page and Home teaser both read this file.
 Replace the value AND set `"tbc": false` to switch a row from dashed-orange
 placeholder to verified styling. **Never invent numbers** (design-system rule).
 
-- [x] Probe diameter — `5 mm`
+- [x] Probe / needle diameter — `7 mm` (cap Ø stays `24 mm`, a separate measurement)
 - [x] Ambient / operating range — `-20–250 °C`
-- [x] BLE range — `UP TO 23 M` (also `range.lineOfSight`, shown on How It Works)
+- [x] BLE — `5.5`, `UP TO 23 M` (also `range.lineOfSight`; the two hardcoded mentions on How It Works were updated to match)
+- [x] Power framing — the glance tile is `0 charging / NO CHARGING, EVER` and the § 02 row is `Charging`, not `Battery`. This is the defensible claim: the same table documents a capacitor energy-storage buffer. **Marketing copy elsewhere still says "no battery"** (~25 places incl. headlines, the comparison tables, and the `battery-free meat probe` SEO keyword) — decide whether that framing stays before launch.
+- [x] Specs-page dimensions header now reads `DIMENSIONS · MM · IP-68` (was a stale `· TBC` marker; no dimension row carries `tbc:true`)
 - [x] Water resistance — `IP68` + dishwasher safe
 - [x] Internal sensor range, max ambient exposure, accuracy, sensor type, resolution, sampling rate (§ 01)
 - [x] Minimum activation temperature, cold-start behavior, energy storage (§ 02)
@@ -47,8 +63,8 @@ placeholder to verified styling. **Never invent numbers** (design-system rule).
 
 ## 4 · Support content
 
-- [ ] Support email `[support@infiniteprobe.com]` — `lib/site.ts` → `SUPPORT_EMAIL` (also remove the dashed "CONFIRM ADDRESS" treatment in `app/support/page.tsx` once real)
-- [ ] Support FAQ draft answers (6) — `app/support/page.tsx` → `FAQS` (cold start, dishwasher, probe count, range, offline use, temperature limits)
+- [x] Support email — `one@infiniteprobe.com`, set in `lib/site.ts` → `SUPPORT_EMAIL`. The dashed "CONFIRM ADDRESS" treatment is gone from both `app/[lang]/support/page.tsx` and `app/[lang]/warranty/page.tsx`, and both contact pills are now `mailto:` links. The warranty page reads `SUPPORT_EMAIL` instead of a hardcoded copy, so the two cannot drift.
+- [x] Support FAQ answers (6) — `app/[lang]/support/page.tsx` → `FAQS` (cold start, dishwasher, probe count, range, offline use, temperature limits). Note: `FaqAccordion` applied the dashed "DRAFT ANSWER" frame **unconditionally**, so these rendered as drafts even once written; the frame is now conditional on `isPlaceholder()`. The answers introduce an optional Wi-Fi Display accessory (4 probes) that appears nowhere else on the site — add a product/spec entry for it or drop the mention.
 - [x] User Manual PDF — hosted on Shopify's CDN, `LINKS.userManualPdf` set in `lib/site.ts`
 - [x] Quick Start Guide PDF — hosted on Shopify's CDN, `LINKS.quickStartPdf` set
 - [x] Declaration of Conformity PDF — **deliberately not published.** The download card and `LINKS.declarationPdf` were removed; the DoC is a legal document to hold on file and produce on request, not a required website asset. Re-add a card here only if distributors or retail buyers ask for it publicly.
@@ -68,7 +84,7 @@ into `/public/images` and set the path, or paste a **Shopify Files CDN URL**
 optimizes remote sources the same way). Note that a Shopify URL's `?v=` is a
 cache-buster — re-uploading the asset mints a new one, so re-copy the URL.
 
-- [x] `heroProbe` — titanium probe hero shot on dark (Home hero, 4:3) — Shopify Files `ProbeOne2.png`
+- [x] `heroProbe` — titanium probe hero shot on black (Home hero, 1:1) — Shopify Files `ProbeOne_front.jpg`, 1080×1080, matching the hero's square container exactly. Note the hero's live-status caption pill is ink `#141414` and half-overlaps the image's lower edge; against this near-black asset it has little contrast, so check it if the pill looks muddy.
 - [x] `lifestyleGrill` — grill / open-fire lifestyle scene (Home § 03, 16:9) — Shopify Files `IPApplication03_claude.png`
 - [ ] `categorySteak` — full-bleed seared steak cross-section (Home § 07 dark band background)
 - [x] `howItWorksHero` — exploded / cutaway probe render (How It Works hero, 4:3) — Shopify Files `Generate2Power.jpg`
@@ -81,9 +97,10 @@ cache-buster — re-uploading the asset mints a new one, so re-copy the URL.
 
 ## 8 · Newsletter
 
-- [ ] Choose a provider (Mailchimp / Klaviyo / ConvertKit / Buttondown) and implement the subscribe call in `app/api/newsletter/route.ts` (the TODO marks the spot)
-- [ ] Set `NEWSLETTER_PROVIDER` and `NEWSLETTER_API_KEY` env vars in Vercel
-- [ ] Until then, the form returns "Newsletter signup isn't live yet" — it will not pretend to succeed
+- [x] Provider chosen and implemented — **Kit** (formerly ConvertKit), v4 API, in `app/api/newsletter/route.ts`. The route creates the subscriber (upsert by email), then adds them to a form in a second call, which is what fires Kit's "subscriber joins form" automations such as a welcome sequence.
+- [x] `NEWSLETTER_PROVIDER`, `NEWSLETTER_API_KEY`, and `NEWSLETTER_FORM_ID` are set in Vercel production. Verified live: a POST to `/api/newsletter` returns `{"ok":true}`, and an invalid address returns 400.
+- [x] Unconfigured/bracketed credentials return 503 rather than pretending to succeed. **The key must be a v4 key** (starts with `kit_`) — a v3 key cannot create subscribers and will fail.
+- [ ] Confirm the Kit account's double opt-in setting is what you want at launch. It is deliberately governed by the Kit account, not forced in code, so consent handling lives in one place.
 
 ## 9 · Announcement bar & copy checks
 
@@ -120,7 +137,7 @@ The site builds and renders fully with Sanity unconfigured; every field falls ba
 - [ ] **`/privacy-policy`** (`app/privacy-policy/page.tsx`) — placeholders: `[MONTH DD, YYYY — SET AT PUBLICATION]` (last updated), `[privacy@infiniteprobe.com]` (confirm address), `[REGISTERED ADDRESS — AWAITING LEGAL]`, `[JURISDICTION — TBC]`, `[REGIONS — TBC]`, `[X]` business-day request-acknowledgment window.
 - [ ] **`/shipping-policy`** (`app/shipping-policy/page.tsx`) — placeholders: last-updated date, `[X–X] days` processing time (×2), peak-season `[X]` day delay, `[HH:MM TIMEZONE — TBC]` cutoff, `[$XX — TBC]` expedited/priority rates, AK/HI/territory `[X–X]` day delay, `[X–XX] business days` international transit, `[CONFIRM WITH CARRIER]` PO Box/APO guidance, `[X–XX]` military address delay, tracking-silence/damage/missing-package day thresholds in the FAQ, `[orders@infiniteprobe.com]`.
 - [ ] **`/terms-of-service`** (`app/terms-of-service/page.tsx`) — placeholders: effective date, `[PENDING]` Shipping Policy cross-reference (now resolvable — link once confirmed), `[USD $100 — TBC]` liability cap, `[JURISDICTION — TBC]` (×2), `[XX]` days informal-resolution period, `[ARBITRATION PROVIDER — TBC]`, `[SEAT — TBC]`, `[legal@infiniteprobe.com]`, `[REGISTERED ADDRESS — AWAITING LEGAL]`. **Do not launch without legal sign-off** — jurisdiction, arbitration provider/seat, and liability cap materially affect enforceability.
-- [ ] **`/warranty`** (`app/warranty/page.tsx`) — placeholders: `[X]`-year warranty length (×2, glance tile + § 02 body), `[XX]`-day return window (×2), `[XX]` days replacement-warranty extension, `[X]` business days refund processing, `[JURISDICTION — TBC]`, an entire unwritten sub-section (`[Regional warranty durations, distributor contacts, and any extended holiday return window — awaiting confirmation from legal and operations.]`), `[support@infiniteprobe.com]`. Also confirm `data/specs.json` → `warranty.years` / `warranty.returnDays` match once resolved (Home guarantee banner reads the same values).
+- [ ] **`/warranty`** (`app/warranty/page.tsx`) — placeholders: `[X]`-year warranty length (×2, glance tile + § 02 body), `[XX]`-day return window (×2), `[XX]` days replacement-warranty extension, `[X]` business days refund processing, `[JURISDICTION — TBC]`, an entire unwritten sub-section (`[Regional warranty durations, distributor contacts, and any extended holiday return window — awaiting confirmation from legal and operations.]`). The contact address is **resolved** (`one@infiniteprobe.com`). Also confirm `data/specs.json` → `warranty.years` / `warranty.returnDays` match once resolved (Home guarantee banner reads the same values).
 - [ ] **Footer/nav policy links** — `lib/site.ts` → `LINKS.shippingPolicy` / `warrantyPolicy` / `privacyPolicy` / `termsOfService` now point at the new internal routes instead of external `[bracketed]` URLs; no further action needed there once the pages' own content is finalized.
 
 ## Notes for ongoing content updates
@@ -167,9 +184,11 @@ CN Version
 单一事实来源 (Single source of truth)；规格页面和首页预览都会读取此文件。
 替换值**并且**设置 `"tbc": false` 即可将表格行从橘色虚线占位符切换为已验证样式。**切勿凭空编造数字**（设计系统规则）。
 
-- [x] 探针直径 — `5 mm`
+- [x] 探针 / 针头直径 — `7 mm`（帽盖直径仍为 `24 mm`，属不同测量项）
 - [x] 环境 / 工作温度范围 — `-20–250 °C`
-- [x] BLE (低功耗蓝牙) 范围 — `UP TO 23 M`（亦即 `range.lineOfSight`，显示在“工作原理”中）
+- [x] BLE (低功耗蓝牙) — `5.5`，`UP TO 23 M`（亦即 `range.lineOfSight`；“工作原理”页中两处硬编码提法已同步更新）
+- [x] 供电表述 — 概览卡片为 `0 charging / NO CHARGING, EVER`，§ 02 行标签为 `Charging` 而非 `Battery`。这是更站得住脚的说法：同一表格中记录了电容储能缓冲。**网站其他营销文案仍写作“no battery”**（约 25 处，含标题、对比表及 `battery-free meat probe` SEO 关键词）— 上线前需决定该表述是否保留。
+- [x] 规格页尺寸图标题现为 `DIMENSIONS · MM · IP-68`（此前为过时的 `· TBC` 标记；已无任何尺寸行标记 `tbc:true`）
 - [x] 防水等级 — `IP68` + 洗碗机可用
 - [x] 内部传感器范围、最高环境暴露温度、精确度、传感器类型、分辨率、采样率 (§ 01)
 - [x] 最小激活温度、冷启动行为、能量储存 (§ 02)
@@ -182,8 +201,8 @@ CN Version
 
 ## 4 · 支持内容 (Support content)
 
-- [ ] 支持邮箱 `[support@infiniteprobe.com]` — `lib/site.ts` → `SUPPORT_EMAIL`（确认真实地址后同时移除 `app/support/page.tsx` 中虚线框的“CONFIRM ADDRESS”样式）
-- [ ] 支持 FAQ 拟定答案 (6) — `app/support/page.tsx` → `FAQS`（冷启动、洗碗机、探针数量、传输范围、离线使用、温度限制）
+- [x] 支持邮箱 — `one@infiniteprobe.com`，已设置于 `lib/site.ts` → `SUPPORT_EMAIL`。`app/[lang]/support/page.tsx` 与 `app/[lang]/warranty/page.tsx` 中的“CONFIRM ADDRESS”虚线样式均已移除，两处联系按钮现为 `mailto:` 链接。保修页面改为读取 `SUPPORT_EMAIL`，不再硬编码，二者不会脱节。
+- [x] 支持 FAQ 答案 (6) — `app/[lang]/support/page.tsx` → `FAQS`（冷启动、洗碗机、探针数量、传输范围、离线使用、温度限制）。注意：`FaqAccordion` 此前**无条件**套用橘色虚线“DRAFT ANSWER”框，导致答案写好后仍显示为草稿；现已改为依据 `isPlaceholder()` 判断。这些答案提到了可选的 Wi-Fi Display 配件（最多 4 个探针），而该配件在网站其他位置均未出现 — 需补充产品/规格条目或删除该提法。
 - [x] 用户手册 PDF — 托管于 Shopify CDN，已设置 `lib/site.ts` 中的 `LINKS.userManualPdf`
 - [x] 快速入门指南 PDF — 托管于 Shopify CDN，已设置 `LINKS.quickStartPdf`
 - [x] 符合性声明 (DoC) PDF — **有意不在网站发布。** 已移除下载卡片及 `LINKS.declarationPdf`；DoC 属于须存档并按要求出示的法律文件，并非网站必备资源。仅在分销商或零售采购方要求公开时再重新添加。
@@ -198,7 +217,7 @@ CN Version
 
 App 截图（UI01–UI05）已从交接文件中上线。仍为 `null` 的插槽会渲染为虚线占位框。填充方式有两种：将文件存入 `/public/images` 并设置路径，或直接粘贴 **Shopify Files CDN 链接**（`cdn.shopify.com` 已在 `next.config.mjs` 中列入白名单，`next/image` 对远程图片同样会做优化处理）。注意 Shopify 链接中的 `?v=` 是缓存清除参数 — 重新上传素材会生成新的参数值，届时需要重新复制链接。
 
-- [x] `heroProbe` — 深色背景下的钛合金探针特写图（首页 Hero，4:3）— Shopify Files `ProbeOne2.png`
+- [x] `heroProbe` — 黑色背景下的钛合金探针特写图（首页 Hero，1:1）— Shopify Files `ProbeOne_front.jpg`，1080×1080，与首页 Hero 的正方形容器完全匹配。注意 Hero 上的实时状态标签为墨色 `#141414` 且有一半压在图片下缘；在这张近黑色素材上对比度较低，若显得糊成一片需另行调整。
 - [x] `lifestyleGrill` — 烧烤 / 明火生活方式场景图（首页 § 03，16:9）— Shopify Files `IPApplication03_claude.png`
 - [ ] `categorySteak` — 香煎牛排截面全幅图（首页 § 07 深色带背景）
 - [x] `howItWorksHero` — 探针爆炸图 / 剖面渲染图（工作原理 Hero，4:3）— Shopify Files `Generate2Power.jpg`
@@ -211,9 +230,10 @@ App 截图（UI01–UI05）已从交接文件中上线。仍为 `null` 的插槽
 
 ## 8 · 新闻通讯 (Newsletter)
 
-- [ ] 选择服务商（Mailchimp / Klaviyo / ConvertKit / Buttondown），并在 `app/api/newsletter/route.ts` 中实现订阅调用（TODO 标记了具体位置）
-- [ ] 在 Vercel 中设置 `NEWSLETTER_PROVIDER` 和 `NEWSLETTER_API_KEY` 环境变量
-- [ ] 在此之前，表单将返回“新闻订阅尚未开启” — 不会假装订阅成功
+- [x] 服务商已选定并完成接入 — **Kit**（原 ConvertKit），v4 API，实现于 `app/api/newsletter/route.ts`。该路由先创建订阅者（按邮箱 upsert），再通过第二次调用将其加入表单，这一步才会触发 Kit 中“订阅者加入表单”类的自动化流程（例如欢迎邮件序列）。
+- [x] `NEWSLETTER_PROVIDER`、`NEWSLETTER_API_KEY`、`NEWSLETTER_FORM_ID` 均已在 Vercel 生产环境中设置。已线上验证：POST `/api/newsletter` 返回 `{"ok":true}`，无效邮箱返回 400。
+- [x] 未配置或带方括号的凭据会返回 503，而非假装成功。**密钥必须是 v4 密钥**（以 `kit_` 开头）— v3 密钥无法创建订阅者，会调用失败。
+- [ ] 确认 Kit 账户的双重确认 (double opt-in) 设置符合上线预期。该行为有意由 Kit 账户设置决定而非在代码中强制，以便同意管理集中于一处。
 
 ## 9 · 公告栏与文案检查
 
@@ -250,7 +270,7 @@ App 截图（UI01–UI05）已从交接文件中上线。仍为 `null` 的插槽
 - [ ] **`/privacy-policy`** (`app/privacy-policy/page.tsx`) — 占位符：`[MONTH DD, YYYY — SET AT PUBLICATION]` (最后更新时间)、`[privacy@infiniteprobe.com]` (确认邮箱)、`[REGISTERED ADDRESS — AWAITING LEGAL]` (注册地址 — 待法务确定)、`[JURISDICTION — TBC]` (司法管辖区 — 待定)、`[REGIONS — TBC]` (地区 — 待定)、`[X]` 个工作日的请求确认窗口。
 - [ ] **`/shipping-policy`** (`app/shipping-policy/page.tsx`) — 占位符：最后更新日期、`[X–X] days` 处理时间 (×2)、旺季 `[X]` 天延迟、`[HH:MM TIMEZONE — TBC]` 截止时间、`[$XX — TBC]` 加急/优先运费率、AK/HI/海外领地 `[X–X]` 天延迟、`[X–XX] business days` 国际运输时间、`[CONFIRM WITH CARRIER]` 邮政信箱/APO 指引、`[X–XX]` 军事地址延迟、FAQ 中的物流无更新/损坏/包裹丢失天数阈值、`[orders@infiniteprobe.com]`。
 - [ ] **`/terms-of-service`** (`app/terms-of-service/page.tsx`) — 占位符：生效日期、`[PENDING]` 发货政策交叉引用（现可解决 — 确认后链接）、`[USD $100 — TBC]` 责任上限、`[JURISDICTION — TBC]` (×2)、`[XX]` 天非正式解决期限、`[ARBITRATION PROVIDER — TBC]` (仲裁机构 — 待定)、`[SEAT — TBC]` (仲裁地 — 待定)、`[legal@infiniteprobe.com]`、`[REGISTERED ADDRESS — AWAITING LEGAL]`。**未获得法务签署批准前切勿上线** — 司法管辖区、仲裁机构/地点和责任上限将实质性影响可执行性。
-- [ ] **`/warranty`** (`app/warranty/page.tsx`) — 占位符：`[X]` 年保修时长 (×2，概览卡片 + § 02 正文)、`[XX]` 天退货窗口 (×2)、`[XX]` 天换货保修延长、`[X]` 个工作日退款处理、`[JURISDICTION — TBC]`、一整个未撰写的子章节 (`[Regional warranty durations, distributor contacts, and any extended holiday return window — awaiting confirmation from legal and operations.]` 区域保修时长、分销商联系方式及延长假期退货窗口 — 待法务及运营确认)、`[support@infiniteprobe.com]`。同时确认一旦解决，`data/specs.json` → `warranty.years` / `warranty.returnDays` 保持匹配（首页保障横幅读取相同的值）。
+- [ ] **`/warranty`** (`app/warranty/page.tsx`) — 占位符：`[X]` 年保修时长 (×2，概览卡片 + § 02 正文)、`[XX]` 天退货窗口 (×2)、`[XX]` 天换货保修延长、`[X]` 个工作日退款处理、`[JURISDICTION — TBC]`、一整个未撰写的子章节 (`[Regional warranty durations, distributor contacts, and any extended holiday return window — awaiting confirmation from legal and operations.]` 区域保修时长、分销商联系方式及延长假期退货窗口 — 待法务及运营确认)。联系邮箱**已确认** (`one@infiniteprobe.com`)。同时确认一旦解决，`data/specs.json` → `warranty.years` / `warranty.returnDays` 保持匹配（首页保障横幅读取相同的值）。
 - [ ] **页脚/导航栏政策链接** — `lib/site.ts` → `LINKS.shippingPolicy` / `warrantyPolicy` / `privacyPolicy` / `termsOfService` 现在指向新的内部路由而非外部 `[带方括号]` 的 URL；一旦页面自身的内容最终确定，无需在此处采取进一步操作。
 
 ## 持续更新内容的注意事项
