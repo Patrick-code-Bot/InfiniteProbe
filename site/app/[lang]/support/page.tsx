@@ -500,15 +500,17 @@ export default async function SupportPage({
           >
             Write to us and we&apos;ll get back within one business day.
           </p>
-          <div
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: 14,
-              border: "1.5px dashed #C9661A",
-              background: "rgba(201,102,26,0.04)",
+              border: "1px solid rgba(20,20,20,0.15)",
+              background: "#FBF9F3",
               borderRadius: 999,
               padding: "16px 30px",
+              textDecoration: "none",
             }}
           >
             <span
@@ -516,22 +518,12 @@ export default async function SupportPage({
               style={{
                 fontSize: 15,
                 letterSpacing: "0.06em",
-                color: "rgba(20,20,20,0.45)",
+                color: "#141414",
               }}
             >
               {SUPPORT_EMAIL}
             </span>
-            <span
-              className="mono"
-              style={{
-                fontSize: 10,
-                letterSpacing: "0.16em",
-                color: "#C9661A",
-              }}
-            >
-              CONFIRM ADDRESS
-            </span>
-          </div>
+          </a>
         </div>
       </div>
 

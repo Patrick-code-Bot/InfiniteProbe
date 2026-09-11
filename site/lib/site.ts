@@ -7,7 +7,7 @@ export const SITE_URL = "https://www.infiniteprobe.com";
 export const SITE_NAME = "InfiniteProbe";
 export const TAGLINE = "Infinite Power · Perfect Meat";
 
-export const SUPPORT_EMAIL = "[support@infiniteprobe.com]"; // CONFIRM ADDRESS
+export const SUPPORT_EMAIL = "one@infiniteprobe.com";
 
 // External links — all placeholders until the real destinations exist.
 export const LINKS = {

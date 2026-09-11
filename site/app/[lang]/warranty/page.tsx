@@ -9,6 +9,7 @@ import {
   getDictionary,
   defaultLocale,
 } from "@/lib/i18n";
+import { SUPPORT_EMAIL } from "@/lib/site";
 import { draftMode } from "next/headers";
 import { getPage } from "@/sanity/queries";
 import { firstHero, text } from "@/sanity/content";
@@ -516,15 +517,17 @@ export default async function WarrantyPage({
               alignItems: "center",
             }}
           >
-            <div
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 14,
-                border: "1.5px dashed #C9661A",
-                background: "rgba(201,102,26,0.04)",
+                border: "1px solid rgba(20,20,20,0.15)",
+                background: "#FBF9F3",
                 borderRadius: 999,
                 padding: "16px 30px",
+                textDecoration: "none",
               }}
             >
               <span
@@ -532,22 +535,12 @@ export default async function WarrantyPage({
                 style={{
                   fontSize: 15,
                   letterSpacing: "0.06em",
-                  color: "rgba(20,20,20,0.45)",
+                  color: "#141414",
                 }}
               >
-                [support@infiniteprobe.com]
+                {SUPPORT_EMAIL}
               </span>
-              <span
-                className="mono"
-                style={{
-                  fontSize: 10,
-                  letterSpacing: "0.16em",
-                  color: "#C9661A",
-                }}
-              >
-                CONFIRM ADDRESS
-              </span>
-            </div>
+            </a>
             <Link href={localePath(locale, "/support")}>
               <button
                 className="btn-outline-dark"
